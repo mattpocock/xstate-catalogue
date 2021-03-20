@@ -97,7 +97,6 @@ const ShowMachinePage = (props: {
     // @ts-ignore
     const hljs: any = window.hljs;
     if (hljs) {
-      console.log(hljs);
       hljs.highlightBlock(fileTextRef.current);
     }
   }, [fileTextRef, props.fileText]);

@@ -12,6 +12,7 @@ import {
   Service,
 } from "../../lib/MachineHelpers";
 import Link from "next/link";
+import Head from "next/head";
 import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
 
 interface Props {
@@ -57,6 +58,9 @@ const MachinePage: NextPage<Props> = (props) => {
 
   return (
     <>
+      <Head>
+        <title>XState Catalogue | {props.slug}</title>
+      </Head>
       <iframe
         ref={iframeRef}
         height="601px"
@@ -86,6 +90,17 @@ const ShowMachinePage = (props: {
   );
 
   const copyToClipboard = useCopyToClipboard({});
+
+  const fileTextRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    const hljs: any = window.hljs;
+    if (hljs) {
+      console.log(hljs);
+      hljs.highlightBlock(fileTextRef.current);
+    }
+  }, [fileTextRef, props.fileText]);
 
   return (
     <MachineHelpersContext.Provider value={{ service }}>
@@ -205,9 +220,13 @@ const ShowMachinePage = (props: {
         </div>
       </div>
       <div className="mt-16">
-        <div className="bg-gray-800 text-gray-100 p-12 -mb-20">
+        <div className="bg-gray-900 text-gray-100 p-12 -mb-20">
           <div className="container max-w-6xl mx-auto relative">
-            <pre>{props.fileText}</pre>
+            <pre>
+              <code ref={fileTextRef} className="lang-ts">
+                {props.fileText}
+              </code>
+            </pre>
             <button
               className="absolute top-0 right-0 mr-8 bg-blue-700 rounded-lg text-gray-100 px-6 py-3 tracking-tight font-bold"
               onClick={() => {

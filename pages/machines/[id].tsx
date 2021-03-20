@@ -272,13 +272,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     fallback: false,
-    paths: machines.map((fileName) => {
-      return {
-        params: {
-          id: fileName.replace(machinePathRegex, ""),
-        },
-      };
-    }),
+    paths: machines
+      .filter((machine) => machine.endsWith(".ts"))
+      .map((fileName) => {
+        return {
+          params: {
+            id: fileName.replace(machinePathRegex, ""),
+          },
+        };
+      }),
   };
 };
 

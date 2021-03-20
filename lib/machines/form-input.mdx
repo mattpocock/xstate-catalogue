@@ -1,0 +1,25 @@
+# Form Input
+
+This machine handles the entire state of a single form input. It's surprisingly complex. No wonder folks build form libraries to handle this stuff.
+
+## Enabled / Disabled
+
+At the top level sits the <State>active</State> and <State>disabled</State> states. They can be switched between via the <Event>ENABLE</Event> and <Event>DISABLE</Event> events.
+
+When you're in the <State>disabled</State> state, most of the events won't work any more.
+
+## Focused / Blurred
+
+When you're in the <State>active</State> state, the focused/blurred functionality comes to life.
+
+The <State>active.focus.focused</State> and <State>active.focus.unfocused</State> states can be toggled between via the <Event>BLUR</Event> and <Event>FOCUS</Event> events.
+
+## Async Validation
+
+Finally, you can manage validation via the <Service>validateField</Service> service.
+
+The machine starts by validating the field initially in the <State>active.validation.pending</State> state. If, while pending, the machine receives a <Event>REPORT_INVALID</Event> event, we'll go to <State>active.validation.invalid</State>.
+
+If <Service>validateField</Service> finishes without receiving an error, <Event>done.invoke.validateField</Event> will trigger and target the <State>active.validation.valid</State> state.
+
+Any <Event value="newValue">CHANGE</Event> events that trigger will kick off the async validation again, heading to <State>active.validation.pending</State>.

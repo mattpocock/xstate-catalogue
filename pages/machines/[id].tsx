@@ -1,5 +1,5 @@
 import { inspect } from "@xstate/inspect";
-import { useMachine } from "@xstate/react";
+import { useInterpret, useMachine } from "@xstate/react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Machine, StateMachine } from "xstate";
@@ -12,6 +12,7 @@ import {
   Service,
 } from "../../lib/MachineHelpers";
 import Link from "next/link";
+import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
 
 interface Props {
   slug: string;
@@ -77,111 +78,148 @@ const ShowMachinePage = (props: {
   mdxDoc: any;
   fileText: string;
 }) => {
-  const [state, send, service] = useMachine(props.machine, {
+  const service = useInterpret(props.machine, {
     devTools: true,
   });
+  const [hasDismissed, setHasDismissed] = useState<boolean>(
+    Boolean(localStorage.getItem("REJECTED_1")),
+  );
+
+  const copyToClipboard = useCopyToClipboard({});
 
   return (
-    <>
+    <MachineHelpersContext.Provider value={{ service }}>
       <div className="flex justify-center">
         <div className="">
+          {!hasDismissed && (
+            <div className="flex justify-center mb-16">
+              <div className="max-w-xl bg-gray-50 text-gray-600 p-6 space-y-4 relative">
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl">💡</span>
+                  <span className="text-xl font-semibold tracking-tighter">
+                    By the way!
+                  </span>
+                </div>
+                <p className="leading- text-gray-500">
+                  You can interact with the state machine in the article below
+                  by pressing on the <Event>EVENT</Event> buttons. They'll show
+                  up as yellow when they can be interacted with.
+                </p>
+                <button
+                  className="absolute top-0 right-0 mb-2 mr-4 p-2 text-lg"
+                  onClick={() => {
+                    setHasDismissed(true);
+                    localStorage.setItem("REJECTED_1", "true");
+                  }}
+                >
+                  <span className="text-gray-600">✖</span>
+                </button>
+              </div>
+            </div>
+          )}
           <div className="flex">
-            <MachineHelpersContext.Provider value={{ service }}>
-              <div className="border-r p-6 space-y-16 hidden md:block">
-                <div className="w-48" />
-                <Link href="/">
-                  <a className="text-gray-600 text-base space-x-3">
-                    <span className="text-gray-500">{"❮"}</span>
-                    <span>Back to List</span>
-                  </a>
-                </Link>
-                <div className="space-y-3">
-                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                    States
-                  </h2>
-                  <ul className="space-y-3">
-                    {props.machine.stateIds.map((id) => {
-                      if (id === props.machine.id) return null;
+            <div className="border-r p-6 space-y-16 hidden md:block">
+              <div className="w-48" />
+              <Link href="/">
+                <a className="text-gray-600 text-base space-x-3">
+                  <span className="text-gray-500">{"❮"}</span>
+                  <span>Back to List</span>
+                </a>
+              </Link>
+              <div className="space-y-3">
+                <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
+                  States
+                </h2>
+                <ul className="space-y-3">
+                  {props.machine.stateIds.map((id) => {
+                    if (id === props.machine.id) return null;
+                    return (
+                      <li>
+                        <State>
+                          {props.machine.getStateNodeById(id).path.join(".")}
+                        </State>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
+                  Events
+                </h2>
+                <ul className="space-y-3">
+                  {props.machine.events
+                    .filter((event) => !event.startsWith("xstate."))
+                    .map((event) => {
                       return (
                         <li>
-                          <State>
-                            {props.machine.getStateNodeById(id).key}
-                          </State>
+                          <Event>{event}</Event>
                         </li>
                       );
                     })}
-                  </ul>
-                </div>
+                </ul>
+              </div>
+              {Object.keys(props.machine.options.actions).length > 0 && (
                 <div className="space-y-3">
                   <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                    Events
+                    Actions
                   </h2>
                   <ul className="space-y-3">
-                    {props.machine.events
-                      .filter((event) => !event.startsWith("xstate."))
-                      .map((event) => {
+                    {Object.keys(props.machine.options.actions).map(
+                      (action) => {
                         return (
                           <li>
-                            <Event>{event}</Event>
+                            <Action>{action}</Action>
                           </li>
                         );
-                      })}
+                      },
+                    )}
                   </ul>
                 </div>
-                {Object.keys(props.machine.options.actions).length > 0 && (
-                  <div className="space-y-3">
-                    <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                      Actions
-                    </h2>
-                    <ul className="space-y-3">
-                      {Object.keys(props.machine.options.actions).map(
-                        (action) => {
-                          return (
-                            <li>
-                              <Action>{action}</Action>
-                            </li>
-                          );
-                        },
-                      )}
-                    </ul>
-                  </div>
-                )}
-                {Object.keys(props.machine.options.services).length > 0 && (
-                  <div className="space-y-3">
-                    <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                      Services
-                    </h2>
-                    <ul className="space-y-3">
-                      {Object.keys(props.machine.options.services).map(
-                        (service) => {
-                          return (
-                            <li>
-                              <Service>{service}</Service>
-                            </li>
-                          );
-                        },
-                      )}
-                    </ul>
-                  </div>
-                )}
-              </div>
-              <div className="prose lg:prose-lg p-6">
-                <MDXProvider components={{ Event, State, Action, Service }}>
-                  <props.mdxDoc></props.mdxDoc>
-                </MDXProvider>
-              </div>
-            </MachineHelpersContext.Provider>
+              )}
+              {Object.keys(props.machine.options.services).length > 0 && (
+                <div className="space-y-3">
+                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
+                    Services
+                  </h2>
+                  <ul className="space-y-3">
+                    {Object.keys(props.machine.options.services).map(
+                      (service) => {
+                        return (
+                          <li>
+                            <Service>{service}</Service>
+                          </li>
+                        );
+                      },
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="prose lg:prose-lg p-6">
+              <MDXProvider components={{ Event, State, Action, Service }}>
+                <props.mdxDoc></props.mdxDoc>
+              </MDXProvider>
+            </div>
           </div>
         </div>
       </div>
       <div className="mt-16">
-        <div className="bg-gray-800 text-white p-12 -mb-20">
-          <div className="container max-w-6xl mx-auto">
+        <div className="bg-gray-800 text-gray-100 p-12 -mb-20">
+          <div className="container max-w-6xl mx-auto relative">
             <pre>{props.fileText}</pre>
+            <button
+              className="absolute top-0 right-0 mr-8 bg-blue-700 rounded-lg text-gray-100 px-6 py-3 tracking-tight font-bold"
+              onClick={() => {
+                copyToClipboard(props.fileText);
+              }}
+            >
+              Copy To Clipboard
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </MachineHelpersContext.Provider>
   );
 };
 

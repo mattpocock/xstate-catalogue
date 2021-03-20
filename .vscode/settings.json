@@ -1,0 +1,6 @@
+{
+  "gitdoc.enabled": false,
+  "[mdx]": {
+    "editor.wordWrap": "wordWrapColumn",
+  },
+}

@@ -1,0 +1,25 @@
+export const metadata = {
+  title: "Authentication",
+};
+
+# Authentication
+
+This state machine handles authentication logic when using an external service, for instance AWS Amplify.
+
+## Initial Check
+
+We start off in <State>checkingIfLoggedIn</State>. This state fires off an service which goes and checks if the user is logged in or not, asynchronously.
+
+- If <Event>REPORT_IS_LOGGED_OUT</Event> gets triggered, we end up in <State>loggedOut</State>
+- If <Event>REPORT_IS_LOGGED_IN</Event> gets triggered, we end up in <State>loggedIn</State>
+  - We also save some user details into context via <Action>assignUserDetailsToContext</Action>
+
+## Logged Out
+
+Once the user is <State>loggedOut</State>, we can log them back in with <Event>LOG_IN</Event>.
+
+Any time the user enters <State>loggedOut</State>, we fire off <Action>navigateToAuthPage</Action> to send them to the login page.
+
+## Logged In
+
+In the initial check, if <Event>REPORT_IS_LOGGED_IN</Event> gets triggered, we end up in <State>loggedIn</State>. From there the user can also log out with <Event>LOG_OUT</Event>.

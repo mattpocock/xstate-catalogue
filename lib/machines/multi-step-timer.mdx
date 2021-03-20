@@ -1,0 +1,13 @@
+# Multi-Step Timer
+
+This machine is useful for when you want one thing to show for a couple of seconds, then another, then another. Without a state machine with timeout support, you'd likely end up using several `setTimeout` functions in a row.
+
+Instead, we get to manage this declaratively using XState's `after`.
+
+## Running the timer
+
+Begin the timer with <Event>BEGIN</Event>. This moves us from the <State>idle</State> into the <State>firstStep</State>.
+
+After 3000ms, we end up in <State>secondStep</State>. After 3000 more, we end up in <State>thirdStep</State>.
+
+After a final 3000ms, we go back to <State>idle</State> again.

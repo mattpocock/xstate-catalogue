@@ -28,11 +28,15 @@ const Section: React.FC<{ title: string }> = (props) => {
   );
 };
 
-const Item: React.FC<{ title: string; href: string }> = (props) => {
+const Item: React.FC<{ title: string; href: string; icon: string }> = (
+  props,
+) => {
   return (
     <Link href={props.href || "/"}>
       <a className="block space-y-2">
-        <div className="border p-10 bg-gray-100"></div>
+        <div className="border p-8 bg-gray-100 flex items-center justify-center">
+          <span className="text-5xl">{props.icon || "💡"}</span>
+        </div>
         <h3 className="text-sm font-semibold text-gray-600">{props.title}</h3>
         {props.children}
       </a>

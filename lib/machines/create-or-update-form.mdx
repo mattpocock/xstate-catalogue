@@ -22,6 +22,6 @@ If the fetch fails, the service sends back <Event data={new Error('Something wen
 
 In the <State>awaitingSubmit</State> state, the user can <Event item={{ name: "Matt Pocock" }}>SUBMIT</Event> the form. We head to either <State>submitting.editing</State> or <State>submitting.creating</State> depending on whether <Context stringify>isInEditMode</Context> is `true`.
 
-- If the edit or create go wrong, via <Event>error.platform.editItem</Event> or <Event>error.platform.createItem</Event>, we head back to <State>awaitingSubmit</State> with the <Context>errorMessage</Context> saved.
+- If the operation goes wrong, via <Event>error.platform.editItem</Event> or <Event>error.platform.createItem</Event>, we head back to <State>awaitingSubmit</State> with the <Context>errorMessage</Context> saved.
 
-- If the edit goes well, via <Event>done.invoke.editItem</Event> or <Event>done.invoke.createItem</Event>, we're done! We head to the <State>complete</State> state and either <Action>onCreateSuccess</Action> or <Action>onEditSuccess</Action> are fired.
+- If the operation goes well, via <Event>done.invoke.editItem</Event> or <Event>done.invoke.createItem</Event>, we're done! We head to the <State>complete</State> state and either <Action>onCreateSuccess</Action> or <Action>onEditSuccess</Action> are fired.

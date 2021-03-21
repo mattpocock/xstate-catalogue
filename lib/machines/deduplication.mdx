@@ -1,0 +1,9 @@
+# Deduplication
+
+Deduplication is similar to [debouncing](/machines/debounce), but instead of restarting the timer on every new event, the machine promises to only fire the event at an interval you set.
+
+## Kicking off the dedup
+
+We start in the <State>canPerformAction</State> state, and pressing <Event action={() => alert('Action fired!')}>GO</Event> will immediately fire an `alert('Action fired!')`.
+
+We then head to the <State>deduplicating</State> state, where <Event action={() => alert('Action fired!')}>GO</Event> no longer works for a couple of seconds. This means that no matter how many times the <Event action={() => alert('Action fired!')}>GO</Event> event is fired, it will only execute at most every 2 seconds.

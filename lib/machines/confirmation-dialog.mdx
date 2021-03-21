@@ -1,0 +1,19 @@
+# Confirmation Dialog
+
+A common pattern in a CRUD application is to ensure that your user is sure they want to do something - i.e. delete an entity or assign some important permissions. Asking 'are you sure' is a user expectation.
+
+## Making the ask
+
+We start with the dialog <State>closed</State>, but opening it with <Event>OPEN_DIALOG</Event> takes us into the <State>open</State> state.
+
+From here, we can either <Event>CANCEL</Event> (press the 'X' to close the dialog), or <Event>CONFIRM</Event>.
+
+Pressing <Event>CONFIRM</Event> puts us into the <State>open.executingAction</State> state, where we fire off the <Service>executeAction</Service> service.
+
+If this fails, with <Event>error.platform.executeAction</Event>, we head back to <State>open.idle</State> and show an <Context>errorMessage</Context>.
+
+But if this succeeds, with <Event>done.invoke.executeAction</Event>, we go all the way back to <State>closed</State> and fire the <Action>onSuccess</Action> action.
+
+## Ensuring the action finishes
+
+Note that <Event>CANCEL</Event> cannot be fired when in <State>open.executingAction</State>. This is by design - you want to make sure the thing succeeds - but this may not be to your taste.

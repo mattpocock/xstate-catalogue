@@ -5,7 +5,9 @@ const Wrapper: React.FC<{ title: string }> = (props) => {
   return (
     <div className="space-y-12">
       <div className="space-y-3">
-        <h1 className="text-3xl tracking-tight font-bold">{props.title}</h1>
+        <h1 className="text-3xl tracking-tight font-bold" id={props.title}>
+          {props.title}
+        </h1>
         <hr />
       </div>
       {props.children}

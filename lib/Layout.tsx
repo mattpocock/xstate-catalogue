@@ -17,7 +17,7 @@ export const Layout: React.FC = ({ children }) => {
       <main className="pb-20">{children}</main>
       <footer className="bg-gray-100 p-12">
         <p className="text-gray-600 text-center">
-          Built by Matt Pocock. Say thanks on{" "}
+          Built by Matt Pocock. Say hello on{" "}
           <a
             href="https://twitter.com/mpocock1"
             className="underline font-bold"

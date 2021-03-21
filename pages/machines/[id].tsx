@@ -134,7 +134,7 @@ const ShowMachinePage = (props: {
           <div className="flex">
             <div className="border-r p-6 space-y-16 hidden md:block">
               <div className="w-48" />
-              <Link href="/">
+              <Link href="/#Catalogue">
                 <a className="text-gray-600 text-base space-x-3">
                   <span className="text-gray-500">{"❮"}</span>
                   <span>Back to List</span>

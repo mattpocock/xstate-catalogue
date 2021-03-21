@@ -10,6 +10,7 @@ import {
   Event,
   Action,
   Service,
+  Context,
 } from "../../lib/MachineHelpers";
 import Link from "next/link";
 import Head from "next/head";
@@ -191,6 +192,22 @@ const ShowMachinePage = (props: {
                   </ul>
                 </div>
               )}
+              {Object.keys(props.machine.options.guards).length > 0 && (
+                <div className="space-y-3">
+                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
+                    Guards
+                  </h2>
+                  <ul className="space-y-3">
+                    {Object.keys(props.machine.options.guards).map((action) => {
+                      return (
+                        <li>
+                          <Action>{action}</Action>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
               {Object.keys(props.machine.options.services).length > 0 && (
                 <div className="space-y-3">
                   <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
@@ -211,7 +228,9 @@ const ShowMachinePage = (props: {
               )}
             </div>
             <div className="prose lg:prose-lg p-6">
-              <MDXProvider components={{ Event, State, Action, Service }}>
+              <MDXProvider
+                components={{ Event, State, Action, Service, Context }}
+              >
                 <props.mdxDoc></props.mdxDoc>
               </MDXProvider>
             </div>

@@ -26,10 +26,15 @@ export const Event = (props: { children: string }) => {
   const context = useContext(MachineHelpersContext);
   const [state, send] = useService(context.service);
 
+  const { children, ...event } = props;
+
   return (
     <button
       onClick={() => {
-        send(props.children);
+        send({
+          ...event,
+          type: props.children,
+        });
       }}
       // To override prose
       style={{ margin: 0 }}
@@ -59,6 +64,20 @@ export const Action = (props: { children: string }) => {
       className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors`}
     >
       {props.children}
+    </span>
+  );
+};
+
+export const Context = (props: { children: string }) => {
+  const context = useContext(MachineHelpersContext);
+  const [state, send] = useService(context.service);
+  return (
+    <span
+      className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors ${
+        state.context[props.children] ? `bg-yellow-100 text-yellow-800` : ""
+      }`}
+    >
+      {props.children}: {state.context[props.children] ?? "undefined"}
     </span>
   );
 };

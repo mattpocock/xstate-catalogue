@@ -1,0 +1,22 @@
+# Pagination
+
+This machine handles button-based pagination, for instance paginating a tabular dataset. If you're looking for infinite scroll, we'll cover that somewhere else.
+
+## Total Pages
+
+This machine relies on receiving <Event totalPages={20}>UPDATE_TOTAL_PAGES</Event> in order to work out how it should behave. Once it does, it moves from the <State>awaitingTotalPages</State> state to the <State>idle</State> state. It also updates <Context>totalPages</Context> in context.
+
+## Current Page
+
+Once we're in the <State>idle</State> state, the <Context>currentPage</Context> value starts to matter.
+
+- <Event>PREV_PAGE</Event> takes us to the previous page, if valid.
+- <Event>NEXT_PAGE</Event> takes us to the next page, if valid.
+- <Event targetPage={10}>GO_TO_TARGET_PAGE</Event> takes us to a target page, if
+  it's within bounds. I've configured that button to always go to page 10.
+
+## Handling Total Pages updates
+
+Sometimes, the number of <Context>totalPages</Context> may change based on external factors, such as filters applied to the search results. When this happens, we need to check that the <Context>currentPage</Context> is still within bounds.
+
+For instance, if we <Event targetPage={19}>GO_TO_TARGET_PAGE</Event> of 19, and then <Event totalPages={5}>UPDATE_TOTAL_PAGES</Event> of 5, the <Context>currentPage</Context> will be reverted to the first page so it doesn't end up being out of bounds.

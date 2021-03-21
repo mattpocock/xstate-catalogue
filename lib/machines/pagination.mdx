@@ -6,6 +6,8 @@ This machine handles button-based pagination, for instance paginating a tabular 
 
 This machine relies on receiving <Event totalPages={20}>UPDATE_TOTAL_PAGES</Event> in order to work out how it should behave. Once it does, it moves from the <State>awaitingTotalPages</State> state to the <State>idle</State> state. It also updates <Context>totalPages</Context> in context.
 
+<WholeContext />
+
 ## Current Page
 
 Once we're in the <State>idle</State> state, the <Context>currentPage</Context> value starts to matter.

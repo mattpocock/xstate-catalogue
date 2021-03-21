@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import packageJson from "../package.json";
 
 const Wrapper: React.FC<{ title: string }> = (props) => {
   return (
@@ -30,17 +31,28 @@ const Section: React.FC<{ title: string }> = (props) => {
   );
 };
 
-const Item: React.FC<{ title: string; href: string; icon: string }> = (
-  props,
-) => {
+const Item: React.FC<{
+  title: string;
+  href: string;
+  icon: string;
+  version: string;
+}> = (props) => {
+  const isNew = props.version === packageJson.version;
   return (
     <Link href={props.href || "/"}>
-      <a className="block space-y-2">
-        <div className="border p-8 bg-gray-100 flex items-center justify-center">
-          <span className="text-5xl">{props.icon || "💡"}</span>
+      <a className="block relative">
+        <div className="space-y-2">
+          <div className="border p-8 bg-gray-100 flex items-center justify-center">
+            <span className="text-5xl">{props.icon || "💡"}</span>
+          </div>
+          <h3 className="text-sm font-semibold text-gray-600">{props.title}</h3>
+          {props.children}
         </div>
-        <h3 className="text-sm font-semibold text-gray-600">{props.title}</h3>
-        {props.children}
+        {isNew && (
+          <span className="top-0 right-0 absolute bg-blue-600 text-xs tracking-widest text-white rounded px-2 py-1 mt-2 mr-2 shadow">
+            NEW
+          </span>
+        )}
       </a>
     </Link>
   );

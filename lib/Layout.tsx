@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import packageJson from "../package.json";
 
 export const Layout: React.FC = ({ children }) => {
   return (
@@ -13,6 +14,9 @@ export const Layout: React.FC = ({ children }) => {
             </p>
           </a>
         </Link>
+        <p className="text-gray-400 text-sm font-semibold">
+          v{packageJson.version}
+        </p>
       </nav>
       <main className="pb-20">{children}</main>
       <footer className="bg-gray-100 p-12">

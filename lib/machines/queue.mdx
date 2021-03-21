@@ -1,0 +1,25 @@
+# Async Queue
+
+This machines handles scheduling of asynchronous events in a queue. This might be used for scheduling actions in an offline queue for an application, or managing a sequence of `n` events that you need to handle in order.
+
+## Execution of items
+
+The queue has several key states which handle the management of the queue. <State>idle</State> is where you'll likely spend most time.
+
+Once an item is added to the queue via <Event items={[{ action: "ALERT_BROWSER_AFTER_PAUSE" }]}>ADD_TO_QUEUE</Event>, we enter the <State>executingItem</State> state. For this demo, that means waiting 2 seconds and then alerting in the browser.
+
+When in the <State>executingItem</State> state, more items can be safely added to the queue via <Event items={[{ action: "ALERT_BROWSER_AFTER_PAUSE" }]}>ADD_TO_QUEUE</Event>.
+
+<WholeContext />
+
+After executing the item, we briefly navigate to <State>checkingIfThereAreMoreItems</State>. If there are no more items, we go back to <State>idle</State>.
+
+In case you add too many alerts to your browser window, there's also a <Event>CLEAR_QUEUE</Event> which takes us back to <State>idle</State>.
+
+## Error handling
+
+This <Event items={[{ action: "FAIL_AFTER_PAUSE" }]}>ADD_TO_QUEUE</Event> button will send an event to the queue that is guaranteed to fail after 2 seconds.
+
+When that item errors, we head to the <State>awaitingRetry</State> state and allow the user to <Event>RETRY</Event>. This retries the first item in the queue, sending us back to <State>executingItem</State>.
+
+If it looks like that item will continuously error, you're best off crashing properly with a <Event>CLEAR_QUEUE</Event> to make sure that your user's app doesn't get out of sync with the server.

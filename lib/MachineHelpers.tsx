@@ -68,7 +68,7 @@ export const Action = (props: { children: string }) => {
   );
 };
 
-export const Context = (props: { children: string }) => {
+export const Context = (props: { children: string; stringify?: boolean }) => {
   const context = useContext(MachineHelpersContext);
   const [state, send] = useService(context.service);
   return (
@@ -80,6 +80,12 @@ export const Context = (props: { children: string }) => {
       {props.children}: {state.context[props.children] ?? "undefined"}
     </span>
   );
+};
+
+export const WholeContext = () => {
+  const context = useContext(MachineHelpersContext);
+  const [state, send] = useService(context.service);
+  return <pre>{JSON.stringify(state.context, null, 2)}</pre>;
 };
 
 export const Service = (props: { children: string }) => {

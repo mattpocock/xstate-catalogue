@@ -10,6 +10,7 @@ import {
   Event,
   Action,
   Service,
+  WholeContext,
   Context,
 } from "../../lib/MachineHelpers";
 import Link from "next/link";
@@ -164,7 +165,7 @@ const ShowMachinePage = (props: {
                 </h2>
                 <ul className="space-y-3">
                   {props.machine.events
-                    .filter((event) => !event.startsWith("xstate."))
+                    .filter((event) => !event.startsWith("xstate.") && event)
                     .map((event) => {
                       return (
                         <li>
@@ -229,7 +230,14 @@ const ShowMachinePage = (props: {
             </div>
             <div className="prose lg:prose-lg p-6">
               <MDXProvider
-                components={{ Event, State, Action, Service, Context }}
+                components={{
+                  Event,
+                  State,
+                  Action,
+                  Service,
+                  Context,
+                  WholeContext,
+                }}
               >
                 <props.mdxDoc></props.mdxDoc>
               </MDXProvider>

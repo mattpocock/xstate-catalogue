@@ -71,13 +71,20 @@ export const Action = (props: { children: string }) => {
 export const Context = (props: { children: string; stringify?: boolean }) => {
   const context = useContext(MachineHelpersContext);
   const [state, send] = useService(context.service);
+
+  let transform = (entry: string) => entry;
+
+  if (props.stringify) {
+    transform = (entry) => JSON.stringify(entry, null, 2);
+  }
   return (
     <span
       className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors ${
         state.context[props.children] ? `bg-yellow-100 text-yellow-800` : ""
       }`}
     >
-      {props.children}: {state.context[props.children] ?? "undefined"}
+      {props.children}:{" "}
+      {transform(state.context[props.children] ?? "undefined")}
     </span>
   );
 };

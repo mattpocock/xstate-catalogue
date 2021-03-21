@@ -4,8 +4,15 @@ Payment checkout
 Multi-step form
 Modal
 Drag and drop
+Throttle
 
-## Other ideas
+## Visual ideas
 
-Show a version number of the package and announce new versions via semver
-Add a NEW icon to machines added recently (i.e. the latest version)
+Do syntax highlighting for JSON blocks
+
+## Bugs
+
+Add metadata to each page with
+
+- the page name
+- default event payloads.

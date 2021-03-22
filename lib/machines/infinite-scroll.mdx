@@ -1,0 +1,21 @@
+# Infinite Scroll
+
+Infinite scroll has become a staple of the social media feed, and it's an important tool to have in your kit as an alternative to [button-based pagination](/machines/pagination).
+
+## Fetching the initial data
+
+We start in <State>fetchingRowOfData</State>, which fires off the <Service>fetchRowOfData</Service> service. When the <Event data={[{ id: Date.now()}, { id: Date.now() }]} totalEntries={8}>RECEIVED_DATA</Event> event is fired, we end up in <State>idle</State>, with the new data available in our context.
+
+<WholeContext />
+
+## Managing the Scroll
+
+When in <State>idle</State>, the user scrolls to the end of the page, we fire the <Event>SCROLL_TO_BOTTOM</Event> event, the machine goes back to <State>fetchingRowOfData</State> to grab more data to fill the space.
+
+## Reaching the end
+
+When there's no more data to receive, we end up in the <State>noMoreDataToFetch</State> state. The machine knows that via a quick round trip to the <State>checkingIfThereIsMoreData</State> state, which runs the <Action>thereIsMoreData</Action> guard to check whether or not to head to <State>noMoreDataToFetch</State>
+
+## Error handling
+
+If, when in the <State>fetchingRowOfData</State> state, the <Service>fetchRowOfData</Service> service fails, <Event>error.platform.fetchRowOfData</Event> is called. That sends us back to <State>idle</State> with the <Context>errorMessage</Context> filled in.

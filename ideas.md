@@ -1,10 +1,18 @@
 ## Machine ideas
 
+Netflix-style on-hover video
+Video/audio playback controls
 Payment checkout
+Websocket connection with retry logic
 Multi-step form
 Modal
 Drag and drop
-Throttle
+Global data cache
+Role-based access
+Video call
+Advanced search area with pagination
+CRUD - list page with search bar, pagination and orderable column headings
+Infinite scroll
 
 ## Visual ideas
 

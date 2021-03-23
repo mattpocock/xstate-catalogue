@@ -1,7 +1,7 @@
 import { inspect } from "@xstate/inspect";
-import { useInterpret, useMachine } from "@xstate/react";
+import { useInterpret, useMachine, useSelector } from "@xstate/react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Machine, StateMachine } from "xstate";
 import { MDXProvider } from "@mdx-js/react";
 import {
@@ -16,19 +16,21 @@ import {
 import Link from "next/link";
 import Head from "next/head";
 import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
+import { useLayout } from "../../lib/GlobalState";
 
 interface Props {
   slug: string;
   fileText: string;
 }
 
-const useGetImports = (slug: string) => {
+const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
     machine: StateMachine<any, any, any>;
     mdxDoc: any;
   }>();
 
   const getMachine = async () => {
+    setImports(undefined);
     const machineImport: {
       default: StateMachine<any, any, any>;
     } = await import(`../../lib/machines/${slug}.machine.ts`);
@@ -43,40 +45,80 @@ const useGetImports = (slug: string) => {
 
   useEffect(() => {
     getMachine();
-  }, [slug]);
+  }, [slug, ...deps]);
 
   return imports;
 };
 
 const MachinePage: NextPage<Props> = (props) => {
-  const imports = useGetImports(props.slug);
+  const layout = useLayout();
+  const imports = useGetImports(props.slug, [layout]);
 
   const iframeRef = useRef(null);
   useEffect(() => {
     inspect({
       iframe: () => iframeRef.current,
     });
-  }, []);
+  }, [layout]);
 
   return (
     <>
       <Head>
         <title>XState Catalogue | {props.slug}</title>
       </Head>
-      <iframe
-        ref={iframeRef}
-        height="601px"
-        className="w-full hidden md:block mb-16"
-      />
-      {imports && (
-        <ShowMachinePage
-          machine={imports.machine}
-          mdxDoc={imports.mdxDoc}
-          fileText={props.fileText}
-        ></ShowMachinePage>
-      )}
+      <Layout
+        content={
+          <>
+            {imports && (
+              <ShowMachinePage
+                machine={imports.machine}
+                mdxDoc={imports.mdxDoc}
+                fileText={props.fileText}
+              ></ShowMachinePage>
+            )}
+          </>
+        }
+        iframe={
+          <iframe key="iframe" ref={iframeRef} className="w-full h-full" />
+        }
+      ></Layout>
     </>
   );
+};
+
+const Layout = (props: {
+  content: React.ReactNode;
+  iframe: React.ReactNode;
+}) => {
+  const layout = useLayout();
+  if (layout === "horizontal" || layout === "vertical") {
+    return (
+      <div
+        className={`md:grid h-full ${
+          layout === "horizontal" ? "md:grid-cols-2" : "md:grid-rows-2"
+        }`}
+      >
+        <div className="hidden md:block">{props.iframe}</div>
+        <div className="overflow-y-scroll md:pt-12">
+          <div>{props.content}</div>
+        </div>
+      </div>
+    );
+  }
+  if (layout === "blog") {
+    return (
+      <div className="h-full overflow-y-scroll">
+        <div>
+          <div style={{ height: "550px" }} className="hidden mb-16 md:block">
+            {props.iframe}
+          </div>
+          <div>{props.content}</div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 };
 
 const ShowMachinePage = (props: {
@@ -109,20 +151,20 @@ const ShowMachinePage = (props: {
         <div className="">
           {!hasDismissed && (
             <div className="flex justify-center mb-16">
-              <div className="max-w-xl bg-gray-50 text-gray-600 p-6 space-y-4 relative">
+              <div className="relative max-w-xl p-6 space-y-4 text-gray-600 bg-gray-50">
                 <div className="flex items-center space-x-3">
                   <span className="text-3xl">💡</span>
                   <span className="text-xl font-semibold tracking-tighter">
                     By the way!
                   </span>
                 </div>
-                <p className="leading- text-gray-500">
+                <p className="text-gray-500 leading-">
                   You can interact with the state machine in the article below
                   by pressing on the <Event>EVENT</Event> buttons. They'll show
                   up as yellow when they can be interacted with.
                 </p>
                 <button
-                  className="absolute top-0 right-0 mb-2 mr-4 p-2 text-lg"
+                  className="absolute top-0 right-0 p-2 mb-2 mr-4 text-lg"
                   onClick={() => {
                     setHasDismissed(true);
                     localStorage.setItem("REJECTED_1", "true");
@@ -134,101 +176,8 @@ const ShowMachinePage = (props: {
             </div>
           )}
           <div className="flex">
-            <div className="border-r p-6 space-y-16 hidden md:block">
-              <div className="w-48" />
-              <Link href="/#Catalogue">
-                <a className="text-gray-600 text-base space-x-3">
-                  <span className="text-gray-500">{"❮"}</span>
-                  <span>Back to List</span>
-                </a>
-              </Link>
-              <div className="space-y-3">
-                <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                  States
-                </h2>
-                <ul className="space-y-3">
-                  {props.machine.stateIds.map((id) => {
-                    if (id === props.machine.id) return null;
-                    return (
-                      <li>
-                        <State>
-                          {props.machine.getStateNodeById(id).path.join(".")}
-                        </State>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <div className="space-y-3">
-                <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                  Events
-                </h2>
-                <ul className="space-y-3">
-                  {props.machine.events
-                    .filter((event) => !event.startsWith("xstate.") && event)
-                    .map((event) => {
-                      return (
-                        <li>
-                          <Event>{event}</Event>
-                        </li>
-                      );
-                    })}
-                </ul>
-              </div>
-              {Object.keys(props.machine.options.actions).length > 0 && (
-                <div className="space-y-3">
-                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                    Actions
-                  </h2>
-                  <ul className="space-y-3">
-                    {Object.keys(props.machine.options.actions).map(
-                      (action) => {
-                        return (
-                          <li>
-                            <Action>{action}</Action>
-                          </li>
-                        );
-                      },
-                    )}
-                  </ul>
-                </div>
-              )}
-              {Object.keys(props.machine.options.guards).length > 0 && (
-                <div className="space-y-3">
-                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                    Guards
-                  </h2>
-                  <ul className="space-y-3">
-                    {Object.keys(props.machine.options.guards).map((action) => {
-                      return (
-                        <li>
-                          <Action>{action}</Action>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
-              {Object.keys(props.machine.options.services).length > 0 && (
-                <div className="space-y-3">
-                  <h2 className="text-base tracking-tighter text-gray-500 font-semibold">
-                    Services
-                  </h2>
-                  <ul className="space-y-3">
-                    {Object.keys(props.machine.options.services).map(
-                      (service) => {
-                        return (
-                          <li>
-                            <Service>{service}</Service>
-                          </li>
-                        );
-                      },
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-            <div className="prose lg:prose-lg p-6">
+            <SideBar machine={props.machine} />
+            <div className="p-6 prose lg:prose-lg">
               <MDXProvider
                 components={{
                   Event,
@@ -246,15 +195,15 @@ const ShowMachinePage = (props: {
         </div>
       </div>
       <div className="mt-16">
-        <div className="bg-gray-900 text-gray-100 p-12 -mb-20">
-          <div className="container max-w-6xl mx-auto relative">
+        <div className="p-12 -mb-20 text-gray-100 bg-gray-900">
+          <div className="container relative max-w-6xl mx-auto">
             <pre>
               <code ref={fileTextRef} className="lang-ts">
                 {props.fileText}
               </code>
             </pre>
             <button
-              className="absolute top-0 right-0 mr-8 bg-blue-700 rounded-lg text-gray-100 px-6 py-3 tracking-tight font-bold"
+              className="absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
               onClick={() => {
                 copyToClipboard(props.fileText);
               }}
@@ -311,3 +260,98 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export default MachinePage;
+
+const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
+  return (
+    <div className="hidden p-6 space-y-16 border-r md:block">
+      <div className="w-48" />
+      <Link href="/#Catalogue">
+        <a className="space-x-3 text-base text-gray-600">
+          <span className="text-gray-500">{"❮"}</span>
+          <span>Back to List</span>
+        </a>
+      </Link>
+      <div className="space-y-3">
+        <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+          States
+        </h2>
+        <ul className="space-y-3">
+          {props.machine.stateIds.map((id) => {
+            if (id === props.machine.id) return null;
+            return (
+              <li>
+                <State>
+                  {props.machine.getStateNodeById(id).path.join(".")}
+                </State>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="space-y-3">
+        <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+          Events
+        </h2>
+        <ul className="space-y-3">
+          {props.machine.events
+            .filter((event) => !event.startsWith("xstate.") && event)
+            .map((event) => {
+              return (
+                <li>
+                  <Event>{event}</Event>
+                </li>
+              );
+            })}
+        </ul>
+      </div>
+      {Object.keys(props.machine.options.actions).length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+            Actions
+          </h2>
+          <ul className="space-y-3">
+            {Object.keys(props.machine.options.actions).map((action) => {
+              return (
+                <li>
+                  <Action>{action}</Action>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {Object.keys(props.machine.options.guards).length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+            Guards
+          </h2>
+          <ul className="space-y-3">
+            {Object.keys(props.machine.options.guards).map((action) => {
+              return (
+                <li>
+                  <Action>{action}</Action>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {Object.keys(props.machine.options.services).length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+            Services
+          </h2>
+          <ul className="space-y-3">
+            {Object.keys(props.machine.options.services).map((service) => {
+              return (
+                <li>
+                  <Service>{service}</Service>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};

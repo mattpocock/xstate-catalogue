@@ -98,7 +98,7 @@ const Layout = (props: {
           layout === "horizontal" ? "md:grid-cols-2" : "md:grid-rows-2"
         }`}
       >
-        <div className="hidden md:block">{props.iframe}</div>
+        <div className="hidden bg-black md:block">{props.iframe}</div>
         <div className="overflow-y-scroll md:pt-12">
           <div>{props.content}</div>
         </div>
@@ -109,7 +109,10 @@ const Layout = (props: {
     return (
       <div className="h-full overflow-y-scroll">
         <div>
-          <div style={{ height: "550px" }} className="hidden mb-16 md:block">
+          <div
+            style={{ height: "550px" }}
+            className="hidden mb-16 bg-black md:block"
+          >
             {props.iframe}
           </div>
           <div>{props.content}</div>

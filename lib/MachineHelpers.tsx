@@ -53,12 +53,6 @@ export const Event = (props: { children: string }) => {
 };
 
 export const Action = (props: { children: string }) => {
-  const context = useContext(MachineHelpersContext);
-  const [state, send] = useService(context.service);
-
-  const justFired = state.actions.some(
-    (action) => action.type === props.children,
-  );
   return (
     <span
       className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors`}
@@ -70,7 +64,7 @@ export const Action = (props: { children: string }) => {
 
 export const Context = (props: { children: string; stringify?: boolean }) => {
   const context = useContext(MachineHelpersContext);
-  const [state, send] = useService(context.service);
+  const [state] = useService(context.service);
 
   let transform = (entry: string) => entry;
 
@@ -91,7 +85,7 @@ export const Context = (props: { children: string; stringify?: boolean }) => {
 
 export const WholeContext = () => {
   const context = useContext(MachineHelpersContext);
-  const [state, send] = useService(context.service);
+  const [state] = useService(context.service);
   return <pre>{JSON.stringify(state.context, null, 2)}</pre>;
 };
 

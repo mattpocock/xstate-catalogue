@@ -1,4 +1,4 @@
-import { actions, assign, createMachine, Sender } from "xstate";
+import { assign, createMachine } from "xstate";
 
 interface DebounceMachineContext {
   action?: () => void;

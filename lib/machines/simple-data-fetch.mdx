@@ -1,0 +1,19 @@
+# Simple Data Fetch
+
+There are tons of patterns for fetching data from a remove server, but let's focus on the simplest.
+
+## Playing fetch
+
+We start with a <Event>FETCH</Event> event, which takes us from the <State>idle.noError</State> state into <State>fetching</State>.
+
+From there, we're waiting for a <Event data={{ name: 'Hello!'}}>RECEIVE_DATA</Event> event, which saves the data into context under <Context stringify>data</Context>.
+
+If the <Service>fetchData</Service> service fails, we'll get an <Event>error.platform.fetchData</Event> event.
+
+If that happens, we save the error into context under <Context>errorMessage</Context> and head to the <State>idle.errored</State> state.
+
+## Cancelling and refetching
+
+If a <Event>FETCH</Event> happens while we're in the <State>fetching</State> state, the service is re-triggered with the new variables passed in to <Event>FETCH</Event>. This means if you're using an [invoked callback](https://xstate.js.org/docs/guides/communication.html#invoking-callbacks) to represent your <Service>fetchData</Service> service, you can implement cancelling the current fetch call.
+
+You can also fire a <Event>CANCEL</Event> event while in <State>fetching</State>, which will end the current <Service>fetchData</Service> service and take you back to <State>idle.noError</State>.

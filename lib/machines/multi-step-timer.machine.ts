@@ -1,4 +1,4 @@
-import { assign, createMachine, Sender } from "xstate";
+import { createMachine } from "xstate";
 
 type MultiStepTimerMachineContext = {};
 

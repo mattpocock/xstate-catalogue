@@ -1,22 +1,22 @@
-import { inspect } from "@xstate/inspect";
-import { useInterpret, useMachine, useSelector } from "@xstate/react";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Machine, StateMachine } from "xstate";
 import { MDXProvider } from "@mdx-js/react";
-import {
-  MachineHelpersContext,
-  State,
-  Event,
-  Action,
-  Service,
-  WholeContext,
-  Context,
-} from "../../lib/MachineHelpers";
-import Link from "next/link";
+import { inspect } from "@xstate/inspect";
+import { useInterpret } from "@xstate/react";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { StateMachine } from "xstate";
 import { useLayout } from "../../lib/GlobalState";
+import {
+  Action,
+  Context,
+  Event,
+  MachineHelpersContext,
+  Service,
+  State,
+  WholeContext,
+} from "../../lib/MachineHelpers";
+import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
 
 interface Props {
   slug: string;

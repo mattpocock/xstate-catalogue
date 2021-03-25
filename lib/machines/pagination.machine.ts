@@ -1,4 +1,4 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine } from "xstate";
 import { choose } from "xstate/lib/actions";
 
 interface PaginationMachineContext {

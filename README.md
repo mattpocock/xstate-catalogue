@@ -1,6 +1,8 @@
 # XState Catalogue
 
-XState Catalogue is a collection of professionally designed state machines you can drop into your projects. Check out the [full site](https://xstate-catalogue.com) to browse the catalogue.
+XState Catalogue is a collection of professionally designed state machines you can drop into your projects.
+
+Check out the [full site](https://xstate-catalogue.com) to browse the catalogue.
 
 ## Contributing
 

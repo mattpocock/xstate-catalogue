@@ -92,7 +92,7 @@ const authenticationMachine = createMachine<
       },
       assignUserDetailsToContext: assign((context, event) => {
         if (event.type !== "REPORT_IS_LOGGED_IN") {
-          return;
+          return {};
         }
         return {
           userDetails: event.userDetails,

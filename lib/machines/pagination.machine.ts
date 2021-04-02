@@ -104,14 +104,14 @@ const paginationMachine = createMachine<
         currentPage: (context) => context.currentPage + 1,
       }),
       goToTargetPage: assign((context, event) => {
-        if (event.type !== "GO_TO_TARGET_PAGE") return;
+        if (event.type !== "GO_TO_TARGET_PAGE") return {};
 
         return {
           currentPage: event.targetPage,
         };
       }),
       assignTotalPagesToContext: assign((context, event) => {
-        if (event.type !== "UPDATE_TOTAL_PAGES") return;
+        if (event.type !== "UPDATE_TOTAL_PAGES") return {};
         return {
           totalPages: event.totalPages,
         };

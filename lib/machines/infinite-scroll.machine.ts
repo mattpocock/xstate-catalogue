@@ -80,7 +80,7 @@ const infiniteScrollMachine = createMachine<
     },
     actions: {
       assignDataToContext: assign((context, event) => {
-        if (event.type !== "RECEIVED_DATA") return;
+        if (event.type !== "RECEIVED_DATA") return {};
         return {
           data: [...context.data, ...event.data],
           totalEntries: event.totalEntries,

@@ -123,7 +123,7 @@ const queueMachine = createMachine<QueueMachineContext, QueueMachineEvent>(
         queue: [],
       }),
       addItemToQueue: assign((context, event) => {
-        if (event.type !== "ADD_TO_QUEUE") return;
+        if (event.type !== "ADD_TO_QUEUE") return {};
         return {
           queue: [
             ...context.queue,

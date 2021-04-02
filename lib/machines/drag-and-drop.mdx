@@ -1,0 +1,33 @@
+# Simple Drag and Drop
+
+## Picking things up
+
+When a user picks up an item, via <Event index={1}>PICK_UP</Event>, we enter the <State>dragging</State> state. The item they pick up is saved in context under <Context stringify>itemBeingHeld</Context>.
+
+When the dragged item reaches the intersection of another item (i.e. is dragged over it) we call the <Event index={2}>DRAG_REACHED_INTERSECTION</Event> event, which assigns the new intersection to context under <Context stringify>itemBeingHeld</Context>.
+
+When the user drops the item, via <Event>DROP</Event>, the list is rearranged and assigned into context.
+
+<WholeContext />
+
+## Test cases
+
+### Swapping items 1 and 2
+
+Pick up first item: <Event index={0}>PICK_UP</Event>.
+
+Cross over second item: <Event index={1}>DRAG_REACHED_INTERSECTION</Event>.
+
+Drop item: <Event>DROP</Event>.
+
+Numbers one and two of the data list should have swapped places.
+
+### Swapping items 1 and 3
+
+Pick up first item: <Event index={0}>PICK_UP</Event>.
+
+Cross over third item: <Event index={3}>DRAG_REACHED_INTERSECTION</Event>.
+
+Drop item: <Event>DROP</Event>.
+
+The first item should now be at the end.

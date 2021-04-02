@@ -1,0 +1,29 @@
+# Multi Step Form
+
+Multi-step forms are a staple of many CRUD apps - especially where the entity being created is complex. State machines handle sequences like these exceptionally well.
+
+I've chosen to model this form as an internet banking payment. On the first page, you choose the beneficiary you'd like to pay, and the amount to pay them. On the second, you confirm the date.
+
+I've also chosen to model the form events as only `SUBMIT` events. For this machine, we assume that the data submitted in these events has been validated in the frontend. For a multi-step form with Async Validation, see [this machine](/machines/multi-step-form-with-validation).
+
+## First Page
+
+We start in the <State>enteringBeneficiary</State> state. When the user submits the form via <Event info={{info: "Hey"}}>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringDate</State> state and the beneficiary info is saved to context: <Context stringify>beneficiaryInfo</Context>.
+
+## Second Page
+
+Once in the <State>enteringDate</State> state, the user can go <Event>BACK</Event> and edit their details on the previous page.
+
+Once they've chosen a date, they can submit the second page's form via <Event info={{ info: "Hey" }}>CONFIRM_DATE</Event> and head into the <State>confirming</State> state. The date info also gets saved into <Context stringify>dateInfo</Context>.
+
+## Confirming
+
+In <State>confirming</State>, we show all the information they've entered in one page to ensure that they've entered it correctly. They can go <Event>BACK</Event> if need be.
+
+## Submitting
+
+If they're happy, they can <Event>CONFIRM</Event> and we enter the <State>confirming.submitting</State> state. This fires off the <Service>submitPayment</Service> service.
+
+On <Event>error.platform.submitPayment</Event>, we head back to <State>confirming.idle</State> with the error message captured in context: <Context>errorMessage</Context>.
+
+But on <Event>done.invoke.submitPayment</Event>, we head to our final state of <State>complete</State>. Here, you could add an entry/exit event to take the user somewhere else.

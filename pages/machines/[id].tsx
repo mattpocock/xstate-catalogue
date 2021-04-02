@@ -1,7 +1,12 @@
 import { MDXProvider } from "@mdx-js/react";
 import { inspect } from "@xstate/inspect";
 import { useInterpret } from "@xstate/react";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+  NextPage,
+} from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -16,12 +21,8 @@ import {
   State,
   WholeContext,
 } from "../../lib/MachineHelpers";
+import { metadata } from "../../lib/metadata";
 import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
-
-interface Props {
-  slug: string;
-  fileText: string;
-}
 
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
@@ -50,7 +51,36 @@ const useGetImports = (slug: string, deps: any[]) => {
   return imports;
 };
 
-const MachinePage: NextPage<Props> = (props) => {
+export const getStaticProps = async ({ params }) => {
+  const fs = await import("fs");
+  const path = await import("path");
+
+  const machinesPath = path.resolve(
+    process.cwd(),
+    "lib/machines",
+    `${params.id}.machine.ts`,
+  );
+
+  const meta = metadata[params.id];
+
+  if (!meta) {
+    throw new Error(
+      `Could not find metadata for ${params.id}. Go to lib/metadata.ts to fix.`,
+    );
+  }
+
+  return {
+    props: {
+      slug: params.id as string,
+      fileText: fs.readFileSync(machinesPath).toString(),
+      meta,
+    },
+  };
+};
+
+const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
+  props,
+) => {
   const layout = useLayout();
   const imports = useGetImports(props.slug, [layout]);
 
@@ -64,7 +94,7 @@ const MachinePage: NextPage<Props> = (props) => {
   return (
     <>
       <Head>
-        <title>XState Catalogue | {props.slug}</title>
+        <title>{props.meta.title} | XState Catalogue</title>
       </Head>
       <Layout
         content={
@@ -220,24 +250,6 @@ const ShowMachinePage = (props: {
   );
 };
 
-export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
-  const fs = await import("fs");
-  const path = await import("path");
-
-  const machinesPath = path.resolve(
-    process.cwd(),
-    "lib/machines",
-    `${params.id}.machine.ts`,
-  );
-
-  return {
-    props: {
-      slug: params.id as string,
-      fileText: fs.readFileSync(machinesPath).toString(),
-    },
-  };
-};
-
 const machinePathRegex = /\.machine\.ts$/;
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -266,7 +278,10 @@ export default MachinePage;
 
 const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
   return (
-    <div className="hidden p-6 space-y-16 border-r md:block">
+    <div
+      className="hidden p-6 space-y-16 border-r md:block"
+      style={{ maxWidth: "300px" }}
+    >
       <div className="w-48" />
       <Link href="/#Catalogue">
         <a className="space-x-3 text-base text-gray-600">
@@ -282,7 +297,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           {props.machine.stateIds.map((id) => {
             if (id === props.machine.id) return null;
             return (
-              <li>
+              <li className="break-all">
                 <State>
                   {props.machine.getStateNodeById(id).path.join(".")}
                 </State>
@@ -300,7 +315,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
             .filter((event) => !event.startsWith("xstate.") && event)
             .map((event) => {
               return (
-                <li>
+                <li className="break-all">
                   <Event>{event}</Event>
                 </li>
               );
@@ -315,7 +330,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.actions).map((action) => {
               return (
-                <li>
+                <li className="break-all">
                   <Action>{action}</Action>
                 </li>
               );
@@ -331,7 +346,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.guards).map((action) => {
               return (
-                <li>
+                <li className="break-all">
                   <Action>{action}</Action>
                 </li>
               );
@@ -347,7 +362,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.services).map((service) => {
               return (
-                <li>
+                <li className="break-all">
                   <Service>{service}</Service>
                 </li>
               );

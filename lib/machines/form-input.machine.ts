@@ -95,13 +95,13 @@ const formInputMachine = createMachine<
   {
     actions: {
       assignReasonToErrorMessage: assign((context, event) => {
-        if (event.type !== "REPORT_INVALID") return;
+        if (event.type !== "REPORT_INVALID") return {};
         return {
           errorMessage: event.reason,
         };
       }),
       assignValueToContext: assign((context, event) => {
-        if (event.type !== "CHANGE") return;
+        if (event.type !== "CHANGE") return {};
         return {
           value: event.value,
         };

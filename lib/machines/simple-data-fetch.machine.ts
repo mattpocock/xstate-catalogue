@@ -77,7 +77,7 @@ const simpleDataFetchMachine = createMachine<
     },
     actions: {
       assignDataToContext: assign((context, event) => {
-        if (event.type !== "RECEIVE_DATA") return;
+        if (event.type !== "RECEIVE_DATA") return {};
         return {
           data: event.data,
         };

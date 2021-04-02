@@ -30,6 +30,7 @@ export const Event = (props: { children: string }) => {
 
   return (
     <button
+      className="text-left"
       onClick={() => {
         send({
           ...event,

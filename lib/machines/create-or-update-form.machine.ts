@@ -157,7 +157,7 @@ const createOrUpdateFormMachine = createMachine<
           event.type !== "SUCCESSFULLY_FETCHED_ITEM" &&
           event.type !== "SUBMIT"
         )
-          return;
+          return {};
         return {
           itemToProcess: event.item,
         };

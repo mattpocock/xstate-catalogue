@@ -1,0 +1,33 @@
+# Multi Step Form With Validation
+
+This expands on the other [multi-step form](/machines/multi-step-form) example. If you haven't already, read that machine first.
+
+This one gets a lot more complex by adding some crucial logic - asynchronous validation to each step.
+
+## Validation pattern
+
+Each page now follows a similar pattern. Let's take <State>enteringBeneficiary</State> as an example. On <Event info={{ info: 'Hey' }}>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringBeneficiary.submitting</State> state.
+
+If the beneficiary fails validation, we receive <Event>error.platform.validateBeneficiary</Event>, which saves the <Context>errorMessage</Context>.
+
+But if it passes with <Event>done.invoke.validateBeneficiary</Event>, we head to <State>enteringBeneficiary.complete</State>. This is the final state of <State>enteringBeneficiary</State> - that triggers <Event>done.state.enteringBeneficiary</Event>, sending us to <State>enteringDate</State>.
+
+## Second Validation pattern
+
+This pattern repeats itself in <State>enteringDate</State>. I'll express it in diagram form here for brevity.
+
+<p>
+  <Event info={{ info: "Hey" }}>CONFIRM_DATE</Event> ->{" "}
+  <State>enteringDate.submitting</State>
+</p>
+
+<p>
+  <Event>done.invoke.validateDate</Event> ->{" "}
+  <State>enteringDate.complete</State> -> <State>confirming</State>
+</p>
+
+## Confirming
+
+Finally, we're in the confirmation stage, which plays out exactly the same as [the other example](/machines/multi-step-form).
+
+<WholeContext />

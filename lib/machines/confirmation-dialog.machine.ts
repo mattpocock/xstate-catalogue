@@ -70,7 +70,7 @@ const confirmationDialogMachine = createMachine<
     },
     actions: {
       assignActionToContext: assign((context, event) => {
-        if (event.type !== "OPEN_DIALOG") return;
+        if (event.type !== "OPEN_DIALOG") return {};
         return {
           action: event.action,
         };

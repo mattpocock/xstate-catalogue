@@ -1,4 +1,4 @@
-import { assign, createMachine, send, Sender } from "xstate";
+import { assign, createMachine } from "xstate";
 
 interface NetflixStyleVideoHoverMachineContext {
   hasVideoLoaded: boolean;

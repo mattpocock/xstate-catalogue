@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import React from "react";
 import packageJson from "../package.json";
 import * as Icons from "../lib/Icons";

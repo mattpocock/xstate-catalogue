@@ -1,12 +1,7 @@
 import { MDXProvider } from "@mdx-js/react";
 import { inspect } from "@xstate/inspect";
 import { useInterpret } from "@xstate/react";
-import {
-  GetStaticPaths,
-  GetStaticProps,
-  InferGetStaticPropsType,
-  NextPage,
-} from "next";
+import { GetStaticPaths, InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";

@@ -1,10 +1,4 @@
-import {
-  assign,
-  createMachine,
-  DoneEventObject,
-  ErrorPlatformEvent,
-  Sender,
-} from "xstate";
+import { assign, createMachine } from "xstate";
 
 interface MultiStepFormMachineContext {
   beneficiaryInfo?: BeneficiaryInfo;

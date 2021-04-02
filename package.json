@@ -1,6 +1,6 @@
 {
   "name": "xstate-catalogue",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "author": "Matt Pocock",
   "license": "MIT",
@@ -10,6 +10,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^10.0.9",
     "@tailwindcss/jit": "^0.1.4",

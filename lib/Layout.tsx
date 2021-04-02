@@ -28,65 +28,72 @@ export const Layout: React.FC = ({ children }) => {
           </a>
         </Link>
         <div className="items-center hidden space-x-6 md:flex">
-          <button
-            onClick={() => globalStateService.send("TOGGLE_LAYOUT")}
-            className="px-2 py-1 text-gray-400"
+          {router.pathname.includes("machines") && (
+            <button
+              onClick={() => globalStateService.send("TOGGLE_LAYOUT")}
+              className="px-2 py-1 text-gray-400"
+            >
+              {layout === "horizontal" && (
+                <svg
+                  className="w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  key="1"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
+                </svg>
+              )}
+              {layout === "vertical" && (
+                <svg
+                  className="w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  key="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                  />
+                </svg>
+              )}
+              {layout === "blog" && (
+                <svg
+                  className="w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  key="3"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </button>
+          )}
+          <a
+            className="text-sm font-semibold text-gray-400"
+            href="https://github.com/mattpocock/xstate-catalogue"
+            target="_blank"
+            title="XState Catalogue GitHub"
           >
-            {layout === "horizontal" && (
-              <svg
-                className="w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                key="1"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-            )}
-            {layout === "vertical" && (
-              <svg
-                className="w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                key="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                />
-              </svg>
-            )}
-            {layout === "blog" && (
-              <svg
-                className="w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                key="3"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                />
-              </svg>
-            )}
-          </button>
-          <p className="text-sm font-semibold text-gray-400">
             v{packageJson.version}
-          </p>
+          </a>
         </div>
       </nav>
       <div className={shouldPreventScroll ? "overflow-hidden" : ""}>

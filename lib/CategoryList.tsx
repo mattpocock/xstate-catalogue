@@ -1,6 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 import packageJson from "../package.json";
+import * as Icons from "../lib/Icons";
+import { metadata } from "./metadata";
 
 const Wrapper: React.FC<{ title: string }> = (props) => {
   return (
@@ -32,20 +35,27 @@ const Section: React.FC<{ title: string }> = (props) => {
 };
 
 const Item: React.FC<{
-  title: string;
-  href: string;
-  icon: string;
-  version: string;
+  id: string;
 }> = (props) => {
-  const isNew = props.version === packageJson.version;
+  const meta = metadata[props.id];
+
+  if (!meta) throw new Error("Could not find metadata for " + props.id);
+
+  const isNew = meta.version === packageJson.version;
+
+  const Icon = Icons[meta.icon];
+
   return (
-    <Link href={props.href || "/"}>
+    <Link href={`/machines/${props.id}`}>
       <a className="relative block">
         <div className="space-y-2">
-          <div className="flex items-center justify-center p-8 bg-gray-100 border">
-            <span className="text-5xl">{props.icon || "💡"}</span>
+          <div className="flex items-center justify-center h-32 bg-gray-100 border rounded">
+            <Icon
+              style={{ width: "60px", height: "60px" }}
+              className="text-gray-600 fill-current"
+            ></Icon>
           </div>
-          <h3 className="text-sm font-semibold text-gray-600">{props.title}</h3>
+          <h3 className="text-sm font-semibold text-gray-600">{meta.title}</h3>
           {props.children}
         </div>
         {isNew && (
@@ -60,33 +70,22 @@ const Item: React.FC<{
 
 const ComingSoonItem: React.FC<{
   title: string;
-  icon: string;
-  version: string;
+  icon: React.FC<any>;
 }> = (props) => {
   return (
     <div className="relative block">
       <div className="space-y-2">
-        <div className="flex items-center justify-center p-8 bg-gray-100 border">
-          <span className="text-5xl">{props.icon || "💡"}</span>
+        <div className="flex items-center justify-center h-32 bg-gray-100 border rounded">
+          <props.icon
+            style={{ width: "60px", height: "60px" }}
+            className="text-gray-600 fill-current"
+          ></props.icon>
         </div>
         <h3 className="text-sm font-semibold text-gray-600">{props.title}</h3>
         {props.children}
       </div>
-      <span className="absolute top-0 right-0 flex justify-center w-12 px-2 py-1 mt-2 mr-2 text-xs tracking-widest text-white uppercase bg-gray-700 rounded shadow">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          />
-        </svg>
+      <span className="absolute top-0 right-0 flex justify-center px-2 py-1 mt-2 mr-2 text-xs tracking-widest text-white uppercase bg-red-700 rounded shadow">
+        SOON
       </span>
     </div>
   );

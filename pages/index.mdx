@@ -1,4 +1,5 @@
 import { CategoryList, CategorySection } from "../lib/CategoryList";
+import * as Icons from "../lib/Icons";
 
 <div className="prose lg:prose-lg container mx-auto p-8 pt-16">
 
@@ -29,36 +30,15 @@ It's going to be sweet. Follow along on [Twitter](https://twitter.com/mpocock1).
 <div className="container mx-auto p-8">
   <CategoryList.Wrapper title="Catalogue">
     <CategoryList.Section title="CRUD">
-      <CategoryList.Item
-        title="Form Input"
-        href="/machines/form-input"
-        icon="🖋"
-        version="0.0.0"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Create / Update Form"
-        href="/machines/create-or-update-form"
-        icon="🪄"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Confirmation Dialog"
-        href="/machines/confirmation-dialog"
-        icon="⁉"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Multi-Step Form"
-        icon="⁉"
-        href="/machines/multi-step-form"
-        version="0.0.2"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Multi-Step Form With Validation"
-        icon="⁉"
-        href="/machines/multi-step-form-with-validation"
-        version="0.0.2"
-      ></CategoryList.Item>
+      <CategoryList.Item id="form-input"></CategoryList.Item>
+      <CategoryList.Item id="create-or-update-form"></CategoryList.Item>
+      <CategoryList.Item id="confirmation-dialog"></CategoryList.Item>
+      <CategoryList.Item id="multi-step-form"></CategoryList.Item>
+      <CategoryList.Item id="multi-step-form-with-validation"></CategoryList.Item>
+      <CategoryList.ComingSoonItem
+        title="Combo Box"
+        icon={Icons.ListAltOutlined}
+      />
     </CategoryList.Section>
     <hr />
     {/* <CategoryList.Section title="Backend Services">
@@ -67,96 +47,36 @@ It's going to be sweet. Follow along on [Twitter](https://twitter.com/mpocock1).
     {/* <hr /> */}
     <CategoryList.Section title="Abstract">
       {/* <CategoryList.Item title="Async Sequences"></CategoryList.Item> */}
-      <CategoryList.Item
-        title="Multi-Step Timer"
-        href="/machines/multi-step-timer"
-        icon="🕒"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Offline Queue"
-        href="/machines/queue"
-        icon="⏩"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Debounce"
-        href="/machines/debounce"
-        icon="⛹️‍♀️"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Deduplication"
-        href="/machines/deduplication"
-        icon="👬🏾"
-        version="0.0.1"
-      ></CategoryList.Item>
+      <CategoryList.Item id="multi-step-timer"></CategoryList.Item>
+      <CategoryList.Item id="queue"></CategoryList.Item>
+      <CategoryList.Item id="debounce"></CategoryList.Item>
+      <CategoryList.Item id="deduplication"></CategoryList.Item>
     </CategoryList.Section>
     <hr />
     <CategoryList.Section title="Lists">
-      <CategoryList.Item
-        title="Pagination"
-        href="/machines/pagination"
-        icon="🗐"
-        version="0.0.1"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Infinite Scroll"
-        version="0.0.1"
-        icon="∞"
-        href="/machines/infinite-scroll"
-      ></CategoryList.Item>
-      <CategoryList.Item
-        title="Drag and Drop"
-        icon="⁉"
-        version="0.0.2"
-        href="/machines/drag-and-drop"
-      ></CategoryList.Item>
+      <CategoryList.Item id="pagination"></CategoryList.Item>
+      <CategoryList.Item id="infinite-scroll"></CategoryList.Item>
+      <CategoryList.Item id="drag-and-drop"></CategoryList.Item>
     </CategoryList.Section>
     <hr />
     <CategoryList.Section title="Data Fetching">
-      <CategoryList.Item
-        title="Simple Data Fetch"
-        href="/machines/simple-data-fetch"
-        icon="🐕"
-        version="0.0.2"
-      ></CategoryList.Item>
+      <CategoryList.Item id="simple-data-fetch"></CategoryList.Item>
+      <CategoryList.Item id="with-local-cache"></CategoryList.Item>
       <CategoryList.ComingSoonItem
         title="With Circuit Breaker"
-        icon="🐕"
-        version="0.0.2"
-      ></CategoryList.ComingSoonItem>
-      <CategoryList.ComingSoonItem
-        title="With Delayed Loading Indicator"
-        icon="🐕"
-        version="0.0.2"
-      ></CategoryList.ComingSoonItem>
-      <CategoryList.ComingSoonItem
-        title="With Global Cache"
-        icon="🐕"
-        version="0.0.2"
+        icon={Icons.BatteryAlertOutlined}
       ></CategoryList.ComingSoonItem>
     </CategoryList.Section>
     <hr />
     <CategoryList.Section title="Global State">
-      <CategoryList.Item
-        title="Authentication"
-        href="/machines/authentication"
-        icon="🔓"
-        version="0.0.0"
-      ></CategoryList.Item>
+      <CategoryList.Item id="authentication"></CategoryList.Item>
     </CategoryList.Section>
     <hr />
-    <CategoryList.Section title="The DOM">
-      <CategoryList.ComingSoonItem
-        title="Global Focus Listener"
-        icon="🔓"
-        version="0.0.0"
-      ></CategoryList.ComingSoonItem>
+    <CategoryList.Section title="Audio/Video">
+      <CategoryList.Item id="netflix-style-video-hover"></CategoryList.Item>
       <CategoryList.ComingSoonItem
         title="Video / Audio controls"
-        icon="🔓"
-        version="0.0.0"
+        icon={Icons.PlayCircleOutlineOutlined}
       ></CategoryList.ComingSoonItem>
     </CategoryList.Section>
     {/* <hr />

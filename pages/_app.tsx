@@ -13,8 +13,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="A collection of professionally designed state machines you can drop into your XState projects"
         ></meta>
-        {/* <link rel="canonical" href="http://example.com/" /> */}
-        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://xstate-catalogue.com" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="State Machine Catalogue" />
         <meta property="og:image" content="/og-image.png" />
@@ -31,6 +31,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content="/og-image.png" />
         <meta name="twitter:creator" content="@mpocock1" />
         <meta name="twitter:site" content="@mpocock1" />
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+            ></script>
+            <script>
+              {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
+            `}
+            </script>
+          </>
+        )}
       </Head>
       <Layout>
         <Component {...pageProps} />

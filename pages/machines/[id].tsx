@@ -292,7 +292,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           {props.machine.stateIds.map((id) => {
             if (id === props.machine.id) return null;
             return (
-              <li className="break-all">
+              <li>
                 <State>
                   {props.machine.getStateNodeById(id).path.join(".")}
                 </State>
@@ -310,7 +310,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
             .filter((event) => !event.startsWith("xstate.") && event)
             .map((event) => {
               return (
-                <li className="break-all">
+                <li>
                   <Event>{event}</Event>
                 </li>
               );
@@ -325,7 +325,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.actions).map((action) => {
               return (
-                <li className="break-all">
+                <li>
                   <Action>{action}</Action>
                 </li>
               );
@@ -341,7 +341,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.guards).map((action) => {
               return (
-                <li className="break-all">
+                <li>
                   <Action>{action}</Action>
                 </li>
               );
@@ -357,7 +357,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.services).map((service) => {
               return (
-                <li className="break-all">
+                <li>
                   <Service>{service}</Service>
                 </li>
               );

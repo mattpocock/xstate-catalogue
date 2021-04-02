@@ -10,14 +10,22 @@ export const State = (props: { children: string }) => {
   const context = useContext(MachineHelpersContext);
   const [state] = useService(context.service);
   return (
-    <span
-      className={`font-mono font-bold text-sm px-2 py-1 transition-colors ${
-        state.matches(props.children)
-          ? `bg-green-100 text-green-800`
-          : "bg-gray-100 text-gray-600"
-      }`}
-    >
-      {props.children}
+    <span className={`font-mono inline-flex flex-wrap font-bold text-sm `}>
+      {props.children.split(".").map((a, index, array) => (
+        <span
+          key={index}
+          className={`transition-colors py-1 ${index === 0 && "pl-2"} ${
+            index === array.length - 1 && "pr-2"
+          } ${
+            state.matches(props.children)
+              ? `bg-green-100 text-green-800`
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {a}
+          {index !== array.length - 1 && "."}
+        </span>
+      ))}
     </span>
   );
 };
@@ -40,14 +48,22 @@ export const Event = (props: { children: string }) => {
       // To override prose
       style={{ margin: 0 }}
     >
-      <span
-        className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors ${
-          state.nextEvents.includes(props.children)
-            ? `bg-yellow-100 text-yellow-800`
-            : ""
-        }`}
-      >
-        {props.children}
+      <span className={`font-mono inline-flex flex-wrap font-bold text-sm `}>
+        {props.children.split(".").map((a, index, array) => (
+          <span
+            key={index}
+            className={`transition-colors py-1 ${index === 0 && "pl-2"} ${
+              index === array.length - 1 && "pr-2"
+            } ${
+              state.nextEvents.includes(props.children)
+                ? `bg-yellow-100 text-yellow-800`
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {a}
+            {index !== array.length - 1 && "."}
+          </span>
+        ))}
       </span>
     </button>
   );
@@ -74,7 +90,7 @@ export const Context = (props: { children: string; stringify?: boolean }) => {
   }
   return (
     <span
-      className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors ${
+      className={`bg-gray-100 text-gray-600 font-mono inline-flex flex-wrap font-bold text-sm px-2 py-1 transition-colors ${
         state.context[props.children] ? `bg-yellow-100 text-yellow-800` : ""
       }`}
     >
@@ -93,7 +109,7 @@ export const WholeContext = () => {
 export const Service = (props: { children: string }) => {
   return (
     <span
-      className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors`}
+      className={`bg-gray-100 text-gray-600 font-mono inline-flex flex-wrap font-bold text-sm px-2 py-1 transition-colors`}
     >
       {props.children}
     </span>

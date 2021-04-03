@@ -15,3 +15,4 @@ export { default as MovieFilterOutlined } from "@material-ui/icons/MovieFilterOu
 export { default as PlayCircleOutlineOutlined } from "@material-ui/icons/PlayCircleOutlineOutlined";
 export { default as BatteryAlertOutlined } from "@material-ui/icons/BatteryAlertOutlined";
 export { default as ListAltOutlined } from "@material-ui/icons/ListAltOutlined";
+export { default as SearchOutlined } from "@material-ui/icons/SearchOutlined";

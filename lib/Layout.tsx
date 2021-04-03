@@ -1,8 +1,14 @@
-import React from "react";
+import { OverlayContainer } from "@react-aria/overlays";
+import { useInterpret, useSelector } from "@xstate/react";
 import Link from "next/link";
-import packageJson from "../package.json";
 import { useRouter } from "next/router";
+import React from "react";
+import packageJson from "../package.json";
+import { CatalogueSearcher } from "./CatalogueSearcher";
 import { globalStateService, useLayout } from "./GlobalState";
+import { SearchOutlined } from "./Icons";
+import { ModalDialog } from "./ModalDialog";
+import { modalsMachine } from "./modalsMachine";
 
 export const Layout: React.FC = ({ children }) => {
   const router = useRouter();
@@ -10,6 +16,12 @@ export const Layout: React.FC = ({ children }) => {
   const shouldPreventScroll = router.pathname.includes("/machines/[id]");
 
   const layout = useLayout();
+
+  const modalsService = useInterpret(modalsMachine);
+
+  const shouldShowSearchModal = useSelector(modalsService, (state) => {
+    return state.matches("showingSearchModal");
+  });
 
   return (
     <div
@@ -27,6 +39,20 @@ export const Layout: React.FC = ({ children }) => {
             </p>
           </a>
         </Link>
+        <div className="self-stretch hidden md:block">
+          <button
+            className="flex items-center h-full p-3 space-x-16 text-lg text-gray-500 border-l border-r outline-none focus:outline-none focus:ring"
+            onClick={() => modalsService.send("CLICK_SEARCH")}
+          >
+            <div className="flex items-center space-x-3 text-sm">
+              <SearchOutlined className="text-gray-400" />
+              <span>Search for machines...</span>
+            </div>
+            <span className="px-2 py-1 ml-4 text-sm tracking-widest text-gray-400 border border-gray-300 rounded">
+              ⌘K
+            </span>
+          </button>
+        </div>
         <div className="items-center hidden space-x-6 md:flex">
           {router.pathname.includes("machines") && (
             <button
@@ -113,6 +139,18 @@ export const Layout: React.FC = ({ children }) => {
           </a>
         </p>
       </footer> */}
+      {shouldShowSearchModal && (
+        <OverlayContainer>
+          <ModalDialog
+            isOpen
+            onClose={() => modalsService.send("CLOSE")}
+            isDismissable
+            title="Search the Catalogue"
+          >
+            <CatalogueSearcher service={modalsService} />
+          </ModalDialog>
+        </OverlayContainer>
+      )}
     </div>
   );
 };

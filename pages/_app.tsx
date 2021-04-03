@@ -3,6 +3,7 @@ import { Layout } from "../lib/Layout";
 import "../styles/globals.css";
 import "../styles/atom-one-dark.css";
 import Head from "next/head";
+import { OverlayProvider } from "@react-aria/overlays";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -49,9 +50,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
         )}
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <OverlayProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </OverlayProvider>
       <script src="/highlight.pack.js"></script>
     </>
   );

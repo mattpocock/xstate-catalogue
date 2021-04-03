@@ -87,14 +87,14 @@ export const metadata: Record<string, MetadataItem> = {
     icon: "KeyboardReturnOutlined",
     version: "0.0.3",
   },
-  "video-audio-controls": {
-    title: "Video / Audio Controls",
-    icon: "PlayCircleOutlineOutlined",
-    version: "0.0.0",
-  },
-  "circuit-breaker": {
-    title: "With Circuit Breaker",
-    icon: "BatteryAlertOutlined",
-    version: "0.0.0",
-  },
+  // "video-audio-controls": {
+  //   title: "Video / Audio Controls",
+  //   icon: "PlayCircleOutlineOutlined",
+  //   version: "0.0.0",
+  // },
+  // "circuit-breaker": {
+  //   title: "With Circuit Breaker",
+  //   icon: "BatteryAlertOutlined",
+  //   version: "0.0.0",
+  // },
 };

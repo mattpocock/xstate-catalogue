@@ -65,7 +65,7 @@ export const metadata: Record<string, MetadataItem> = {
   "netflix-style-video-hover": {
     title: "Netflix-style Video Hover",
     icon: "MovieFilterOutlined",
-    version: "0.0.3",
+    version: "0.1.0",
   },
   pagination: {
     title: "Pagination",

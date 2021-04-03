@@ -1,4 +1,39 @@
-# NetflixStyleVideoHover
+# Netflix-Style Video Hover
 
-<Event>REPORT_IMAGE_LOADED</Event>
-<Event>REPORT_VIDEO_LOADED</Event>
+This machine covers a complex interaction - an image card which, on hover, fades into a video. You'll have seen this interaction before if you've used Netflix.
+
+This is a bit of a personal one. I had to implement this at a job long before I knew about XState, and it was a mess. This is my shot at redemption.
+
+## The Background Image
+
+The first step to getting the card to work is to wait for the background image to load. If we try the other interactions without a loaded background image, it's going to look awful. So we start in the <State>awaitingBackgroundImageLoad</State> state, and on <Event>REPORT_IMAGE_LOADED</Event> we head to <State>idle</State>.
+
+If the image fails to load, reported via <Event>REPORT_IMAGE_FAILED_TO_LOAD</Event>, we head to the <State>imageFailedToLoad</State> state. Since this will be fairly rare, I've made this error irrecoverable - you can't currently escape from this fail state.
+
+## Reacting to the hover
+
+In <State>idle</State>, we can react to <Event>MOUSE_OVER</Event> events. This takes us to <State>showingVideo</State>.
+
+The first time we get here, we head to <State>showingVideo.loadingVideoSrc</State>. This is where we're waiting for the video resource to load from the network. We don't want to do this as soon as we hit the page, because we don't want to drain the user's network.
+
+On <Event>REPORT_VIDEO_LOADED</Event>, the video gets loaded and starts auto playing via <State>showingVideo.autoPlayingVideo</State>.
+
+## Don't play it too quickly!
+
+There's a wrinkle - we don't want the video to play too quickly - we want to show the background for 2 seconds before animating the video in.
+
+We handle this via a nested 'waiting' state. When we first reach <State>showingVideo.loadingVideoSrc</State>, we stay in <State>showingVideo.loadingVideoSrc.cannotMoveOn</State> for 2 seconds. Any calls to <Event>REPORT_VIDEO_LOADED</Event> for that second save the loaded state to <Context stringify>hasVideoLoaded</Context>.
+
+After the second is up, and the video has already loaded, we go to <State>showingVideo.autoPlayingVideo</State>.
+
+Otherwise, we head to <State>showingVideo.loadingVideoSrc.canMoveOn</State>, where a <Event>REPORT_VIDEO_LOADED</Event> event will head to <State>showingVideo.autoPlayingVideo</State>.
+
+## Stopping the video
+
+At any time during the video loading/waiting/playing cycle, the user can <Event>MOUSE_OUT</Event>, which pulls us back into <State>idle</State>.
+
+## Playing it for a second time
+
+When the user triggers <Event>MOUSE_OVER</Event> when <Context stringify>hasVideoLoaded</Context> is true, the behaviour needs to change again. There's no reason to load the video again - but we still need to wait for 2 seconds.
+
+Here, we head to <State>showingVideo.waitingBeforePlaying</State> for a moment, and the video starts autoplaying via <State>showingVideo.autoPlayingVideo</State>. <Event>MOUSE_OUT</Event> takes us back to idle again.

@@ -42,7 +42,6 @@ const netflixStyleVideoHoverMachine = createMachine<
           },
         },
       },
-      // Things failed terribly, this is bad....
       imageFailedToLoad: {},
       idle: {
         on: {
@@ -63,16 +62,16 @@ const netflixStyleVideoHoverMachine = createMachine<
             always: [
               {
                 cond: "hasLoadedVideo",
-                target: "waitingASecondBeforePlaying",
+                target: "waitingBeforePlaying",
               },
               {
                 target: "loadingVideoSrc",
               },
             ],
           },
-          waitingASecondBeforePlaying: {
+          waitingBeforePlaying: {
             after: {
-              1000: {
+              2000: {
                 target: "autoPlayingVideo",
               },
             },
@@ -85,7 +84,7 @@ const netflixStyleVideoHoverMachine = createMachine<
             states: {
               cannotMoveOn: {
                 after: {
-                  1000: {
+                  2000: {
                     target: "canMoveOn",
                   },
                 },

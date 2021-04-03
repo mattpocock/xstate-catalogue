@@ -1,6 +1,6 @@
 {
   "name": "xstate-catalogue",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "Matt Pocock",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@mdx-js/loader": "^1.6.22",
+    "@mdx-js/react": "^1.6.22",
     "@next/mdx": "^10.0.9",
     "@react-aria/button": "^3.3.1",
     "@react-aria/dialog": "^3.1.2",
@@ -41,6 +42,7 @@
     "react-syntax-highlighter": "^15.4.3",
     "tailwindcss": "^2.0.4",
     "typescript": "^4.2.3",
+    "ws": "^7.4.4",
     "xstate": "^4.16.2"
   }
 }

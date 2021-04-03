@@ -45,7 +45,7 @@ export const Layout: React.FC = ({ children }) => {
             onClick={() => modalsService.send("CLICK_SEARCH")}
           >
             <div className="flex items-center space-x-3 text-sm">
-              <SearchOutlined className="text-gray-400" />
+              <SearchOutlined className="w-4 h-4 text-gray-400" />
               <span>Search for machines...</span>
             </div>
             <span className="px-2 py-1 ml-4 text-sm tracking-widest text-gray-400 border border-gray-300 rounded">

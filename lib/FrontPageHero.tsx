@@ -30,7 +30,7 @@ export const FrontPageHero = () => {
                 href="/#Catalogue"
                 className="items-center hidden w-full px-6 py-3 pl-5 space-x-4 text-white bg-blue-700 border-2 border-blue-700 rounded lg:flex"
               >
-                <ImportContactsOutlined className="text-blue-100" />
+                <ImportContactsOutlined className="w-4 h-4 text-blue-100" />
                 <span>Browse the Catalogue</span>
               </a>
               <a
@@ -38,7 +38,7 @@ export const FrontPageHero = () => {
                 className="flex items-center w-full px-6 py-3 pl-5 space-x-4 text-gray-200 bg-gray-800 border-2 border-gray-400 rounded"
                 target="_blank"
               >
-                <GitHub className="text-gray-300" />
+                <GitHub className="w-4 h-4 text-gray-300" />
                 <span>View on GitHub</span>
               </a>
               <a
@@ -46,7 +46,7 @@ export const FrontPageHero = () => {
                 className="flex items-center w-full px-6 py-3 pl-5 space-x-4 text-gray-200 bg-gray-800 border-2 border-gray-400 rounded"
                 target="_blank"
               >
-                <Twitter className="text-gray-300" />
+                <Twitter className="w-4 h-4 text-gray-300" />
                 <span>Follow on Twitter</span>
               </a>
             </div>

@@ -17,3 +17,5 @@ export { default as BatteryAlertOutlined } from "@material-ui/icons/BatteryAlert
 export { default as ListAltOutlined } from "@material-ui/icons/ListAltOutlined";
 export { default as SearchOutlined } from "@material-ui/icons/SearchOutlined";
 export { default as GitHub } from "@material-ui/icons/GitHub";
+export { default as Twitter } from "@material-ui/icons/Twitter";
+export { default as ImportContactsOutlined } from "@material-ui/icons/ImportContactsOutlined";

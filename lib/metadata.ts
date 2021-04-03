@@ -35,7 +35,7 @@ export const metadata: Record<string, MetadataItem> = {
   "drag-and-drop": {
     title: "Drag And Drop",
     icon: "PanToolOutlined",
-    version: "0.0.3",
+    version: "0.1.0",
   },
   "form-input": {
     title: "Form Input",
@@ -50,12 +50,12 @@ export const metadata: Record<string, MetadataItem> = {
   "multi-step-form": {
     title: "Multi-Step Form",
     icon: "DynamicFeedOutlined",
-    version: "0.0.3",
+    version: "0.1.0",
   },
   "multi-step-form-with-validation": {
     title: "Multi-Step Form With Validation",
     icon: "DynamicFeedOutlined",
-    version: "0.0.3",
+    version: "0.1.0",
   },
   "multi-step-timer": {
     title: "Multi-Step Timer",

@@ -1,3 +1,4 @@
+import GitHub from "@material-ui/icons/GitHub";
 import { MDXProvider } from "@mdx-js/react";
 import { inspect } from "@xstate/inspect";
 import { useInterpret } from "@xstate/react";
@@ -16,7 +17,7 @@ import {
   State,
   WholeContext,
 } from "../../lib/MachineHelpers";
-import { metadata } from "../../lib/metadata";
+import { metadata, MetadataItem } from "../../lib/metadata";
 import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
 
 const useGetImports = (slug: string, deps: any[]) => {
@@ -100,9 +101,11 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
           <>
             {imports && (
               <ShowMachinePage
+                slug={props.slug}
                 machine={imports.machine}
                 mdxDoc={imports.mdxDoc}
                 fileText={props.fileText}
+                meta={props.meta}
               ></ShowMachinePage>
             )}
           </>
@@ -157,6 +160,8 @@ const ShowMachinePage = (props: {
   machine: StateMachine<any, any, any>;
   mdxDoc: any;
   fileText: string;
+  slug: string;
+  meta: MetadataItem;
 }) => {
   const service = useInterpret(props.machine, {
     devTools: true,
@@ -209,19 +214,39 @@ const ShowMachinePage = (props: {
           )}
           <div className="flex">
             <SideBar machine={props.machine} />
-            <div className="p-6 prose lg:prose-lg">
-              <MDXProvider
-                components={{
-                  Event,
-                  State,
-                  Action,
-                  Service,
-                  Context,
-                  WholeContext,
-                }}
-              >
-                <props.mdxDoc></props.mdxDoc>
-              </MDXProvider>
+            <div className="p-6 space-y-6">
+              <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
+                <a
+                  href={`https://github.com/mattpocock/xstate-catalogue/edit/master/lib/machines/${props.slug}.machine.ts`}
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  target="_blank"
+                >
+                  <span>Edit</span>
+                  <GitHub style={{ height: "1rem", width: "1.2rem" }} />
+                </a>
+                <a
+                  href={`https://github.com/mattpocock/xstate-catalogue/discussions?discussions_q=${props.meta.title}`}
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  target="_blank"
+                >
+                  <span>Discuss</span>
+                  <GitHub style={{ height: "1rem", width: "1.2rem" }} />
+                </a>
+              </div>
+              <div className="prose lg:prose-lg">
+                <MDXProvider
+                  components={{
+                    Event,
+                    State,
+                    Action,
+                    Service,
+                    Context,
+                    WholeContext,
+                  }}
+                >
+                  <props.mdxDoc></props.mdxDoc>
+                </MDXProvider>
+              </div>
             </div>
           </div>
         </div>

@@ -16,3 +16,4 @@ export { default as PlayCircleOutlineOutlined } from "@material-ui/icons/PlayCir
 export { default as BatteryAlertOutlined } from "@material-ui/icons/BatteryAlertOutlined";
 export { default as ListAltOutlined } from "@material-ui/icons/ListAltOutlined";
 export { default as SearchOutlined } from "@material-ui/icons/SearchOutlined";
+export { default as GitHub } from "@material-ui/icons/GitHub";

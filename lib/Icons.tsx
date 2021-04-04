@@ -19,3 +19,5 @@ export { default as SearchOutlined } from "@material-ui/icons/SearchOutlined";
 export { default as GitHub } from "@material-ui/icons/GitHub";
 export { default as Twitter } from "@material-ui/icons/Twitter";
 export { default as ImportContactsOutlined } from "@material-ui/icons/ImportContactsOutlined";
+export { default as TimerOutlined } from "@material-ui/icons/TimerOutlined";
+export { default as TabOutlined } from "@material-ui/icons/TabOutlined";

@@ -1,0 +1,9 @@
+# Tab Focus
+
+This machine tracks whether the user is focused on the current window. It has two states, <State>userIsOnTab</State> and <State>userIsNotOnTab</State>.
+
+When the machine receives <Event>REPORT_TAB_FOCUS</Event> from the <Service>checkForDocumentFocus</Service>, we head to <State>userIsOnTab</State>.
+
+When the machine receives <Event>REPORT_TAB_BLUR</Event> from the <Service>checkForDocumentBlur</Service> service, we head to <State>userIsNotOnTab</State>.
+
+These services are also hooked up to the DOM, so you can test this by losing focus on the current page.

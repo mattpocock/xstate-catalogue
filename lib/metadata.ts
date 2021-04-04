@@ -87,6 +87,11 @@ export const metadata: Record<string, MetadataItem> = {
     icon: "KeyboardReturnOutlined",
     version: "0.0.3",
   },
+  "tab-focus": {
+    title: "Tab Focus",
+    icon: "TabOutlined",
+    version: "0.1.0",
+  },
   // "video-audio-controls": {
   //   title: "Video / Audio Controls",
   //   icon: "PlayCircleOutlineOutlined",

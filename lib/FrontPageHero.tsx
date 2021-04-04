@@ -4,7 +4,7 @@ import css from "./FrontPageHero.module.css";
 export const FrontPageHero = () => {
   return (
     <div
-      className={`px-6 py-12 bg-gray-800 md:py-20 xl:py-48 ${css.backgroundImage}`}
+      className={`px-6 py-12 bg-gray-800 md:py-20 xl:py-36 ${css.backgroundImage}`}
     >
       <div className="container max-w-6xl mx-auto">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-6">

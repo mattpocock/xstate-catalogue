@@ -1,12 +1,12 @@
+![XState Catalogue](./public/og-image.png)
+
 # XState Catalogue
 
 XState Catalogue is a collection of professionally designed state machines you can drop into your XState projects.
 
-Check out the [full site](https://xstate-catalogue.com) to browse the catalogue.
+**We're accepting contributions!** We'd love to hear your ideas for new machines and ways to improve the catalogue.
 
-## Contributing
-
-We're accepting contributions! We'd love to hear your ideas for new machines and ways to improve the catalogue.
+Check out the [full site](https://xstate-catalogue.com) for the full browsing experience.
 
 ### Setting up the repo
 

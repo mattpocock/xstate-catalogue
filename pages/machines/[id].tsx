@@ -1,13 +1,13 @@
-import GitHub from "@material-ui/icons/GitHub";
-import { MDXProvider } from "@mdx-js/react";
-import { inspect } from "@xstate/inspect";
-import { useInterpret } from "@xstate/react";
-import { GetStaticPaths, InferGetStaticPropsType, NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
-import { StateMachine } from "xstate";
-import { useLayout } from "../../lib/GlobalState";
+import GitHub from '@material-ui/icons/GitHub';
+import { MDXProvider } from '@mdx-js/react';
+import { inspect } from '@xstate/inspect';
+import { useInterpret } from '@xstate/react';
+import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
+import { StateMachine } from 'xstate';
+import { useLayout } from '../../lib/GlobalState';
 import {
   Action,
   Context,
@@ -16,9 +16,9 @@ import {
   Service,
   State,
   WholeContext,
-} from "../../lib/MachineHelpers";
-import { metadata, MetadataItem } from "../../lib/metadata";
-import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
+} from '../../lib/MachineHelpers';
+import { metadata, MetadataItem } from '../../lib/metadata';
+import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
 
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
@@ -48,12 +48,12 @@ const useGetImports = (slug: string, deps: any[]) => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const fs = await import("fs");
-  const path = await import("path");
+  const fs = await import('fs');
+  const path = await import('path');
 
   const machinesPath = path.resolve(
     process.cwd(),
-    "lib/machines",
+    'lib/machines',
     `${params.id}.machine.ts`,
   );
 
@@ -123,11 +123,11 @@ const Layout = (props: {
   iframe: React.ReactNode;
 }) => {
   const layout = useLayout();
-  if (layout === "horizontal" || layout === "vertical") {
+  if (layout === 'horizontal' || layout === 'vertical') {
     return (
       <div
         className={`md:grid h-full ${
-          layout === "horizontal" ? "md:grid-cols-2" : "md:grid-rows-2"
+          layout === 'horizontal' ? 'md:grid-cols-2' : 'md:grid-rows-2'
         }`}
       >
         <div className="hidden bg-black md:block">{props.iframe}</div>
@@ -137,12 +137,12 @@ const Layout = (props: {
       </div>
     );
   }
-  if (layout === "blog") {
+  if (layout === 'blog') {
     return (
       <div className="h-full overflow-y-scroll">
         <div>
           <div
-            style={{ height: "550px" }}
+            style={{ height: '550px' }}
             className="hidden mb-16 bg-black md:block"
           >
             {props.iframe}
@@ -167,7 +167,7 @@ const ShowMachinePage = (props: {
     devTools: true,
   });
   const [hasDismissed, setHasDismissed] = useState<boolean>(
-    Boolean(localStorage.getItem("REJECTED_1")),
+    Boolean(localStorage.getItem('REJECTED_1')),
   );
 
   const copyToClipboard = useCopyToClipboard({});
@@ -204,7 +204,7 @@ const ShowMachinePage = (props: {
                   className="absolute top-0 right-0 p-2 mb-2 mr-4 text-lg"
                   onClick={() => {
                     setHasDismissed(true);
-                    localStorage.setItem("REJECTED_1", "true");
+                    localStorage.setItem('REJECTED_1', 'true');
                   }}
                 >
                   <span className="text-gray-600">✖</span>
@@ -222,7 +222,7 @@ const ShowMachinePage = (props: {
                   target="_blank"
                 >
                   <span>Edit</span>
-                  <GitHub style={{ height: "1rem", width: "1.2rem" }} />
+                  <GitHub style={{ height: '1rem', width: '1.2rem' }} />
                 </a>
                 <a
                   href={`https://github.com/mattpocock/xstate-catalogue/discussions?discussions_q=${props.meta.title}`}
@@ -230,7 +230,7 @@ const ShowMachinePage = (props: {
                   target="_blank"
                 >
                   <span>Discuss</span>
-                  <GitHub style={{ height: "1rem", width: "1.2rem" }} />
+                  <GitHub style={{ height: '1rem', width: '1.2rem' }} />
                 </a>
               </div>
               <div className="prose lg:prose-lg">
@@ -277,21 +277,21 @@ const ShowMachinePage = (props: {
 const machinePathRegex = /\.machine\.ts$/;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const fs = await import("fs");
-  const path = await import("path");
+  const fs = await import('fs');
+  const path = await import('path');
 
-  const machinesPath = path.resolve(process.cwd(), "lib/machines");
+  const machinesPath = path.resolve(process.cwd(), 'lib/machines');
 
   const machines = fs.readdirSync(machinesPath);
 
   return {
     fallback: false,
     paths: machines
-      .filter((machine) => machine.endsWith(".ts"))
+      .filter((machine) => machine.endsWith('.ts'))
       .map((fileName) => {
         return {
           params: {
-            id: fileName.replace(machinePathRegex, ""),
+            id: fileName.replace(machinePathRegex, ''),
           },
         };
       }),
@@ -304,12 +304,12 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
   return (
     <div
       className="hidden p-6 space-y-16 border-r md:block"
-      style={{ maxWidth: "300px" }}
+      style={{ maxWidth: '300px' }}
     >
       <div className="w-48" />
       <Link href="/#Catalogue">
         <a className="space-x-3 text-base text-gray-600">
-          <span className="text-gray-500">{"❮"}</span>
+          <span className="text-gray-500">{'❮'}</span>
           <span>Back to List</span>
         </a>
       </Link>
@@ -323,7 +323,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
             return (
               <li>
                 <State>
-                  {props.machine.getStateNodeById(id).path.join(".")}
+                  {props.machine.getStateNodeById(id).path.join('.')}
                 </State>
               </li>
             );
@@ -336,7 +336,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
         </h2>
         <ul className="space-y-3">
           {props.machine.events
-            .filter((event) => !event.startsWith("xstate.") && event)
+            .filter((event) => !event.startsWith('xstate.') && event)
             .map((event) => {
               return (
                 <li>

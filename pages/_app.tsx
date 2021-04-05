@@ -1,9 +1,9 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
-import { Layout } from "../lib/Layout";
-import "../styles/globals.css";
-import "../styles/atom-one-dark.css";
-import Head from "next/head";
-import { OverlayProvider } from "@react-aria/overlays";
+import { AppProps } from 'next/dist/next-server/lib/router/router';
+import { Layout } from '../lib/Layout';
+import '../styles/globals.css';
+import '../styles/atom-one-dark.css';
+import Head from 'next/head';
+import { OverlayProvider } from '@react-aria/overlays';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

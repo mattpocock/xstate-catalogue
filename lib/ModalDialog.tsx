@@ -1,14 +1,14 @@
-import { useDialog } from "@react-aria/dialog";
-import { FocusScope } from "@react-aria/focus";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
+import { useDialog } from '@react-aria/dialog';
+import { FocusScope } from '@react-aria/focus';
+import { VisuallyHidden } from '@react-aria/visually-hidden';
 import {
   OverlayProps,
   useModal,
   useOverlay,
   usePreventScroll,
-} from "@react-aria/overlays";
-import { AriaDialogProps } from "@react-types/dialog";
-import React from "react";
+} from '@react-aria/overlays';
+import { AriaDialogProps } from '@react-types/dialog';
+import React from 'react';
 
 export const ModalDialog: React.FC<
   OverlayProps & { title: string } & AriaDialogProps
@@ -26,16 +26,16 @@ export const ModalDialog: React.FC<
   return (
     <div
       style={{
-        position: "fixed",
+        position: 'fixed',
         zIndex: 100,
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
-        background: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        background: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <FocusScope contain restoreFocus autoFocus>

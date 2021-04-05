@@ -1,5 +1,5 @@
-import { GitHub, ImportContactsOutlined, Twitter } from "./Icons";
-import css from "./FrontPageHero.module.css";
+import { GitHub, ImportContactsOutlined, Twitter } from './Icons';
+import css from './FrontPageHero.module.css';
 
 export const FrontPageHero = () => {
   return (

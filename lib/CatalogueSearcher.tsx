@@ -1,9 +1,9 @@
-import { useSelector } from "@xstate/react";
-import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
-import * as icons from "./Icons";
-import { metadata, MetadataItem } from "./metadata";
-import { ModalsMachineInterpreter } from "./modalsMachine";
+import { useSelector } from '@xstate/react';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
+import * as icons from './Icons';
+import { metadata, MetadataItem } from './metadata';
+import { ModalsMachineInterpreter } from './modalsMachine';
 
 const entries: (MetadataItem & { id: string })[] = Object.entries(metadata).map(
   ([id, value]) => ({
@@ -20,7 +20,7 @@ export const CatalogueSearcher = (props: {
     (state) => state.context.searchModalText,
   );
   const optionsToShow = useMemo(() => {
-    const search = new RegExp(input, "i");
+    const search = new RegExp(input, 'i');
     return entries
       .filter((entry) => {
         return search.test(entry.title);
@@ -40,7 +40,7 @@ export const CatalogueSearcher = (props: {
             type="search"
             onChange={(e) => {
               props.service.send({
-                type: "UPDATE_SEARCH_MODAL_TEXT",
+                type: 'UPDATE_SEARCH_MODAL_TEXT',
                 text: e.target.value,
               });
             }}
@@ -63,7 +63,7 @@ export const CatalogueSearcher = (props: {
               <button
                 onClick={() => {
                   router.push(`/machines/${option.id}`);
-                  props.service.send("CLOSE");
+                  props.service.send('CLOSE');
                 }}
                 className="flex items-center px-3 py-3 space-x-3 focus:outline-none focus:ring"
               >

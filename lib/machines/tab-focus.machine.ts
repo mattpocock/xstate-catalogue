@@ -1,13 +1,13 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine, Sender } from 'xstate';
 
 interface TabFocusMachineContext {}
 
 type TabFocusMachineEvent =
   | {
-      type: "REPORT_TAB_BLUR";
+      type: 'REPORT_TAB_BLUR';
     }
   | {
-      type: "REPORT_TAB_FOCUS";
+      type: 'REPORT_TAB_FOCUS';
     };
 
 const tabFocusMachine = createMachine<
@@ -15,23 +15,23 @@ const tabFocusMachine = createMachine<
   TabFocusMachineEvent
 >(
   {
-    id: "tabFocus",
-    initial: "userIsOnTab",
+    id: 'tabFocus',
+    initial: 'userIsOnTab',
     states: {
       userIsOnTab: {
         invoke: {
-          src: "checkForDocumentBlur",
+          src: 'checkForDocumentBlur',
         },
         on: {
-          REPORT_TAB_BLUR: "userIsNotOnTab",
+          REPORT_TAB_BLUR: 'userIsNotOnTab',
         },
       },
       userIsNotOnTab: {
         invoke: {
-          src: "checkForDocumentFocus",
+          src: 'checkForDocumentFocus',
         },
         on: {
-          REPORT_TAB_FOCUS: "userIsOnTab",
+          REPORT_TAB_FOCUS: 'userIsOnTab',
         },
       },
     },
@@ -44,24 +44,24 @@ const tabFocusMachine = createMachine<
     services: {
       checkForDocumentBlur: () => (send: Sender<TabFocusMachineEvent>) => {
         const listener = () => {
-          send("REPORT_TAB_BLUR");
+          send('REPORT_TAB_BLUR');
         };
 
-        window.addEventListener("blur", listener);
+        window.addEventListener('blur', listener);
 
         return () => {
-          window.removeEventListener("blur", listener);
+          window.removeEventListener('blur', listener);
         };
       },
       checkForDocumentFocus: () => (send: Sender<TabFocusMachineEvent>) => {
         const listener = () => {
-          send("REPORT_TAB_FOCUS");
+          send('REPORT_TAB_FOCUS');
         };
 
-        window.addEventListener("focus", listener);
+        window.addEventListener('focus', listener);
 
         return () => {
-          window.removeEventListener("focus", listener);
+          window.removeEventListener('focus', listener);
         };
       },
     },

@@ -1,4 +1,4 @@
-import { assign, createMachine, Interpreter, Sender } from "xstate";
+import { assign, createMachine, Interpreter, Sender } from 'xstate';
 
 interface Context {
   searchModalText: string;
@@ -6,44 +6,44 @@ interface Context {
 
 type Event =
   | {
-      type: "CMD_K_PRESSED";
+      type: 'CMD_K_PRESSED';
     }
   | {
-      type: "CLICK_SEARCH";
+      type: 'CLICK_SEARCH';
     }
   | {
-      type: "UPDATE_SEARCH_MODAL_TEXT";
+      type: 'UPDATE_SEARCH_MODAL_TEXT';
       text: string;
     }
   | {
-      type: "CLOSE";
+      type: 'CLOSE';
     };
 
 export type ModalsMachineInterpreter = Interpreter<Context, any, Event>;
 
 export const modalsMachine = createMachine<Context, Event>(
   {
-    initial: "idle",
+    initial: 'idle',
     context: {
-      searchModalText: "",
+      searchModalText: '',
     },
     states: {
       idle: {
         on: {
           CMD_K_PRESSED: {
-            target: "showingSearchModal",
+            target: 'showingSearchModal',
           },
           CLICK_SEARCH: {
-            target: "showingSearchModal",
+            target: 'showingSearchModal',
           },
         },
         invoke: {
-          src: "listenForKeyboardShortcuts",
+          src: 'listenForKeyboardShortcuts',
         },
       },
       showingSearchModal: {
         on: {
-          CLOSE: "idle",
+          CLOSE: 'idle',
           UPDATE_SEARCH_MODAL_TEXT: {
             actions: assign((context, event) => {
               return {
@@ -59,14 +59,14 @@ export const modalsMachine = createMachine<Context, Event>(
     services: {
       listenForKeyboardShortcuts: () => (send: Sender<Event>) => {
         const listener = (e: KeyboardEvent) => {
-          if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-            send("CMD_K_PRESSED");
+          if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            send('CMD_K_PRESSED');
           }
         };
-        document.addEventListener("keydown", listener);
+        document.addEventListener('keydown', listener);
 
         return () => {
-          document.removeEventListener("keydown", listener);
+          document.removeEventListener('keydown', listener);
         };
       },
     },

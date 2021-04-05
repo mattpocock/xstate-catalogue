@@ -1,5 +1,5 @@
-import { assign, createMachine } from "xstate";
-import { choose } from "xstate/lib/actions";
+import { assign, createMachine } from 'xstate';
+import { choose } from 'xstate/lib/actions';
 
 interface PaginationMachineContext {
   totalPages?: number;
@@ -11,17 +11,17 @@ interface PaginationMachineContext {
 
 type PaginationMachineEvent =
   | {
-      type: "UPDATE_TOTAL_PAGES";
+      type: 'UPDATE_TOTAL_PAGES';
       totalPages: number;
     }
   | {
-      type: "NEXT_PAGE";
+      type: 'NEXT_PAGE';
     }
   | {
-      type: "PREV_PAGE";
+      type: 'PREV_PAGE';
     }
   | {
-      type: "GO_TO_TARGET_PAGE";
+      type: 'GO_TO_TARGET_PAGE';
       targetPage: number;
     };
 
@@ -30,24 +30,24 @@ const paginationMachine = createMachine<
   PaginationMachineEvent
 >(
   {
-    id: "pagination",
-    initial: "awaitingTotalPages",
+    id: 'pagination',
+    initial: 'awaitingTotalPages',
     context: {
       currentPage: 1,
     },
     on: {
       UPDATE_TOTAL_PAGES: {
-        cond: "newTotalPagesIsValidValue",
+        cond: 'newTotalPagesIsValidValue',
         actions: choose([
           {
-            cond: "currentPageIsAboveNewTotalPages",
-            actions: ["assignTotalPagesToContext", "goToFirstPage"],
+            cond: 'currentPageIsAboveNewTotalPages',
+            actions: ['assignTotalPagesToContext', 'goToFirstPage'],
           },
           {
-            actions: ["assignTotalPagesToContext"],
+            actions: ['assignTotalPagesToContext'],
           },
         ]),
-        target: "idle",
+        target: 'idle',
       },
     },
     states: {
@@ -55,16 +55,16 @@ const paginationMachine = createMachine<
       idle: {
         on: {
           NEXT_PAGE: {
-            cond: "canGoToNextPage",
-            actions: "goToNextPage",
+            cond: 'canGoToNextPage',
+            actions: 'goToNextPage',
           },
           PREV_PAGE: {
-            cond: "canGoToPrevPage",
-            actions: "goToPrevPage",
+            cond: 'canGoToPrevPage',
+            actions: 'goToPrevPage',
           },
           GO_TO_TARGET_PAGE: {
-            actions: "goToTargetPage",
-            cond: "targetPageIsWithinBounds",
+            actions: 'goToTargetPage',
+            cond: 'targetPageIsWithinBounds',
           },
         },
       },
@@ -73,12 +73,12 @@ const paginationMachine = createMachine<
   {
     guards: {
       newTotalPagesIsValidValue: (context, event) => {
-        if (event.type !== "UPDATE_TOTAL_PAGES") return false;
+        if (event.type !== 'UPDATE_TOTAL_PAGES') return false;
 
         return event.totalPages > 0;
       },
       currentPageIsAboveNewTotalPages: (context, event) => {
-        if (event.type !== "UPDATE_TOTAL_PAGES") return false;
+        if (event.type !== 'UPDATE_TOTAL_PAGES') return false;
 
         return context.currentPage > event.totalPages;
       },
@@ -89,7 +89,7 @@ const paginationMachine = createMachine<
         return context.currentPage > 1;
       },
       targetPageIsWithinBounds: (context, event) => {
-        if (event.type !== "GO_TO_TARGET_PAGE") return false;
+        if (event.type !== 'GO_TO_TARGET_PAGE') return false;
         return event.targetPage >= 1 && event.targetPage <= context.totalPages;
       },
     },
@@ -104,14 +104,14 @@ const paginationMachine = createMachine<
         currentPage: (context) => context.currentPage + 1,
       }),
       goToTargetPage: assign((context, event) => {
-        if (event.type !== "GO_TO_TARGET_PAGE") return {};
+        if (event.type !== 'GO_TO_TARGET_PAGE') return {};
 
         return {
           currentPage: event.targetPage,
         };
       }),
       assignTotalPagesToContext: assign((context, event) => {
-        if (event.type !== "UPDATE_TOTAL_PAGES") return {};
+        if (event.type !== 'UPDATE_TOTAL_PAGES') return {};
         return {
           totalPages: event.totalPages,
         };

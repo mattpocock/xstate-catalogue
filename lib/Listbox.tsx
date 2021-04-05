@@ -1,10 +1,10 @@
-import { useFocusRing } from "@react-aria/focus";
-import { useListBox, useOption } from "@react-aria/listbox";
-import { mergeProps } from "@react-aria/utils";
-import { useListState, ListProps } from "@react-stately/list";
-import React from "react";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
-import { AriaListBoxProps } from "@react-types/listbox";
+import { useFocusRing } from '@react-aria/focus';
+import { useListBox, useOption } from '@react-aria/listbox';
+import { mergeProps } from '@react-aria/utils';
+import { useListState, ListProps } from '@react-stately/list';
+import React from 'react';
+import { VisuallyHidden } from '@react-aria/visually-hidden';
+import { AriaListBoxProps } from '@react-types/listbox';
 
 export function ListBox(
   props: ListProps<{}> & { label: string } & AriaListBoxProps<{}>,
@@ -26,9 +26,9 @@ export function ListBox(
         ref={ref}
         style={{
           padding: 0,
-          margin: "5px 0",
-          listStyle: "none",
-          border: "1px solid gray",
+          margin: '5px 0',
+          listStyle: 'none',
+          border: '1px solid gray',
           maxWidth: 250,
         }}
       >
@@ -64,10 +64,10 @@ function Option({ item, state }) {
       {...mergeProps(optionProps, focusProps)}
       ref={ref}
       style={{
-        background: isSelected ? "blueviolet" : "transparent",
-        color: isSelected ? "white" : null,
-        padding: "2px 5px",
-        outline: isFocusVisible ? "2px solid orange" : "none",
+        background: isSelected ? 'blueviolet' : 'transparent',
+        color: isSelected ? 'white' : null,
+        padding: '2px 5px',
+        outline: isFocusVisible ? '2px solid orange' : 'none',
       }}
     >
       {item.rendered}

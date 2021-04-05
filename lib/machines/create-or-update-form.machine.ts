@@ -1,4 +1,4 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine, Sender } from 'xstate';
 
 interface CreateOrUpdateFormMachineContext {
   isInEditMode: boolean;
@@ -12,15 +12,15 @@ interface Item {
 
 type CreateOrUpdateFormMachineEvent =
   | {
-      type: "SUBMIT";
+      type: 'SUBMIT';
       item: Item;
     }
   | {
-      type: "SUCCESSFULLY_FETCHED_ITEM";
+      type: 'SUCCESSFULLY_FETCHED_ITEM';
       item: Item;
     }
   | {
-      type: "RETRY";
+      type: 'RETRY';
     };
 
 const createOrUpdateFormMachine = createMachine<
@@ -28,8 +28,8 @@ const createOrUpdateFormMachine = createMachine<
   CreateOrUpdateFormMachineEvent
 >(
   {
-    id: "createOrUpdateForm",
-    initial: "checkingIfInEditMode",
+    id: 'createOrUpdateForm',
+    initial: 'checkingIfInEditMode',
     context: {
       // Randomly true or false
       isInEditMode: Math.random() < 0.5,
@@ -38,84 +38,84 @@ const createOrUpdateFormMachine = createMachine<
       checkingIfInEditMode: {
         always: [
           {
-            cond: "isInEditMode",
-            target: "fetchingItemToEdit",
+            cond: 'isInEditMode',
+            target: 'fetchingItemToEdit',
           },
           {
-            target: "awaitingSubmit",
+            target: 'awaitingSubmit',
           },
         ],
       },
       fetchingItemToEdit: {
         invoke: {
-          src: "fetchItem",
+          src: 'fetchItem',
           onError: {
-            target: "failedToFetch",
-            actions: "assignErrorMessageToContext",
+            target: 'failedToFetch',
+            actions: 'assignErrorMessageToContext',
           },
         },
         on: {
           SUCCESSFULLY_FETCHED_ITEM: {
-            target: "awaitingSubmit",
-            actions: "assignItemToContext",
+            target: 'awaitingSubmit',
+            actions: 'assignItemToContext',
           },
         },
       },
       failedToFetch: {
-        exit: ["clearErrorMessage"],
+        exit: ['clearErrorMessage'],
         on: {
-          RETRY: "fetchingItemToEdit",
+          RETRY: 'fetchingItemToEdit',
         },
       },
       awaitingSubmit: {
-        id: "awaitingSubmit",
-        exit: ["clearErrorMessage"],
+        id: 'awaitingSubmit',
+        exit: ['clearErrorMessage'],
         on: {
           SUBMIT: {
-            target: "submitting",
-            actions: ["assignItemToContext"],
+            target: 'submitting',
+            actions: ['assignItemToContext'],
           },
         },
       },
       submitting: {
-        initial: "checkingIfInEditMode",
+        initial: 'checkingIfInEditMode',
         states: {
           checkingIfInEditMode: {
             always: [
               {
-                cond: "isInEditMode",
-                target: "editing",
+                cond: 'isInEditMode',
+                target: 'editing',
               },
               {
-                target: "creating",
+                target: 'creating',
               },
             ],
           },
           editing: {
             invoke: {
-              src: "editItem",
-              onDone: { target: "#complete", actions: "onEditSuccess" },
+              src: 'editItem',
+              onDone: { target: '#complete', actions: 'onEditSuccess' },
               onError: {
-                target: "#awaitingSubmit",
-                actions: "assignErrorMessageToContext",
+                target: '#awaitingSubmit',
+                actions: 'assignErrorMessageToContext',
               },
             },
           },
           creating: {
             invoke: {
-              src: "createItem",
-              onDone: { target: "#complete", actions: "onCreateSuccess" },
+              src: 'createItem',
+              onDone: { target: '#complete', actions: 'onCreateSuccess' },
               onError: {
-                target: "#awaitingSubmit",
-                actions: "assignErrorMessageToContext",
+                target: '#awaitingSubmit',
+                actions: 'assignErrorMessageToContext',
               },
             },
           },
         },
       },
       complete: {
-        id: "complete",
-        type: "final",
+        id: 'complete',
+        type: 'final',
       },
     },
   },
@@ -139,23 +139,23 @@ const createOrUpdateFormMachine = createMachine<
     },
     actions: {
       onCreateSuccess: () => {
-        alert("onCreateSuccess");
+        alert('onCreateSuccess');
       },
       onEditSuccess: () => {
-        alert("onEditSuccess");
+        alert('onEditSuccess');
       },
       clearErrorMessage: assign((context) => ({
         errorMessage: undefined,
       })),
       assignErrorMessageToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
       assignItemToContext: assign((context, event) => {
         if (
-          event.type !== "SUCCESSFULLY_FETCHED_ITEM" &&
-          event.type !== "SUBMIT"
+          event.type !== 'SUCCESSFULLY_FETCHED_ITEM' &&
+          event.type !== 'SUBMIT'
         )
           return {};
         return {

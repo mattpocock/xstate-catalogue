@@ -1,4 +1,4 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
 interface MultiStepFormMachineContext {
   beneficiaryInfo?: BeneficiaryInfo;
@@ -18,18 +18,18 @@ interface DateInfo {
 
 type MultiStepFormMachineEvent =
   | {
-      type: "BACK";
+      type: 'BACK';
     }
   | {
-      type: "CONFIRM_BENEFICIARY";
+      type: 'CONFIRM_BENEFICIARY';
       info: BeneficiaryInfo;
     }
   | {
-      type: "CONFIRM_DATE";
+      type: 'CONFIRM_DATE';
       info: DateInfo;
     }
   | {
-      type: "CONFIRM";
+      type: 'CONFIRM';
     };
 
 const multiStepFormMachine = createMachine<
@@ -37,61 +37,61 @@ const multiStepFormMachine = createMachine<
   MultiStepFormMachineEvent
 >(
   {
-    id: "multiStepFormWithValidation",
-    initial: "enteringBeneficiary",
+    id: 'multiStepFormWithValidation',
+    initial: 'enteringBeneficiary',
     states: {
       enteringBeneficiary: {
         on: {
           CONFIRM_BENEFICIARY: {
-            target: "enteringDate",
-            actions: ["assignBeneficiaryInfoToContext"],
+            target: 'enteringDate',
+            actions: ['assignBeneficiaryInfoToContext'],
           },
         },
       },
       enteringDate: {
-        id: "enteringDate",
+        id: 'enteringDate',
         on: {
           BACK: {
-            target: "enteringBeneficiary",
+            target: 'enteringBeneficiary',
           },
           CONFIRM_DATE: {
-            target: "confirming",
-            actions: ["assignDateToContext"],
+            target: 'confirming',
+            actions: ['assignDateToContext'],
           },
         },
       },
       confirming: {
         onDone: {
-          target: "success",
+          target: 'success',
         },
-        initial: "idle",
+        initial: 'idle',
         states: {
           idle: {
-            exit: ["clearErrorMessage"],
+            exit: ['clearErrorMessage'],
             on: {
-              CONFIRM: "submitting",
+              CONFIRM: 'submitting',
               BACK: {
-                target: "#enteringDate",
+                target: '#enteringDate',
               },
             },
           },
           submitting: {
             invoke: {
-              src: "submitPayment",
+              src: 'submitPayment',
               onDone: {
-                target: "complete",
+                target: 'complete',
               },
               onError: {
-                target: "idle",
-                actions: "assignErrorMessageToContext",
+                target: 'idle',
+                actions: 'assignErrorMessageToContext',
               },
             },
           },
-          complete: { type: "final" },
+          complete: { type: 'final' },
         },
       },
       success: {
-        type: "final",
+        type: 'final',
       },
     },
   },
@@ -99,20 +99,20 @@ const multiStepFormMachine = createMachine<
     services: { submitPayment: () => () => {} },
     actions: {
       assignDateToContext: assign((context, event) => {
-        if (event.type !== "CONFIRM_DATE") return {};
+        if (event.type !== 'CONFIRM_DATE') return {};
         return {
           dateInfo: event.info,
         };
       }),
       assignBeneficiaryInfoToContext: assign((context, event) => {
-        if (event.type !== "CONFIRM_BENEFICIARY") return {};
+        if (event.type !== 'CONFIRM_BENEFICIARY') return {};
         return {
           beneficiaryInfo: event.info,
         };
       }),
       assignErrorMessageToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
       clearErrorMessage: assign({

@@ -14,11 +14,11 @@ export const useCopyToClipboard = ({
   onSuccess,
 }: UseCopyToClipboardParams) => {
   const copyToClipboard = (content: string) => {
-    if (process.env.NODE_ENV === "test") {
+    if (process.env.NODE_ENV === 'test') {
       onSuccess?.(content);
     } else {
       try {
-        const dummyDiv = document.createElement("textarea");
+        const dummyDiv = document.createElement('textarea');
 
         dummyDiv.value = content;
 
@@ -27,7 +27,7 @@ export const useCopyToClipboard = ({
         dummyDiv.select();
         dummyDiv.setSelectionRange(0, 99999);
 
-        document.execCommand("copy");
+        document.execCommand('copy');
         document.body.removeChild(dummyDiv);
 
         onSuccess?.(content);

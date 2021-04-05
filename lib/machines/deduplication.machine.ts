@@ -1,9 +1,9 @@
-import { createMachine } from "xstate";
+import { createMachine } from 'xstate';
 
 interface DeduplicationMachineContext {}
 
 type DeduplicationMachineEvent = {
-  type: "GO";
+  type: 'GO';
   action: () => void;
 };
 
@@ -12,21 +12,21 @@ const deduplicationMachine = createMachine<
   DeduplicationMachineEvent
 >(
   {
-    id: "deduplication",
-    initial: "canPerformAction",
+    id: 'deduplication',
+    initial: 'canPerformAction',
     states: {
       canPerformAction: {
         on: {
           GO: {
-            target: "deduplicating",
-            actions: "performAction",
+            target: 'deduplicating',
+            actions: 'performAction',
           },
         },
       },
       deduplicating: {
         after: {
           2000: {
-            target: "canPerformAction",
+            target: 'canPerformAction',
           },
         },
       },

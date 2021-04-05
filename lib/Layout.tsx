@@ -1,26 +1,26 @@
-import { OverlayContainer } from "@react-aria/overlays";
-import { useInterpret, useSelector } from "@xstate/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import packageJson from "../package.json";
-import { CatalogueSearcher } from "./CatalogueSearcher";
-import { globalStateService, useLayout } from "./GlobalState";
-import { SearchOutlined } from "./Icons";
-import { ModalDialog } from "./ModalDialog";
-import { modalsMachine } from "./modalsMachine";
+import { OverlayContainer } from '@react-aria/overlays';
+import { useInterpret, useSelector } from '@xstate/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import packageJson from '../package.json';
+import { CatalogueSearcher } from './CatalogueSearcher';
+import { globalStateService, useLayout } from './GlobalState';
+import { SearchOutlined } from './Icons';
+import { ModalDialog } from './ModalDialog';
+import { modalsMachine } from './modalsMachine';
 
 export const Layout: React.FC = ({ children }) => {
   const router = useRouter();
 
-  const shouldPreventScroll = router.pathname.includes("/machines/[id]");
+  const shouldPreventScroll = router.pathname.includes('/machines/[id]');
 
   const layout = useLayout();
 
   const modalsService = useInterpret(modalsMachine);
 
   const shouldShowSearchModal = useSelector(modalsService, (state) => {
-    return state.matches("showingSearchModal");
+    return state.matches('showingSearchModal');
   });
 
   return (
@@ -34,7 +34,7 @@ export const Layout: React.FC = ({ children }) => {
         <Link href="/">
           <a>
             <p className="font-bold tracking-tight text-gray-700">
-              XState{" "}
+              XState{' '}
               <span className="font-light tracking-tighter">Catalogue</span>
             </p>
           </a>
@@ -42,7 +42,7 @@ export const Layout: React.FC = ({ children }) => {
         <div className="self-stretch hidden md:block">
           <button
             className="flex items-center h-full p-3 space-x-16 text-lg text-gray-500 border-l border-r outline-none focus:outline-none focus:ring"
-            onClick={() => modalsService.send("CLICK_SEARCH")}
+            onClick={() => modalsService.send('CLICK_SEARCH')}
           >
             <div className="flex items-center space-x-3 text-sm">
               <SearchOutlined className="w-4 h-4 text-gray-400" />
@@ -54,12 +54,12 @@ export const Layout: React.FC = ({ children }) => {
           </button>
         </div>
         <div className="items-center hidden space-x-6 md:flex">
-          {router.pathname.includes("machines") && (
+          {router.pathname.includes('machines') && (
             <button
-              onClick={() => globalStateService.send("TOGGLE_LAYOUT")}
+              onClick={() => globalStateService.send('TOGGLE_LAYOUT')}
               className="px-2 py-1 text-gray-400"
             >
-              {layout === "horizontal" && (
+              {layout === 'horizontal' && (
                 <svg
                   className="w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ export const Layout: React.FC = ({ children }) => {
                   />
                 </svg>
               )}
-              {layout === "vertical" && (
+              {layout === 'vertical' && (
                 <svg
                   className="w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +93,7 @@ export const Layout: React.FC = ({ children }) => {
                   />
                 </svg>
               )}
-              {layout === "blog" && (
+              {layout === 'blog' && (
                 <svg
                   className="w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ export const Layout: React.FC = ({ children }) => {
           </a>
         </div>
       </nav>
-      <div className={shouldPreventScroll ? "overflow-hidden" : ""}>
+      <div className={shouldPreventScroll ? 'overflow-hidden' : ''}>
         {children}
       </div>
       {/* <main className="pb-20">{children}</main> */}
@@ -143,7 +143,7 @@ export const Layout: React.FC = ({ children }) => {
         <OverlayContainer>
           <ModalDialog
             isOpen
-            onClose={() => modalsService.send("CLOSE")}
+            onClose={() => modalsService.send('CLOSE')}
             isDismissable
             title="Search the Catalogue"
           >

@@ -18,7 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" href="/favicon.png" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="State Machine Catalogue" />
-        <meta property="og:image" content="/og-image.png" />
+        <meta
+          property="og:image"
+          content="https://xstate-catalogue.com/og-image.png"
+        />
         <meta
           property="og:description"
           content="A collection of professionally designed state machines you can drop into your XState projects"

@@ -1,4 +1,4 @@
-import { useService } from '@xstate/react';
+import { useSelector, useService } from '@xstate/react';
 import React, { useContext } from 'react';
 import { Interpreter } from 'xstate';
 
@@ -102,14 +102,32 @@ export const Context = (props: { children: string; stringify?: boolean }) => {
 
 export const WholeContext = () => {
   const context = useContext(MachineHelpersContext);
-  const [state] = useService(context.service);
-  return <pre>{JSON.stringify(state.context, null, 2)}</pre>;
+  const jsonContext = useSelector(context.service, (state) => {
+    return JSON.stringify(state.context, null, 2);
+  });
+  return <pre>{jsonContext}</pre>;
 };
 
 export const Service = (props: { children: string }) => {
+  const context = useContext(MachineHelpersContext);
+  const isCurrentlyInvoked = useSelector(context.service, (state) => {
+    const nodesWhichInvokeThisService = state.configuration.filter((node) => {
+      return node.invoke.some((invoke) => invoke.src === props.children);
+    });
+
+    const isCurrentlyInvoked = nodesWhichInvokeThisService.some((node) =>
+      state.matches(node.path),
+    );
+    return isCurrentlyInvoked;
+  });
+
   return (
     <span
-      className={`bg-gray-100 text-gray-600 font-mono inline-flex flex-wrap font-bold text-sm px-2 py-1 transition-colors`}
+      className={`font-mono inline-flex flex-wrap font-bold text-sm px-2 py-1 transition-colors relative ${
+        isCurrentlyInvoked
+          ? `bg-blue-100 text-blue-800`
+          : `bg-gray-100 text-gray-600`
+      }`}
     >
       {props.children}
     </span>

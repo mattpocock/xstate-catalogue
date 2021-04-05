@@ -15,5 +15,6 @@ Check out the [full site](https://xstate-catalogue.com) for the full browsing ex
 
 ### Contributing a new machine
 
-1. Run `yarn generate` to generate the boilerplate for a new machine
-2. Add an entry to `lib/metadata.ts` to add a title/icon/target version.
+1. Run `yarn generate` to generate the boilerplate for a new machine.
+2. Follow the instructions in the CLI.
+3. Just like that, you can start editing the files and write a new machine.

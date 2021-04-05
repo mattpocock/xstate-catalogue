@@ -1,7 +1,7 @@
 import { assign, createMachine } from 'xstate';
 import { choose } from 'xstate/lib/actions';
 
-interface PaginationMachineContext {
+export interface PaginationMachineContext {
   totalPages?: number;
   /**
    * This page is 1-indexed, not 0-indexed
@@ -9,7 +9,7 @@ interface PaginationMachineContext {
   currentPage: number;
 }
 
-type PaginationMachineEvent =
+export type PaginationMachineEvent =
   | {
       type: 'UPDATE_TOTAL_PAGES';
       totalPages: number;

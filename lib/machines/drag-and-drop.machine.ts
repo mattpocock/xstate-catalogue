@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface DragAndDropMachineContext {
+export interface DragAndDropMachineContext {
   dataList: Data[];
   itemBeingHeld?: {
     startIndex: number;
@@ -12,7 +12,7 @@ interface Data {
   id: number;
 }
 
-type DragAndDropMachineEvent =
+export type DragAndDropMachineEvent =
   | {
       type: 'DROP';
     }

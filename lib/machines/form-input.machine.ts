@@ -1,13 +1,13 @@
 import { assign, createMachine, Sender } from 'xstate';
 
-interface FormInputMachineContext {
+export interface FormInputMachineContext {
   value: Value;
   errorMessage?: string;
 }
 
 type Value = any;
 
-type FormInputMachineEvent =
+export type FormInputMachineEvent =
   | {
       type: 'CHANGE';
       value: Value;

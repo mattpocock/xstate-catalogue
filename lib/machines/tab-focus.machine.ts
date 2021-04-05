@@ -1,8 +1,8 @@
 import { assign, createMachine, Sender } from 'xstate';
 
-interface TabFocusMachineContext {}
+export interface TabFocusMachineContext {}
 
-type TabFocusMachineEvent =
+export type TabFocusMachineEvent =
   | {
       type: 'REPORT_TAB_BLUR';
     }

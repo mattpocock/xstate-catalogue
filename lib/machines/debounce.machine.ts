@@ -1,10 +1,10 @@
 import { assign, createMachine } from 'xstate';
 
-interface DebounceMachineContext {
+export interface DebounceMachineContext {
   action?: () => void;
 }
 
-type DebounceMachineEvent = {
+export type DebounceMachineEvent = {
   type: 'GO';
   action: () => void;
 };

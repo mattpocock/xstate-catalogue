@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface WithLocalCacheMachineContext {
+export interface WithLocalCacheMachineContext {
   cache: Cache;
   errorMessage?: string;
   currentVariablesBeingProcessed?: Variables;
@@ -16,7 +16,7 @@ interface Data {
   name: string;
 }
 
-type WithLocalCacheMachineEvent =
+export type WithLocalCacheMachineEvent =
   | {
       type: 'FETCH';
       variables: Variables;

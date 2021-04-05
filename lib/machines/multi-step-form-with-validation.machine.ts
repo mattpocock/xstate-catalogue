@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface MultiStepFormMachineContext {
+export interface MultiStepFormMachineContext {
   beneficiaryInfo?: BeneficiaryInfo;
   dateInfo?: DateInfo;
   errorMessage?: string;
@@ -16,7 +16,7 @@ interface DateInfo {
   preferredData: string;
 }
 
-type MultiStepFormMachineEvent =
+export type MultiStepFormMachineEvent =
   | {
       type: 'BACK';
     }

@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface SimpleDataFetchMachineContext {
+export interface SimpleDataFetchMachineContext {
   data?: Data;
   errorMessage?: string;
 }
@@ -13,7 +13,7 @@ interface Data {
   name: string;
 }
 
-type SimpleDataFetchMachineEvent =
+export type SimpleDataFetchMachineEvent =
   | {
       type: 'FETCH';
       variables: Variables;

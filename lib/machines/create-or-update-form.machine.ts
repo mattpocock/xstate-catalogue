@@ -1,6 +1,6 @@
 import { assign, createMachine, Sender } from 'xstate';
 
-interface CreateOrUpdateFormMachineContext {
+export interface CreateOrUpdateFormMachineContext {
   isInEditMode: boolean;
   errorMessage?: string;
   itemToProcess?: Item;
@@ -10,7 +10,7 @@ interface Item {
   name: string;
 }
 
-type CreateOrUpdateFormMachineEvent =
+export type CreateOrUpdateFormMachineEvent =
   | {
       type: 'SUBMIT';
       item: Item;

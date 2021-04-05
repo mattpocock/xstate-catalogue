@@ -1,6 +1,6 @@
 import { assign, createMachine, Sender } from 'xstate';
 
-interface InfiniteScrollMachineContext {
+export interface InfiniteScrollMachineContext {
   data: Data[];
   totalEntries: number;
   errorMessage?: string;
@@ -10,7 +10,7 @@ interface Data {
   id: number;
 }
 
-type InfiniteScrollMachineEvent =
+export type InfiniteScrollMachineEvent =
   | {
       type: 'SCROLL_TO_BOTTOM';
     }

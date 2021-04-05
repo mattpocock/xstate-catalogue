@@ -1,6 +1,6 @@
 import { assign, createMachine, Sender } from 'xstate';
 
-type AuthenticationMachineContext = {
+export type AuthenticationMachineContext = {
   userDetails?: UserDetails;
 };
 
@@ -8,7 +8,7 @@ interface UserDetails {
   username: string;
 }
 
-type AuthenticationMachineEvent =
+export type AuthenticationMachineEvent =
   | {
       type: 'REPORT_IS_LOGGED_IN';
       userDetails: UserDetails;

@@ -1,8 +1,8 @@
 import { createMachine } from 'xstate';
 
-interface DeduplicationMachineContext {}
+export interface DeduplicationMachineContext {}
 
-type DeduplicationMachineEvent = {
+export type DeduplicationMachineEvent = {
   type: 'GO';
   action: () => void;
 };

@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface QueueMachineContext {
+export interface QueueMachineContext {
   queue: QueueItemWithTime[];
 }
 
@@ -12,7 +12,7 @@ interface QueueItemWithTime extends QueueItem {
   timeAdded: string;
 }
 
-type QueueMachineEvent =
+export type QueueMachineEvent =
   | {
       type: 'ADD_TO_QUEUE';
       items: QueueItem[];

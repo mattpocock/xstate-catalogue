@@ -1,8 +1,8 @@
 import { createMachine } from 'xstate';
 
-type MultiStepTimerMachineContext = {};
+export type MultiStepTimerMachineContext = {};
 
-type MultiStepTimerMachineEvent = {
+export type MultiStepTimerMachineEvent = {
   type: 'BEGIN';
 };
 

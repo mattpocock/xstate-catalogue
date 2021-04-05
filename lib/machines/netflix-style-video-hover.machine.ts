@@ -1,10 +1,10 @@
 import { assign, createMachine } from 'xstate';
 
-interface NetflixStyleVideoHoverMachineContext {
+export interface NetflixStyleVideoHoverMachineContext {
   hasVideoLoaded: boolean;
 }
 
-type NetflixStyleVideoHoverMachineEvent =
+export type NetflixStyleVideoHoverMachineEvent =
   | {
       type: 'REPORT_IMAGE_LOADED';
     }

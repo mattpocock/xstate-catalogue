@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate';
 
-interface ConfirmationDialogMachineContext {
+export interface ConfirmationDialogMachineContext {
   action?: () => Promise<void>;
   errorMessage?: string;
 }

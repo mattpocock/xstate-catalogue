@@ -266,16 +266,14 @@ const ShowMachinePage = (props: {
                 {props.fileText}
               </code>
             </pre>
-            <div className="sticky bottom-6 xl:absolute xl:top-0 xl:bottom-auto xl:right-0 xl:mr-8 flex justify-end">
-              <button
-                className="px-6 py-3 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
-                onClick={() => {
-                  copyToClipboard(props.fileText);
-                }}
-              >
-                Copy To Clipboard
-              </button>
-            </div>
+            <button
+              className="invisible md:visible absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
+              onClick={() => {
+                copyToClipboard(props.fileText);
+              }}
+            >
+              Copy To Clipboard
+            </button>
           </div>
         </div>
       </div>

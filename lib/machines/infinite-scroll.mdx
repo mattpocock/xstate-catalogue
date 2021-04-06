@@ -1,10 +1,19 @@
+export const metadata = {
+  eventPayloads: {
+    RECEIVED_DATA: {
+      data: [{ id: Date.now() }, { id: Date.now() }],
+      totalEntries: 8,
+    },
+  },
+};
+
 # Infinite Scroll
 
 Infinite scroll has become a staple of the social media feed, and it's an important tool to have in your kit as an alternative to [button-based pagination](/machines/pagination).
 
 ## Fetching the initial data
 
-We start in <State>fetchingRowOfData</State>, which fires off the <Service>fetchRowOfData</Service> service. When the <Event data={[{ id: Date.now()}, { id: Date.now() }]} totalEntries={8}>RECEIVED_DATA</Event> event is fired, we end up in <State>idle</State>, with the new data available in our context.
+We start in <State>fetchingRowOfData</State>, which fires off the <Service>fetchRowOfData</Service> service. When the <Event>RECEIVED_DATA</Event> event is fired, we end up in <State>idle</State>, with the new data available in our context.
 
 <WholeContext />
 

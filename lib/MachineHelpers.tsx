@@ -4,7 +4,14 @@ import { Interpreter } from 'xstate';
 
 export const MachineHelpersContext = React.createContext<{
   service: Interpreter<any, any, any>;
+  metadata?: MDXMetadata;
 }>({} as any);
+
+export interface MDXMetadata {
+  eventPayloads?: {
+    [eventType: string]: any;
+  };
+}
 
 export const State = (props: { children: string }) => {
   const context = useContext(MachineHelpersContext);
@@ -36,11 +43,14 @@ export const Event = (props: { children: string }) => {
 
   const { children, ...event } = props;
 
+  const defaultEvent = context.metadata?.eventPayloads?.[props.children] || {};
+
   return (
     <button
       className="text-left"
       onClick={() => {
         send({
+          ...defaultEvent,
           ...event,
           type: props.children,
         });

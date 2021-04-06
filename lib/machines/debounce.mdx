@@ -1,3 +1,13 @@
+export const metadata = {
+  eventPayloads: {
+    GO: {
+      action: () => {
+        alert('Action fired!');
+      },
+    },
+  },
+};
+
 # Debounce
 
 Debouncing is a handy tool for lightening the load on heavy tasks. If you have a search box that you want to use for filtering on the server, debouncing will help you deduplicate multiple calls.
@@ -6,8 +16,8 @@ Debouncing can be troublesome to implement in vanilla Javascript, but state mach
 
 ## Pressing Go
 
-We start off in the <State>idle</State> state. Pressing <Event action={() => alert('Action fired!')}>GO</Event> will send us into <State>debouncing</State>.
+We start off in the <State>idle</State> state. Pressing <Event>GO</Event> will send us into <State>debouncing</State>.
 
 From there, we have a countdown of two seconds before the action we passed into the event is fired. Which in this case, is `alert('Action fired!')`.
 
-But if we press <Event action={() => alert('Action fired!')}>GO</Event> multiple times, we stay in <State>debouncing</State> longer than two seconds, and only the _last_ action we passed in gets fired.
+But if we press <Event>GO</Event> multiple times, we stay in <State>debouncing</State> longer than two seconds, and only the _last_ action we passed in gets fired.

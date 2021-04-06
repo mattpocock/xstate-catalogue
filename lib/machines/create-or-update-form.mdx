@@ -1,3 +1,18 @@
+export const metadata = {
+  eventPayloads: {
+    SUCCESSFULLY_FETCHED_ITEM: {
+      item: { name: "Matt Pocock" },
+      totalEntries: 8,
+    },
+    SUBMIT: {
+      item: { name: "Matt Pocock" },
+    },
+    'error.platform.fetchItem': {
+      data: new Error('Something went wrong...'),
+    },
+  },
+};
+
 # Create / Update Form
 
 A common pattern in CRUD applications is to reuse the same components for creating and editing an entity. This state machine handles both cases, including data fetching (when in update mode), validating the inputs and calling the correct create/edit method when submitting.
@@ -14,13 +29,13 @@ If we _are_ in edit mode, we head to <State>fetchingItemToEdit</State>. If not, 
 
 When we're in edit mode, we need to make an async call to the database to grab the item we need to edit. That's what the <State>fetchingItemToEdit</State> state is for.
 
-If the item is successfully fetched, the <Service>fetchItem</Service> service sends back the <Event item={{ name: "Matt Pocock" }}>SUCCESSFULLY_FETCHED_ITEM</Event> event. That then gets saved into context under <Context stringify>itemToProcess</Context>, and we're ready to go to <State>awaitingSubmit</State>.
+If the item is successfully fetched, the <Service>fetchItem</Service> service sends back the <Event>SUCCESSFULLY_FETCHED_ITEM</Event> event. That then gets saved into context under <Context stringify>itemToProcess</Context>, and we're ready to go to <State>awaitingSubmit</State>.
 
-If the fetch fails, the service sends back <Event data={new Error('Something went wrong...')}>error.platform.fetchItem</Event>, which saves an <Context>errorMessage</Context> into context. The user can then <Event>RETRY</Event> if they like.
+If the fetch fails, the service sends back <Event>error.platform.fetchItem</Event>, which saves an <Context>errorMessage</Context> into context. The user can then <Event>RETRY</Event> if they like.
 
 ## Submitting the form
 
-In the <State>awaitingSubmit</State> state, the user can <Event item={{ name: "Matt Pocock" }}>SUBMIT</Event> the form. We head to either <State>submitting.editing</State> or <State>submitting.creating</State> depending on whether <Context stringify>isInEditMode</Context> is `true`.
+In the <State>awaitingSubmit</State> state, the user can <Event>SUBMIT</Event> the form. We head to either <State>submitting.editing</State> or <State>submitting.creating</State> depending on whether <Context stringify>isInEditMode</Context> is `true`.
 
 - If the operation goes wrong, via <Event>error.platform.editItem</Event> or <Event>error.platform.createItem</Event>, we head back to <State>awaitingSubmit</State> with the <Context>errorMessage</Context> saved.
 

@@ -1,3 +1,18 @@
+export const metadata = {
+  eventPayloads: {
+    CONFIRM_BENEFICIARY: {
+      info: {
+        info: "Hey",
+      },
+    },
+    CONFIRM_DATE: {
+      info: {
+        info: "Hey",
+      },
+    },
+  },
+};
+
 # Multi Step Form With Validation
 
 This expands on the other [multi-step form](/machines/multi-step-form) example. If you haven't already, read that machine first.
@@ -6,7 +21,7 @@ This one gets a lot more complex by adding some crucial logic - asynchronous val
 
 ## Validation pattern
 
-Each page now follows a similar pattern. Let's take <State>enteringBeneficiary</State> as an example. On <Event info={{ info: 'Hey' }}>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringBeneficiary.submitting</State> state.
+Each page now follows a similar pattern. Let's take <State>enteringBeneficiary</State> as an example. On <Event>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringBeneficiary.submitting</State> state.
 
 If the beneficiary fails validation, we receive <Event>error.platform.validateBeneficiary</Event>, which saves the <Context>errorMessage</Context>.
 
@@ -17,7 +32,7 @@ But if it passes with <Event>done.invoke.validateBeneficiary</Event>, we head to
 This pattern repeats itself in <State>enteringDate</State>. I'll express it in diagram form here for brevity.
 
 <p>
-  <Event info={{ info: "Hey" }}>CONFIRM_DATE</Event> ->{" "}
+  <Event>CONFIRM_DATE</Event> ->{" "}
   <State>enteringDate.submitting</State>
 </p>
 

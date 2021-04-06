@@ -1,3 +1,11 @@
+export const metadata = {
+  eventPayloads: {
+    CHANGE: {
+      value: "newValue",
+    },
+  },
+};
+
 # Form Input
 
 This machine handles the entire state of a single form input. It's surprisingly complex. No wonder folks build form libraries to handle this stuff.
@@ -22,4 +30,4 @@ The machine starts by validating the field initially in the <State>active.valida
 
 If <Service>validateField</Service> finishes without receiving an error, <Event>done.invoke.validateField</Event> will trigger and target the <State>active.validation.valid</State> state.
 
-Any <Event value="newValue">CHANGE</Event> events that trigger will kick off the async validation again, heading to <State>active.validation.pending</State>.
+Any <Event>CHANGE</Event> events that trigger will kick off the async validation again, heading to <State>active.validation.pending</State>.

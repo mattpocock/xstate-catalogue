@@ -1,13 +1,28 @@
+export const metadata = {
+  eventPayloads: {
+    RECEIVE_DATA: {
+      data: {
+        name: "Matthew Pocock",
+      },
+    },
+    FETCH: {
+      variables: {
+        id: "id-1",
+      },
+    },
+  },
+};
+
 # Data Fetch With Local Cache
 
 ## Filling up the cache
 
-We start in the <State>idle</State> state. The first time that <Event variables={{ id: "id-1" }}>FETCH</Event> is called, we head to <State>fetching</State> with the <Context stringify>currentVariablesBeingProcessed</Context> value populated in context.
+We start in the <State>idle</State> state. The first time that <Event>FETCH</Event> is called, we head to <State>fetching</State> with the <Context stringify>currentVariablesBeingProcessed</Context> value populated in context.
 
-From there, we can receive a <Event data={{ name: "Matthew Pocock" }}>RECEIVE_DATA</Event> event which pulls in the value into the cache. That takes us back to <State>idle</State>.
+From there, we can receive a <Event>RECEIVE_DATA</Event> event which pulls in the value into the cache. That takes us back to <State>idle</State>.
 
 <WholeContext />
 
 ## Fetching a cached item
 
-If the item is already in the cache when the user presses <Event variables={{ id: "id-1" }}>FETCH</Event>, we return to the <State>idle</State> state. The items are cached, so can be retrieved by stringifying the <Context stringify>currentVariablesBeingProcessed</Context> value.
+If the item is already in the cache when the user presses <Event>FETCH</Event>, we return to the <State>idle</State> state. The items are cached, so can be retrieved by stringifying the <Context stringify>currentVariablesBeingProcessed</Context> value.

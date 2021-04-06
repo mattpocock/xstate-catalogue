@@ -1,3 +1,14 @@
+export const metadata = {
+  eventPayloads: {
+    RECEIVE_DATA: {
+      data: {
+        name: "Hello!",
+      },
+    },
+  },
+};
+
+
 # Simple Data Fetch
 
 There are tons of patterns for fetching data from a remove server, but let's focus on the simplest.
@@ -6,7 +17,7 @@ There are tons of patterns for fetching data from a remove server, but let's foc
 
 We start with a <Event>FETCH</Event> event, which takes us from the <State>idle.noError</State> state into <State>fetching</State>.
 
-From there, we're waiting for a <Event data={{ name: 'Hello!'}}>RECEIVE_DATA</Event> event, which saves the data into context under <Context stringify>data</Context>.
+From there, we're waiting for a <Event>RECEIVE_DATA</Event> event, which saves the data into context under <Context stringify>data</Context>.
 
 If the <Service>fetchData</Service> service fails, we'll get an <Event>error.platform.fetchData</Event> event.
 

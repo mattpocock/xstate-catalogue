@@ -1,3 +1,19 @@
+export const metadata = {
+  eventPayloads: {
+    CONFIRM_BENEFICIARY: {
+      info: {
+        info: "Hey",
+      },
+    },
+    CONFIRM_DATE: {
+      info: {
+        info: "Hey",
+      },
+    },
+  },
+};
+
+
 # Multi Step Form
 
 Multi-step forms are a staple of many CRUD apps - especially where the entity being created is complex. State machines handle sequences like these exceptionally well.
@@ -8,13 +24,13 @@ I've also chosen to model the form events as only `SUBMIT` events. For this mach
 
 ## First Page
 
-We start in the <State>enteringBeneficiary</State> state. When the user submits the form via <Event info={{info: "Hey"}}>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringDate</State> state and the beneficiary info is saved to context: <Context stringify>beneficiaryInfo</Context>.
+We start in the <State>enteringBeneficiary</State> state. When the user submits the form via <Event>CONFIRM_BENEFICIARY</Event>, we enter the <State>enteringDate</State> state and the beneficiary info is saved to context: <Context stringify>beneficiaryInfo</Context>.
 
 ## Second Page
 
 Once in the <State>enteringDate</State> state, the user can go <Event>BACK</Event> and edit their details on the previous page.
 
-Once they've chosen a date, they can submit the second page's form via <Event info={{ info: "Hey" }}>CONFIRM_DATE</Event> and head into the <State>confirming</State> state. The date info also gets saved into <Context stringify>dateInfo</Context>.
+Once they've chosen a date, they can submit the second page's form via <Event>CONFIRM_DATE</Event> and head into the <State>confirming</State> state. The date info also gets saved into <Context stringify>dateInfo</Context>.
 
 ## Confirming
 

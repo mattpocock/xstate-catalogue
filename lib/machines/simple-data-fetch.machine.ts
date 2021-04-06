@@ -1,6 +1,6 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
-interface SimpleDataFetchMachineContext {
+export interface SimpleDataFetchMachineContext {
   data?: Data;
   errorMessage?: string;
 }
@@ -13,17 +13,17 @@ interface Data {
   name: string;
 }
 
-type SimpleDataFetchMachineEvent =
+export type SimpleDataFetchMachineEvent =
   | {
-      type: "FETCH";
+      type: 'FETCH';
       variables: Variables;
     }
   | {
-      type: "RECEIVE_DATA";
+      type: 'RECEIVE_DATA';
       data: Data;
     }
   | {
-      type: "CANCEL";
+      type: 'CANCEL';
     };
 
 const simpleDataFetchMachine = createMachine<
@@ -31,19 +31,19 @@ const simpleDataFetchMachine = createMachine<
   SimpleDataFetchMachineEvent
 >(
   {
-    id: "simpleDataFetch",
-    initial: "idle",
+    id: 'simpleDataFetch',
+    initial: 'idle',
     states: {
       idle: {
         on: {
           FETCH: {
-            target: "fetching",
+            target: 'fetching',
           },
         },
-        initial: "noError",
+        initial: 'noError',
         states: {
           noError: {
-            entry: ["clearErrorMessage"],
+            entry: ['clearErrorMessage'],
           },
           errored: {},
         },
@@ -51,21 +51,21 @@ const simpleDataFetchMachine = createMachine<
       fetching: {
         on: {
           FETCH: {
-            target: "fetching",
+            target: 'fetching',
           },
           CANCEL: {
-            target: "idle",
+            target: 'idle',
           },
           RECEIVE_DATA: {
-            target: "idle",
-            actions: "assignDataToContext",
+            target: 'idle',
+            actions: 'assignDataToContext',
           },
         },
         invoke: {
-          src: "fetchData",
+          src: 'fetchData',
           onError: {
-            target: "idle.errored",
-            actions: "assignErrorToContext",
+            target: 'idle.errored',
+            actions: 'assignErrorToContext',
           },
         },
       },
@@ -77,7 +77,7 @@ const simpleDataFetchMachine = createMachine<
     },
     actions: {
       assignDataToContext: assign((context, event) => {
-        if (event.type !== "RECEIVE_DATA") return {};
+        if (event.type !== 'RECEIVE_DATA') return {};
         return {
           data: event.data,
         };
@@ -87,7 +87,7 @@ const simpleDataFetchMachine = createMachine<
       }),
       assignErrorToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
     },

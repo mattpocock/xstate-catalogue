@@ -1,20 +1,20 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
-interface ConfirmationDialogMachineContext {
+export interface ConfirmationDialogMachineContext {
   action?: () => Promise<void>;
   errorMessage?: string;
 }
 
 type ConfirmationDialogMachineEvent =
   | {
-      type: "OPEN_DIALOG";
+      type: 'OPEN_DIALOG';
       action: () => Promise<void>;
     }
   | {
-      type: "CONFIRM";
+      type: 'CONFIRM';
     }
   | {
-      type: "CANCEL";
+      type: 'CANCEL';
     };
 
 const confirmationDialogMachine = createMachine<
@@ -22,38 +22,38 @@ const confirmationDialogMachine = createMachine<
   ConfirmationDialogMachineEvent
 >(
   {
-    id: "confirmationDialog",
-    initial: "closed",
+    id: 'confirmationDialog',
+    initial: 'closed',
     states: {
       closed: {
-        id: "closed",
+        id: 'closed',
         on: {
           OPEN_DIALOG: {
-            target: "open",
-            actions: "assignActionToContext",
+            target: 'open',
+            actions: 'assignActionToContext',
           },
         },
       },
       open: {
-        exit: ["clearErrorMessage"],
-        initial: "idle",
+        exit: ['clearErrorMessage'],
+        initial: 'idle',
         states: {
           idle: {
             on: {
-              CANCEL: "#closed",
-              CONFIRM: "executingAction",
+              CANCEL: '#closed',
+              CONFIRM: 'executingAction',
             },
           },
           executingAction: {
             invoke: {
-              src: "executeAction",
+              src: 'executeAction',
               onError: {
-                target: "idle",
-                actions: "assignErrorMessageToContext",
+                target: 'idle',
+                actions: 'assignErrorMessageToContext',
               },
               onDone: {
-                target: "#closed",
-                actions: ["clearActionFromContext", "onSuccess"],
+                target: '#closed',
+                actions: ['clearActionFromContext', 'onSuccess'],
               },
             },
           },
@@ -70,14 +70,14 @@ const confirmationDialogMachine = createMachine<
     },
     actions: {
       assignActionToContext: assign((context, event) => {
-        if (event.type !== "OPEN_DIALOG") return {};
+        if (event.type !== 'OPEN_DIALOG') return {};
         return {
           action: event.action,
         };
       }),
       assignErrorMessageToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
       clearErrorMessage: assign({
@@ -87,7 +87,7 @@ const confirmationDialogMachine = createMachine<
         action: undefined,
       }),
       onSuccess: () => {
-        alert("onSuccess fired!");
+        alert('onSuccess fired!');
       },
     },
   },

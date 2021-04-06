@@ -1,6 +1,6 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine, Sender } from 'xstate';
 
-interface InfiniteScrollMachineContext {
+export interface InfiniteScrollMachineContext {
   data: Data[];
   totalEntries: number;
   errorMessage?: string;
@@ -10,12 +10,12 @@ interface Data {
   id: number;
 }
 
-type InfiniteScrollMachineEvent =
+export type InfiniteScrollMachineEvent =
   | {
-      type: "SCROLL_TO_BOTTOM";
+      type: 'SCROLL_TO_BOTTOM';
     }
   | {
-      type: "RECEIVED_DATA";
+      type: 'RECEIVED_DATA';
       data: Data[];
       totalEntries: number;
     };
@@ -25,8 +25,8 @@ const infiniteScrollMachine = createMachine<
   InfiniteScrollMachineEvent
 >(
   {
-    id: "infiniteScroll",
-    initial: "fetchingRowOfData",
+    id: 'infiniteScroll',
+    initial: 'fetchingRowOfData',
     context: {
       totalEntries: Infinity,
       data: [],
@@ -35,37 +35,37 @@ const infiniteScrollMachine = createMachine<
       fetchingRowOfData: {
         on: {
           RECEIVED_DATA: {
-            target: "checkingIfThereIsMoreData",
-            actions: ["assignDataToContext"],
+            target: 'checkingIfThereIsMoreData',
+            actions: ['assignDataToContext'],
           },
         },
         invoke: {
-          src: "fetchRowOfData",
+          src: 'fetchRowOfData',
           onError: {
-            target: "idle",
-            actions: "assignErrorMessageToContext",
+            target: 'idle',
+            actions: 'assignErrorMessageToContext',
           },
         },
       },
       idle: {
-        exit: ["clearErrorMessage"],
+        exit: ['clearErrorMessage'],
         on: {
-          SCROLL_TO_BOTTOM: "fetchingRowOfData",
+          SCROLL_TO_BOTTOM: 'fetchingRowOfData',
         },
       },
       checkingIfThereIsMoreData: {
         always: [
           {
-            cond: "thereIsMoreData",
-            target: "idle",
+            cond: 'thereIsMoreData',
+            target: 'idle',
           },
           {
-            target: "noMoreDataToFetch",
+            target: 'noMoreDataToFetch',
           },
         ],
       },
       noMoreDataToFetch: {
-        type: "final",
+        type: 'final',
       },
     },
   },
@@ -80,7 +80,7 @@ const infiniteScrollMachine = createMachine<
     },
     actions: {
       assignDataToContext: assign((context, event) => {
-        if (event.type !== "RECEIVED_DATA") return {};
+        if (event.type !== 'RECEIVED_DATA') return {};
         return {
           data: [...context.data, ...event.data],
           totalEntries: event.totalEntries,
@@ -91,7 +91,7 @@ const infiniteScrollMachine = createMachine<
       })),
       assignErrorMessageToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
     },

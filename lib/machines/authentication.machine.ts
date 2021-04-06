@@ -1,6 +1,6 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine, Sender } from 'xstate';
 
-type AuthenticationMachineContext = {
+export type AuthenticationMachineContext = {
   userDetails?: UserDetails;
 };
 
@@ -8,19 +8,19 @@ interface UserDetails {
   username: string;
 }
 
-type AuthenticationMachineEvent =
+export type AuthenticationMachineEvent =
   | {
-      type: "REPORT_IS_LOGGED_IN";
+      type: 'REPORT_IS_LOGGED_IN';
       userDetails: UserDetails;
     }
   | {
-      type: "REPORT_IS_LOGGED_OUT";
+      type: 'REPORT_IS_LOGGED_OUT';
     }
   | {
-      type: "LOG_OUT";
+      type: 'LOG_OUT';
     }
   | {
-      type: "LOG_IN";
+      type: 'LOG_IN';
       userDetails: UserDetails;
     };
 
@@ -29,37 +29,37 @@ const authenticationMachine = createMachine<
   AuthenticationMachineEvent
 >(
   {
-    id: "authentication",
-    initial: "checkingIfLoggedIn",
+    id: 'authentication',
+    initial: 'checkingIfLoggedIn',
     states: {
       checkingIfLoggedIn: {
         invoke: {
-          src: "checkIfLoggedIn",
+          src: 'checkIfLoggedIn',
           onError: {
-            target: "loggedOut",
+            target: 'loggedOut',
           },
         },
         on: {
           REPORT_IS_LOGGED_IN: {
-            target: "loggedIn",
-            actions: "assignUserDetailsToContext",
+            target: 'loggedIn',
+            actions: 'assignUserDetailsToContext',
           },
-          REPORT_IS_LOGGED_OUT: "loggedOut",
+          REPORT_IS_LOGGED_OUT: 'loggedOut',
         },
       },
       loggedIn: {
         on: {
           LOG_OUT: {
-            target: "loggedOut",
+            target: 'loggedOut',
           },
         },
       },
       loggedOut: {
-        entry: ["navigateToAuthPage", "clearUserDetailsFromContext"],
+        entry: ['navigateToAuthPage', 'clearUserDetailsFromContext'],
         on: {
           LOG_IN: {
-            target: "loggedIn",
-            actions: "assignUserDetailsToContext",
+            target: 'loggedIn',
+            actions: 'assignUserDetailsToContext',
           },
         },
       },
@@ -91,7 +91,7 @@ const authenticationMachine = createMachine<
         // should take them to the /auth route
       },
       assignUserDetailsToContext: assign((context, event) => {
-        if (event.type !== "REPORT_IS_LOGGED_IN") {
+        if (event.type !== 'REPORT_IS_LOGGED_IN') {
           return {};
         }
         return {

@@ -1,6 +1,6 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
-interface WithLocalCacheMachineContext {
+export interface WithLocalCacheMachineContext {
   cache: Cache;
   errorMessage?: string;
   currentVariablesBeingProcessed?: Variables;
@@ -16,17 +16,17 @@ interface Data {
   name: string;
 }
 
-type WithLocalCacheMachineEvent =
+export type WithLocalCacheMachineEvent =
   | {
-      type: "FETCH";
+      type: 'FETCH';
       variables: Variables;
     }
   | {
-      type: "RECEIVE_DATA";
+      type: 'RECEIVE_DATA';
       data: Data;
     }
   | {
-      type: "CANCEL";
+      type: 'CANCEL';
     };
 
 const withLocalCacheMachine = createMachine<
@@ -34,8 +34,8 @@ const withLocalCacheMachine = createMachine<
   WithLocalCacheMachineEvent
 >(
   {
-    id: "simpleDataFetch",
-    initial: "idle",
+    id: 'simpleDataFetch',
+    initial: 'idle',
     context: {
       cache: {},
     },
@@ -44,19 +44,19 @@ const withLocalCacheMachine = createMachine<
         on: {
           FETCH: [
             {
-              cond: "itemIsAlreadyInCache",
-              target: "idle",
+              cond: 'itemIsAlreadyInCache',
+              target: 'idle',
             },
             {
-              target: "fetching",
-              actions: "assignVariablesToContext",
+              target: 'fetching',
+              actions: 'assignVariablesToContext',
             },
           ],
         },
-        initial: "noError",
+        initial: 'noError',
         states: {
           noError: {
-            entry: ["clearErrorMessage"],
+            entry: ['clearErrorMessage'],
           },
           errored: {},
         },
@@ -65,27 +65,27 @@ const withLocalCacheMachine = createMachine<
         on: {
           FETCH: [
             {
-              cond: "itemIsAlreadyInCache",
-              target: "idle",
+              cond: 'itemIsAlreadyInCache',
+              target: 'idle',
             },
             {
-              target: "fetching",
-              actions: "assignVariablesToContext",
+              target: 'fetching',
+              actions: 'assignVariablesToContext',
             },
           ],
           CANCEL: {
-            target: "idle",
+            target: 'idle',
           },
           RECEIVE_DATA: {
-            target: "idle",
-            actions: ["assignDataToContext"],
+            target: 'idle',
+            actions: ['assignDataToContext'],
           },
         },
         invoke: {
-          src: "fetchData",
+          src: 'fetchData',
           onError: {
-            target: "idle.errored",
-            actions: "assignErrorToContext",
+            target: 'idle.errored',
+            actions: 'assignErrorToContext',
           },
         },
       },
@@ -94,7 +94,7 @@ const withLocalCacheMachine = createMachine<
   {
     guards: {
       itemIsAlreadyInCache: (context, event) => {
-        if (event.type !== "FETCH") return false;
+        if (event.type !== 'FETCH') return false;
 
         return Boolean(context.cache[JSON.stringify(event.variables)]);
       },
@@ -104,13 +104,13 @@ const withLocalCacheMachine = createMachine<
     },
     actions: {
       assignVariablesToContext: assign((context, event) => {
-        if (event.type !== "FETCH") return {};
+        if (event.type !== 'FETCH') return {};
         return {
           currentVariablesBeingProcessed: event.variables,
         };
       }),
       assignDataToContext: assign((context, event) => {
-        if (event.type !== "RECEIVE_DATA") return {};
+        if (event.type !== 'RECEIVE_DATA') return {};
         return {
           cache: {
             ...context.cache,
@@ -125,7 +125,7 @@ const withLocalCacheMachine = createMachine<
       })),
       assignErrorToContext: assign((context, event: any) => {
         return {
-          errorMessage: event.data?.message || "An unknown error occurred",
+          errorMessage: event.data?.message || 'An unknown error occurred',
         };
       }),
     },

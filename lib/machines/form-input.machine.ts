@@ -1,31 +1,31 @@
-import { assign, createMachine, Sender } from "xstate";
+import { assign, createMachine, Sender } from 'xstate';
 
-interface FormInputMachineContext {
+export interface FormInputMachineContext {
   value: Value;
   errorMessage?: string;
 }
 
 type Value = any;
 
-type FormInputMachineEvent =
+export type FormInputMachineEvent =
   | {
-      type: "CHANGE";
+      type: 'CHANGE';
       value: Value;
     }
   | {
-      type: "BLUR";
+      type: 'BLUR';
     }
   | {
-      type: "FOCUS";
+      type: 'FOCUS';
     }
   | {
-      type: "DISABLE";
+      type: 'DISABLE';
     }
   | {
-      type: "ENABLE";
+      type: 'ENABLE';
     }
   | {
-      type: "REPORT_INVALID";
+      type: 'REPORT_INVALID';
       reason: string;
     };
 
@@ -34,49 +34,49 @@ const formInputMachine = createMachine<
   FormInputMachineEvent
 >(
   {
-    id: "formInput",
-    initial: "active",
+    id: 'formInput',
+    initial: 'active',
     states: {
       active: {
         on: {
-          DISABLE: "disabled",
+          DISABLE: 'disabled',
         },
-        type: "parallel",
+        type: 'parallel',
         states: {
           focus: {
-            initial: "unfocused",
+            initial: 'unfocused',
             states: {
               focused: {
                 on: {
-                  BLUR: "unfocused",
+                  BLUR: 'unfocused',
                 },
               },
               unfocused: {
                 on: {
-                  FOCUS: "focused",
+                  FOCUS: 'focused',
                 },
               },
             },
           },
           validation: {
-            initial: "pending",
+            initial: 'pending',
             on: {
               CHANGE: {
-                target: ".pending",
-                actions: "assignValueToContext",
+                target: '.pending',
+                actions: 'assignValueToContext',
               },
             },
             states: {
               pending: {
                 on: {
                   REPORT_INVALID: {
-                    target: "invalid",
-                    actions: "assignReasonToErrorMessage",
+                    target: 'invalid',
+                    actions: 'assignReasonToErrorMessage',
                   },
                 },
                 invoke: {
-                  src: "validateField",
-                  onDone: "valid",
+                  src: 'validateField',
+                  onDone: 'valid',
                 },
               },
               valid: {},
@@ -87,7 +87,7 @@ const formInputMachine = createMachine<
       },
       disabled: {
         on: {
-          ENABLE: "active",
+          ENABLE: 'active',
         },
       },
     },
@@ -95,13 +95,13 @@ const formInputMachine = createMachine<
   {
     actions: {
       assignReasonToErrorMessage: assign((context, event) => {
-        if (event.type !== "REPORT_INVALID") return {};
+        if (event.type !== 'REPORT_INVALID') return {};
         return {
           errorMessage: event.reason,
         };
       }),
       assignValueToContext: assign((context, event) => {
-        if (event.type !== "CHANGE") return {};
+        if (event.type !== 'CHANGE') return {};
         return {
           value: event.value,
         };
@@ -109,10 +109,10 @@ const formInputMachine = createMachine<
     },
     services: {
       validateField: (context) => (send: Sender<FormInputMachineEvent>) => {
-        if (context.value === "") {
+        if (context.value === '') {
           send({
-            type: "REPORT_INVALID",
-            reason: "Value cannot be empty",
+            type: 'REPORT_INVALID',
+            reason: 'Value cannot be empty',
           });
         }
       },

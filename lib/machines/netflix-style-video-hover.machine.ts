@@ -1,24 +1,24 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
-interface NetflixStyleVideoHoverMachineContext {
+export interface NetflixStyleVideoHoverMachineContext {
   hasVideoLoaded: boolean;
 }
 
-type NetflixStyleVideoHoverMachineEvent =
+export type NetflixStyleVideoHoverMachineEvent =
   | {
-      type: "REPORT_IMAGE_LOADED";
+      type: 'REPORT_IMAGE_LOADED';
     }
   | {
-      type: "REPORT_IMAGE_FAILED_TO_LOAD";
+      type: 'REPORT_IMAGE_FAILED_TO_LOAD';
     }
   | {
-      type: "MOUSE_OVER";
+      type: 'MOUSE_OVER';
     }
   | {
-      type: "REPORT_VIDEO_LOADED";
+      type: 'REPORT_VIDEO_LOADED';
     }
   | {
-      type: "MOUSE_OUT";
+      type: 'MOUSE_OUT';
     };
 
 const netflixStyleVideoHoverMachine = createMachine<
@@ -26,8 +26,8 @@ const netflixStyleVideoHoverMachine = createMachine<
   NetflixStyleVideoHoverMachineEvent
 >(
   {
-    id: "netflixStyleVideoHover",
-    initial: "awaitingBackgroundImageLoad",
+    id: 'netflixStyleVideoHover',
+    initial: 'awaitingBackgroundImageLoad',
     context: {
       hasVideoLoaded: false,
     },
@@ -35,80 +35,79 @@ const netflixStyleVideoHoverMachine = createMachine<
       awaitingBackgroundImageLoad: {
         on: {
           REPORT_IMAGE_LOADED: {
-            target: "idle",
+            target: 'idle',
           },
           REPORT_IMAGE_FAILED_TO_LOAD: {
-            target: "imageFailedToLoad",
+            target: 'imageFailedToLoad',
           },
         },
       },
-      // Things failed terribly, this is bad....
       imageFailedToLoad: {},
       idle: {
         on: {
           MOUSE_OVER: {
-            target: "showingVideo",
+            target: 'showingVideo',
           },
         },
       },
       showingVideo: {
-        initial: "checkingIfVideoHasLoaded",
+        initial: 'checkingIfVideoHasLoaded',
         on: {
           MOUSE_OUT: {
-            target: "idle",
+            target: 'idle',
           },
         },
         states: {
           checkingIfVideoHasLoaded: {
             always: [
               {
-                cond: "hasLoadedVideo",
-                target: "waitingASecondBeforePlaying",
+                cond: 'hasLoadedVideo',
+                target: 'waitingBeforePlaying',
               },
               {
-                target: "loadingVideoSrc",
+                target: 'loadingVideoSrc',
               },
             ],
           },
-          waitingASecondBeforePlaying: {
+          waitingBeforePlaying: {
             after: {
-              1000: {
-                target: "autoPlayingVideo",
+              2000: {
+                target: 'autoPlayingVideo',
               },
             },
           },
           loadingVideoSrc: {
-            initial: "cannotMoveOn",
+            initial: 'cannotMoveOn',
             onDone: {
-              target: "autoPlayingVideo",
+              target: 'autoPlayingVideo',
             },
             states: {
               cannotMoveOn: {
                 after: {
-                  1000: {
-                    target: "canMoveOn",
+                  2000: {
+                    target: 'canMoveOn',
                   },
                 },
                 on: {
                   REPORT_VIDEO_LOADED: {
-                    actions: "reportVideoLoaded",
+                    actions: 'reportVideoLoaded',
                   },
                 },
               },
               canMoveOn: {
                 always: {
-                  cond: "hasLoadedVideo",
-                  target: "loaded",
+                  cond: 'hasLoadedVideo',
+                  target: 'loaded',
                 },
                 on: {
                   REPORT_VIDEO_LOADED: {
-                    actions: "reportVideoLoaded",
-                    target: "loaded",
+                    actions: 'reportVideoLoaded',
+                    target: 'loaded',
                   },
                 },
               },
               loaded: {
-                type: "final",
+                type: 'final',
               },
             },
           },

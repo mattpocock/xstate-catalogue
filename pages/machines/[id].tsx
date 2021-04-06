@@ -1,12 +1,13 @@
-import { MDXProvider } from "@mdx-js/react";
-import { inspect } from "@xstate/inspect";
-import { useInterpret } from "@xstate/react";
-import { GetStaticPaths, InferGetStaticPropsType, NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
-import { StateMachine } from "xstate";
-import { useLayout } from "../../lib/GlobalState";
+import GitHub from '@material-ui/icons/GitHub';
+import { MDXProvider } from '@mdx-js/react';
+import { inspect } from '@xstate/inspect';
+import { useInterpret } from '@xstate/react';
+import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
+import { StateMachine } from 'xstate';
+import { useLayout } from '../../lib/GlobalState';
 import {
   Action,
   Context,
@@ -15,9 +16,9 @@ import {
   Service,
   State,
   WholeContext,
-} from "../../lib/MachineHelpers";
-import { metadata } from "../../lib/metadata";
-import { useCopyToClipboard } from "../../lib/useCopyToClipboard";
+} from '../../lib/MachineHelpers';
+import { metadata, MetadataItem } from '../../lib/metadata';
+import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
 
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
@@ -47,12 +48,12 @@ const useGetImports = (slug: string, deps: any[]) => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const fs = await import("fs");
-  const path = await import("path");
+  const fs = await import('fs');
+  const path = await import('path');
 
   const machinesPath = path.resolve(
     process.cwd(),
-    "lib/machines",
+    'lib/machines',
     `${params.id}.machine.ts`,
   );
 
@@ -81,10 +82,14 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
 
   const iframeRef = useRef(null);
   useEffect(() => {
-    inspect({
+    const { disconnect } = inspect({
       iframe: () => iframeRef.current,
     });
-  }, [layout]);
+
+    return () => {
+      disconnect();
+    };
+  }, [layout, props.slug]);
 
   return (
     <>
@@ -96,9 +101,11 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
           <>
             {imports && (
               <ShowMachinePage
+                slug={props.slug}
                 machine={imports.machine}
                 mdxDoc={imports.mdxDoc}
                 fileText={props.fileText}
+                meta={props.meta}
               ></ShowMachinePage>
             )}
           </>
@@ -116,11 +123,11 @@ const Layout = (props: {
   iframe: React.ReactNode;
 }) => {
   const layout = useLayout();
-  if (layout === "horizontal" || layout === "vertical") {
+  if (layout === 'horizontal' || layout === 'vertical') {
     return (
       <div
         className={`md:grid h-full ${
-          layout === "horizontal" ? "md:grid-cols-2" : "md:grid-rows-2"
+          layout === 'horizontal' ? 'md:grid-cols-2' : 'md:grid-rows-2'
         }`}
       >
         <div className="hidden bg-black md:block">{props.iframe}</div>
@@ -130,12 +137,12 @@ const Layout = (props: {
       </div>
     );
   }
-  if (layout === "blog") {
+  if (layout === 'blog') {
     return (
       <div className="h-full overflow-y-scroll">
         <div>
           <div
-            style={{ height: "550px" }}
+            style={{ height: '550px' }}
             className="hidden mb-16 bg-black md:block"
           >
             {props.iframe}
@@ -153,12 +160,14 @@ const ShowMachinePage = (props: {
   machine: StateMachine<any, any, any>;
   mdxDoc: any;
   fileText: string;
+  slug: string;
+  meta: MetadataItem;
 }) => {
   const service = useInterpret(props.machine, {
     devTools: true,
   });
   const [hasDismissed, setHasDismissed] = useState<boolean>(
-    Boolean(localStorage.getItem("REJECTED_1")),
+    Boolean(localStorage.getItem('REJECTED_1')),
   );
 
   const copyToClipboard = useCopyToClipboard({});
@@ -195,7 +204,7 @@ const ShowMachinePage = (props: {
                   className="absolute top-0 right-0 p-2 mb-2 mr-4 text-lg"
                   onClick={() => {
                     setHasDismissed(true);
-                    localStorage.setItem("REJECTED_1", "true");
+                    localStorage.setItem('REJECTED_1', 'true');
                   }}
                 >
                   <span className="text-gray-600">✖</span>
@@ -205,19 +214,39 @@ const ShowMachinePage = (props: {
           )}
           <div className="flex">
             <SideBar machine={props.machine} />
-            <div className="p-6 prose lg:prose-lg">
-              <MDXProvider
-                components={{
-                  Event,
-                  State,
-                  Action,
-                  Service,
-                  Context,
-                  WholeContext,
-                }}
-              >
-                <props.mdxDoc></props.mdxDoc>
-              </MDXProvider>
+            <div className="p-6 space-y-6">
+              <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
+                <a
+                  href={`https://github.com/mattpocock/xstate-catalogue/edit/master/lib/machines/${props.slug}.machine.ts`}
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  target="_blank"
+                >
+                  <span>Edit</span>
+                  <GitHub style={{ height: '1rem', width: '1.2rem' }} />
+                </a>
+                <a
+                  href={`https://github.com/mattpocock/xstate-catalogue/discussions?discussions_q=${props.meta.title}`}
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  target="_blank"
+                >
+                  <span>Discuss</span>
+                  <GitHub style={{ height: '1rem', width: '1.2rem' }} />
+                </a>
+              </div>
+              <div className="prose lg:prose-lg">
+                <MDXProvider
+                  components={{
+                    Event,
+                    State,
+                    Action,
+                    Service,
+                    Context,
+                    WholeContext,
+                  }}
+                >
+                  <props.mdxDoc></props.mdxDoc>
+                </MDXProvider>
+              </div>
             </div>
           </div>
         </div>
@@ -248,21 +277,21 @@ const ShowMachinePage = (props: {
 const machinePathRegex = /\.machine\.ts$/;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const fs = await import("fs");
-  const path = await import("path");
+  const fs = await import('fs');
+  const path = await import('path');
 
-  const machinesPath = path.resolve(process.cwd(), "lib/machines");
+  const machinesPath = path.resolve(process.cwd(), 'lib/machines');
 
   const machines = fs.readdirSync(machinesPath);
 
   return {
     fallback: false,
     paths: machines
-      .filter((machine) => machine.endsWith(".ts"))
+      .filter((machine) => machine.endsWith('.ts'))
       .map((fileName) => {
         return {
           params: {
-            id: fileName.replace(machinePathRegex, ""),
+            id: fileName.replace(machinePathRegex, ''),
           },
         };
       }),
@@ -275,12 +304,12 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
   return (
     <div
       className="hidden p-6 space-y-16 border-r md:block"
-      style={{ maxWidth: "300px" }}
+      style={{ maxWidth: '300px' }}
     >
       <div className="w-48" />
       <Link href="/#Catalogue">
         <a className="space-x-3 text-base text-gray-600">
-          <span className="text-gray-500">{"❮"}</span>
+          <span className="text-gray-500">{'❮'}</span>
           <span>Back to List</span>
         </a>
       </Link>
@@ -294,7 +323,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
             return (
               <li>
                 <State>
-                  {props.machine.getStateNodeById(id).path.join(".")}
+                  {props.machine.getStateNodeById(id).path.join('.')}
                 </State>
               </li>
             );
@@ -307,7 +336,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
         </h2>
         <ul className="space-y-3">
           {props.machine.events
-            .filter((event) => !event.startsWith("xstate.") && event)
+            .filter((event) => !event.startsWith('xstate.') && event)
             .map((event) => {
               return (
                 <li>

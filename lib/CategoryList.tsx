@@ -1,8 +1,8 @@
-import Link from "next/link";
-import React from "react";
-import packageJson from "../package.json";
-import * as Icons from "../lib/Icons";
-import { metadata } from "./metadata";
+import Link from 'next/link';
+import React from 'react';
+import packageJson from '../package.json';
+import * as Icons from '../lib/Icons';
+import { metadata } from './metadata';
 
 const Wrapper: React.FC<{ title: string }> = (props) => {
   return (
@@ -38,7 +38,7 @@ const Item: React.FC<{
 }> = (props) => {
   const meta = metadata[props.id];
 
-  if (!meta) throw new Error("Could not find metadata for " + props.id);
+  if (!meta) throw new Error('Could not find metadata for ' + props.id);
 
   const isNew = meta.version === packageJson.version;
 
@@ -50,7 +50,7 @@ const Item: React.FC<{
         <div className="space-y-2">
           <div className="flex items-center justify-center h-32 bg-gray-100 border rounded">
             <Icon
-              style={{ width: "60px", height: "60px" }}
+              style={{ width: '60px', height: '60px' }}
               className="text-gray-600 fill-current"
             ></Icon>
           </div>
@@ -76,7 +76,7 @@ const ComingSoonItem: React.FC<{
       <div className="space-y-2">
         <div className="flex items-center justify-center h-32 bg-gray-100 border rounded">
           <props.icon
-            style={{ width: "60px", height: "60px" }}
+            style={{ width: '60px', height: '60px' }}
             className="text-gray-600 fill-current"
           ></props.icon>
         </div>

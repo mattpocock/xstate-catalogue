@@ -1,8 +1,9 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
-import { Layout } from "../lib/Layout";
-import "../styles/globals.css";
-import "../styles/atom-one-dark.css";
-import Head from "next/head";
+import { AppProps } from 'next/dist/next-server/lib/router/router';
+import { Layout } from '../lib/Layout';
+import '../styles/globals.css';
+import '../styles/atom-one-dark.css';
+import Head from 'next/head';
+import { OverlayProvider } from '@react-aria/overlays';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,8 +17,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="canonical" href="https://xstate-catalogue.com" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <meta property="og:type" content="article" />
-        <meta property="og:title" content="State Machine Catalogue" />
-        <meta property="og:image" content="/og-image.png" />
+        <meta
+          property="og:title"
+          content="XState Catalogue - Beautiful State Machines"
+        />
+        <meta
+          property="og:image"
+          content="https://xstate-catalogue.com/og-image.png"
+        />
         <meta
           property="og:description"
           content="A collection of professionally designed state machines you can drop into your XState projects"
@@ -49,9 +56,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
         )}
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <OverlayProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </OverlayProvider>
       <script src="/highlight.pack.js"></script>
     </>
   );

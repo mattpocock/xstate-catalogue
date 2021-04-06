@@ -1,6 +1,6 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine } from 'xstate';
 
-interface DragAndDropMachineContext {
+export interface DragAndDropMachineContext {
   dataList: Data[];
   itemBeingHeld?: {
     startIndex: number;
@@ -12,16 +12,16 @@ interface Data {
   id: number;
 }
 
-type DragAndDropMachineEvent =
+export type DragAndDropMachineEvent =
   | {
-      type: "DROP";
+      type: 'DROP';
     }
   | {
-      type: "DRAG_REACHED_INTERSECTION";
+      type: 'DRAG_REACHED_INTERSECTION';
       index: number;
     }
   | {
-      type: "PICK_UP";
+      type: 'PICK_UP';
       index: number;
     };
 // | {
@@ -36,8 +36,8 @@ const dragAndDropMachine = createMachine<
   DragAndDropMachineEvent
 >(
   {
-    id: "dragAndDrop",
-    initial: "idle",
+    id: 'dragAndDrop',
+    initial: 'idle',
     context: {
       dataList: [
         {
@@ -55,22 +55,22 @@ const dragAndDropMachine = createMachine<
       idle: {
         on: {
           PICK_UP: {
-            target: "dragging",
-            actions: ["assignPickedUpItemToContext"],
+            target: 'dragging',
+            actions: ['assignPickedUpItemToContext'],
           },
         },
       },
       dragging: {
         on: {
           DROP: {
-            target: "idle",
+            target: 'idle',
             actions: [
-              "rearrangeListBasedOnIndex",
-              "removeItemBeingHeldFromContext",
+              'rearrangeListBasedOnIndex',
+              'removeItemBeingHeldFromContext',
             ],
           },
           DRAG_REACHED_INTERSECTION: {
-            actions: ["assignCurrentPositionToContext"],
+            actions: ['assignCurrentPositionToContext'],
           },
         },
       },
@@ -79,7 +79,7 @@ const dragAndDropMachine = createMachine<
   {
     actions: {
       assignPickedUpItemToContext: assign((context, event) => {
-        if (event.type !== "PICK_UP") return {};
+        if (event.type !== 'PICK_UP') return {};
         return {
           itemBeingHeld: {
             currentIndex: event.index,
@@ -93,7 +93,7 @@ const dragAndDropMachine = createMachine<
         };
       }),
       rearrangeListBasedOnIndex: assign((context, event) => {
-        if (event.type !== "DROP") return {};
+        if (event.type !== 'DROP') return {};
 
         const newDataList = [...context.dataList];
 
@@ -108,7 +108,7 @@ const dragAndDropMachine = createMachine<
         };
       }),
       assignCurrentPositionToContext: assign((context, event) => {
-        if (event.type !== "DRAG_REACHED_INTERSECTION") return {};
+        if (event.type !== 'DRAG_REACHED_INTERSECTION') return {};
         return {
           itemBeingHeld: {
             ...context.itemBeingHeld,

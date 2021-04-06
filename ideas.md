@@ -12,7 +12,6 @@ Role-based access
 Video call
 Advanced search area with pagination
 CRUD - list page with search bar, pagination and orderable column headings
-Infinite scroll
 
 ## Visual ideas
 

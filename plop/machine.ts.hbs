@@ -1,9 +1,8 @@
 import { assign, createMachine, Sender } from "xstate";
 
-interface {{properCase name}}MachineContext {};
+export interface {{properCase name}}MachineContext {};
 
-
-type {{properCase name}}MachineEvent =
+export type {{properCase name}}MachineEvent =
   | {
       type: "TYPE";
     };
@@ -19,8 +18,7 @@ const {{camelCase name}}Machine = createMachine<
       idle: {},
     },
   },
-  {
-  },
+  {},
 );
 
 export default {{camelCase name}}Machine;

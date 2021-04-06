@@ -1,38 +1,38 @@
-import { createMachine } from "xstate";
+import { createMachine } from 'xstate';
 
-type MultiStepTimerMachineContext = {};
+export type MultiStepTimerMachineContext = {};
 
-type MultiStepTimerMachineEvent = {
-  type: "BEGIN";
+export type MultiStepTimerMachineEvent = {
+  type: 'BEGIN';
 };
 
 const multiStepTimerMachine = createMachine<
   MultiStepTimerMachineContext,
   MultiStepTimerMachineEvent
 >({
-  id: "multiStepTimer",
-  initial: "idle",
+  id: 'multiStepTimer',
+  initial: 'idle',
   states: {
     idle: {
       on: {
         BEGIN: {
-          target: "firstStep",
+          target: 'firstStep',
         },
       },
     },
     firstStep: {
       after: {
-        3000: "secondStep",
+        3000: 'secondStep',
       },
     },
     secondStep: {
       after: {
-        3000: "thirdStep",
+        3000: 'thirdStep',
       },
     },
     thirdStep: {
       after: {
-        3000: "idle",
+        3000: 'idle',
       },
     },
   },

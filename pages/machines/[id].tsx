@@ -13,6 +13,7 @@ import {
   Context,
   Event,
   MachineHelpersContext,
+  MDXMetadata,
   Service,
   State,
   WholeContext,
@@ -24,6 +25,7 @@ const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
     machine: StateMachine<any, any, any>;
     mdxDoc: any;
+    mdxMetadata?: MDXMetadata;
   }>();
 
   const getMachine = async () => {
@@ -37,6 +39,7 @@ const useGetImports = (slug: string, deps: any[]) => {
     setImports({
       machine: machineImport.default,
       mdxDoc: mdxDoc.default,
+      mdxMetadata: mdxDoc.metadata,
     });
   };
 
@@ -106,6 +109,7 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
                 mdxDoc={imports.mdxDoc}
                 fileText={props.fileText}
                 meta={props.meta}
+                mdxMetadata={imports.mdxMetadata}
               ></ShowMachinePage>
             )}
           </>
@@ -162,6 +166,7 @@ const ShowMachinePage = (props: {
   fileText: string;
   slug: string;
   meta: MetadataItem;
+  mdxMetadata?: MDXMetadata;
 }) => {
   const service = useInterpret(props.machine, {
     devTools: true,
@@ -183,7 +188,9 @@ const ShowMachinePage = (props: {
   }, [fileTextRef, props.fileText]);
 
   return (
-    <MachineHelpersContext.Provider value={{ service }}>
+    <MachineHelpersContext.Provider
+      value={{ service, metadata: props.mdxMetadata }}
+    >
       <div className="flex justify-center">
         <div className="">
           {!hasDismissed && (

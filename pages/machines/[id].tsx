@@ -259,7 +259,7 @@ const ShowMachinePage = (props: {
         </div>
       </div>
       <div className="mt-16">
-        <div className="p-12 -mb-20 text-gray-100 bg-gray-900">
+        <div className="p-6 xl:p-12 -mb-20 text-gray-100 bg-gray-900">
           <div className="container relative max-w-6xl mx-auto">
             <pre>
               <code ref={fileTextRef} className="lang-ts">
@@ -267,7 +267,7 @@ const ShowMachinePage = (props: {
               </code>
             </pre>
             <button
-              className="absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
+              className="invisible md:visible absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
               onClick={() => {
                 copyToClipboard(props.fileText);
               }}

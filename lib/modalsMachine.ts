@@ -60,6 +60,7 @@ export const modalsMachine = createMachine<Context, Event>(
       listenForKeyboardShortcuts: () => (send: Sender<Event>) => {
         const listener = (e: KeyboardEvent) => {
           if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
             send('CMD_K_PRESSED');
           }
         };

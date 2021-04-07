@@ -65,7 +65,7 @@ export const CatalogueSearcher = (props: {
                   router.push(`/machines/${option.id}`);
                   props.service.send('CLOSE');
                 }}
-                className="flex items-center px-3 py-3 space-x-3 focus:outline-none focus:ring"
+                className="flex items-center w-full px-3 py-3 space-x-3 focus:outline-none focus:ring"
               >
                 <Icon className="flex-shrink-0 block text-gray-500 fill-current" />
                 <span className="block text-sm text-gray-600">

@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "with-heart",
+      "name": "Mark Chandler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1954752?v=4",
+      "profile": "http://chanchan.io",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "xstate-catalogue",
+  "projectOwner": "mattpocock",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

@@ -1,5 +1,5 @@
 import { useSelector, useService } from '@xstate/react';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Interpreter } from 'xstate';
 
 export const MachineHelpersContext = React.createContext<{
@@ -115,7 +115,21 @@ export const WholeContext = () => {
   const jsonContext = useSelector(context.service, (state) => {
     return JSON.stringify(state.context, null, 2);
   });
-  return <pre>{jsonContext}</pre>;
+  const jsonContextRef = useRef(null);
+  useEffect(() => {
+    // @ts-ignore
+    const hljs: any = window.hljs;
+    if (hljs) {
+      hljs.highlightBlock(jsonContextRef.current);
+    }
+  }, [jsonContextRef, jsonContext]);
+  return (
+    <pre>
+      <code ref={jsonContextRef} className="json">
+        {jsonContext}
+      </code>
+    </pre>
+  );
 };
 
 export const Service = (props: { children: string }) => {

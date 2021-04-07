@@ -35,6 +35,16 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "bemayr",
+      "name": "Bernhard Mayr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6529243?v=4",
+      "profile": "https://twitter.com/bemayr",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

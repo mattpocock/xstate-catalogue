@@ -13,6 +13,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hmaurer",
+      "name": "Henri Maurer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/541045?v=4",
+      "profile": "https://twitter.com/belinburgh",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -70,7 +70,7 @@ export const Event = (props: { children: string }) => {
       onClick={() => {
         send({
           ...examplePayload,
-          payload,
+          ...payload,
           type: event,
         });
       }}
@@ -81,7 +81,7 @@ export const Event = (props: { children: string }) => {
         {Object.values(eventProperties).length == 0 ? (
           <span className={`px-2 py-1 ${color}`}>{displayableEvent}</span>
         ) : (
-          <ParametrizedEvent definition={eventProperties} color={color}>
+          <ParametrizedEvent eventProperties={eventProperties} specifiedPayload={payload} color={color}>
             {displayableEvent}
           </ParametrizedEvent>
         )}
@@ -92,16 +92,23 @@ export const Event = (props: { children: string }) => {
 
 const ParametrizedEvent = (props: {
   children: string;
-  definition: EventDefinition;
+  eventProperties: EventDefinition;
+  specifiedPayload: {[key: string]: any}
   color: string;
 }) => {
-  const { children: event, definition, color } = props;
+  const { children: event, eventProperties, specifiedPayload, color } = props;
 
-  const properties = Object.values(definition).map(({ exampleValue }) =>
-    exampleValue !== undefined
-      ? JSON.stringify(exampleValue) !== '{}'
-        ? JSON.stringify(exampleValue)
-        : exampleValue.toString()
+  const examplePayload: { [key: string]: any } = Object
+    .entries(eventProperties)
+    .reduce((payload, [property, { exampleValue }]) => ({...payload, [property]: exampleValue}), {});
+
+  const payload = {...examplePayload, ...specifiedPayload}
+
+  const properties = Object.values(payload).map(value =>
+    value !== undefined
+      ? JSON.stringify(value) !== '{}'
+        ? JSON.stringify(value)
+        : value.toString()
       : '?',
   );
 

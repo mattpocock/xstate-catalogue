@@ -1,3 +1,18 @@
+export const metadata = {
+  events: {
+    UPDATE_TOTAL_PAGES: {
+      totalPages: {
+        type: 'number',
+      },
+    },
+    GO_TO_TARGET_PAGE: {
+      targetPage: {
+        variables: 'number',
+      },
+    },
+  },
+};
+
 # Pagination
 
 This machine handles button-based pagination, for instance paginating a tabular dataset. It's a little different to [infinite scroll](/machines/infinite-scroll).

@@ -1,8 +1,11 @@
 export const metadata = {
-  eventPayloads: {
+  events: {
     GO: {
-      action: () => {
-        alert('Action fired!');
+      action: {
+        type: 'object',
+        exampleValue: () => {
+          alert('Action fired!');
+        },
       },
     },
   },

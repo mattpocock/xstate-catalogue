@@ -7,9 +7,16 @@ export const MachineHelpersContext = React.createContext<{
   metadata?: MDXMetadata;
 }>({} as any);
 
+type EventDefinition = {
+  [property: string]: {
+    type: string;
+    exampleValue: any | undefined;
+  };
+};
+
 export interface MDXMetadata {
-  eventPayloads?: {
-    [eventType: string]: any;
+  events?: {
+    [eventType: string]: EventDefinition;
   };
 }
 
@@ -41,41 +48,70 @@ export const Event = (props: { children: string }) => {
   const context = useContext(MachineHelpersContext);
   const [state, send] = useService(context.service);
 
-  const { children, ...event } = props;
+  const { children: event, ...payload } = props;
 
-  const defaultEvent = context.metadata?.eventPayloads?.[props.children] || {};
+  const eventProperties = context.metadata?.events?.[event] || {};
+  const examplePayload: { [key: string]: any } = Object.fromEntries(
+    Object.entries(eventProperties).map(([property, { exampleValue }]) => [
+      [property],
+      exampleValue,
+    ]),
+  );
+  // const isEventComplete = eventProperties.reduce((isComplete, [_, {exampleValue}]) => isComplete && (exampleValue !== undefined), true);
+
+  const displayableEvent = event.replaceAll('.', '.\u200b'); // https://stackoverflow.com/questions/10373459/break-long-no-spaces-lines-on-commas-dots-hyphens-or-other-special-chars
+  const color = state.nextEvents.includes(event)
+    ? `bg-yellow-100 text-yellow-800`
+    : 'bg-gray-100 text-gray-600';
 
   return (
     <button
       className="text-left"
       onClick={() => {
         send({
-          ...defaultEvent,
-          ...event,
-          type: props.children,
+          ...examplePayload,
+          payload,
+          type: event,
         });
       }}
       // To override prose
       style={{ margin: 0 }}
     >
       <span className={`font-mono inline-flex flex-wrap font-bold text-sm `}>
-        {props.children.split('.').map((a, index, array) => (
-          <span
-            key={index}
-            className={`transition-colors py-1 ${index === 0 && 'pl-2'} ${
-              index === array.length - 1 && 'pr-2'
-            } ${
-              state.nextEvents.includes(props.children)
-                ? `bg-yellow-100 text-yellow-800`
-                : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            {a}
-            {index !== array.length - 1 && '.'}
-          </span>
-        ))}
+        {Object.values(eventProperties).length == 0 ? (
+          <span className={`px-2 py-1 ${color}`}>{displayableEvent}</span>
+        ) : (
+          <ParametrizedEvent definition={eventProperties} color={color}>
+            {displayableEvent}
+          </ParametrizedEvent>
+        )}
       </span>
     </button>
+  );
+};
+
+const ParametrizedEvent = (props: {
+  children: string;
+  definition: EventDefinition;
+  color: string;
+}) => {
+  const { children: event, definition, color } = props;
+
+  const properties = Object.values(definition).map(({ exampleValue }) =>
+    exampleValue !== undefined
+      ? JSON.stringify(exampleValue) !== '{}'
+        ? JSON.stringify(exampleValue)
+        : exampleValue.toString()
+      : '?',
+  );
+
+  return (
+    <span>
+      <span className={`pl-2 py-1 ${color}`}>{event} </span>
+      <span className={`pr-2 py-1 ${color}`}>
+        (<i>{properties.join(', ')}</i>)
+      </span>
+    </span>
   );
 };
 

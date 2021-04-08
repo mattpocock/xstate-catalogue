@@ -1,14 +1,22 @@
 export const metadata = {
-  eventPayloads: {
+  events: {
     SUCCESSFULLY_FETCHED_ITEM: {
-      item: { name: "Matt Pocock" },
-      totalEntries: 8,
+      item: {
+        type: 'object',
+        exampleValue: { name: "Matt Pocock" },
+      },
     },
     SUBMIT: {
-      item: { name: "Matt Pocock" },
+      item: {
+        type: 'string',
+        exampleValue: { name: "Matt Pocock" },
+      },
     },
     'error.platform.fetchItem': {
-      data: new Error('Something went wrong...'),
+      data: {
+        type: 'object',
+        exampleValue: new Error('Something went wrong...'),
+      },
     },
   },
 };
@@ -29,7 +37,7 @@ If we _are_ in edit mode, we head to <State>fetchingItemToEdit</State>. If not, 
 
 When we're in edit mode, we need to make an async call to the database to grab the item we need to edit. That's what the <State>fetchingItemToEdit</State> state is for.
 
-If the item is successfully fetched, the <Service>fetchItem</Service> service sends back the <Event>SUCCESSFULLY_FETCHED_ITEM</Event> event. That then gets saved into context under <Context stringify>itemToProcess</Context>, and we're ready to go to <State>awaitingSubmit</State>.
+If the item is successfully fetched, the <Service>fetchItem</Service> service sends back the <Event test="prop">SUCCESSFULLY_FETCHED_ITEM</Event> event. That then gets saved into context under <Context stringify>itemToProcess</Context>, and we're ready to go to <State>awaitingSubmit</State>.
 
 If the fetch fails, the service sends back <Event>error.platform.fetchItem</Event>, which saves an <Context>errorMessage</Context> into context. The user can then <Event>RETRY</Event> if they like.
 

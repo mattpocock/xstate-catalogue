@@ -1,8 +1,14 @@
 export const metadata = {
-  eventPayloads: {
+  events: {
     RECEIVED_DATA: {
-      data: [{ id: Date.now() }, { id: Date.now() }],
-      totalEntries: 8,
+      data: {
+        type: 'object',
+        exampleValue: [{ id: Date.now() }, { id: Date.now() }],
+      },
+      totalEntries: {
+        type: 'number',
+        exampleValue: 8,
+      },
     },
   },
 };

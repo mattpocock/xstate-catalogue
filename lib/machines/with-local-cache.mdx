@@ -1,13 +1,15 @@
 export const metadata = {
-  eventPayloads: {
+  events: {
     RECEIVE_DATA: {
       data: {
-        name: "Matthew Pocock",
+        type: 'object',
+        exampleValue: { name: "Matthew Pocock" },
       },
     },
     FETCH: {
-      variables: {
-        id: "id-1",
+      data: {
+        variables: 'object',
+        exampleValue: { id: "id-1" },
       },
     },
   },

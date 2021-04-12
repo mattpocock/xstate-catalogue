@@ -83,13 +83,13 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
   const imports = useGetImports(props.slug, [layout]);
 
   const iframeRef = useRef(null);
-  
+
   let disconnectInspector: () => void;
   const connectInspector = () => {
     disconnectInspector = inspect({
       iframe: () => iframeRef.current,
     }).disconnect;
-  }
+  };
 
   useEffect(connectInspector, [layout, props.slug]);
   useEffect(disconnectInspector ?? (() => {}), []);
@@ -171,7 +171,7 @@ const ShowMachinePage = (props: {
   mdxMetadata?: MDXMetadata;
 }) => {
   function startMachine() {
-    return interpret(props.machine, { devTools: true }).start()
+    return interpret(props.machine, { devTools: true }).start();
   }
   const [service, setService] = useState(startMachine());
   const [hasDismissed, setHasDismissed] = useState<boolean>(
@@ -183,9 +183,9 @@ const ShowMachinePage = (props: {
   const fileTextRef = useRef(null);
 
   function reset() {
-    service.stop()
-    setService(startMachine())
-    props.connectInspector()
+    service.stop();
+    setService(startMachine());
+    props.connectInspector();
   }
 
   // do proper service cleanup because `useInterpret` is no longer used
@@ -323,7 +323,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export default MachinePage;
 
-const SideBar = (props: { machine: StateMachine<any, any, any>, reset: () => void }) => {
+const SideBar = (props: {
+  machine: StateMachine<any, any, any>;
+  reset: () => void;
+}) => {
   return (
     <div
       className="hidden p-6 space-y-16 border-r md:block"
@@ -337,9 +340,12 @@ const SideBar = (props: { machine: StateMachine<any, any, any>, reset: () => voi
         </a>
       </Link>
       <div className="space-y-3">
-      <button
+        <button
           className="border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-gray-200 rounded px-4 py-2"
-          onClick={props.reset}>Reset the Machine</button>
+          onClick={props.reset}
+        >
+          Reset the Machine
+        </button>
       </div>
       <div className="space-y-3">
         <h2 className="text-base font-semibold tracking-tighter text-gray-500">

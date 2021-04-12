@@ -84,15 +84,18 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
 
   const iframeRef = useRef(null);
 
-  let disconnectInspector: () => void;
+  let disconnectInspector = () => {};
   const connectInspector = () => {
+    disconnectInspector();
     disconnectInspector = inspect({
       iframe: () => iframeRef.current,
     }).disconnect;
   };
 
   useEffect(connectInspector, [layout, props.slug]);
-  useEffect(disconnectInspector ?? (() => {}), []);
+  useEffect(() => {
+    return disconnectInspector ?? (() => {});
+  }, []);
 
   return (
     <>
@@ -184,8 +187,8 @@ const ShowMachinePage = (props: {
 
   function reset() {
     service.stop();
-    setService(startMachine());
     props.connectInspector();
+    setService(startMachine());
   }
 
   // do proper service cleanup because `useInterpret` is no longer used

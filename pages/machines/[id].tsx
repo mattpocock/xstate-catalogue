@@ -188,6 +188,13 @@ const ShowMachinePage = (props: {
     props.connectInspector()
   }
 
+  // do proper service cleanup because `useInterpret` is no longer used
+  useLayoutEffect(() => {
+    return () => {
+      service?.stop();
+    };
+  }, []);
+
   useEffect(() => {
     // @ts-ignore
     const hljs: any = window.hljs;

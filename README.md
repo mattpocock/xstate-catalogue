@@ -1,6 +1,6 @@
 ![XState Catalogue](./public/og-image.png)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # XState Catalogue
@@ -31,10 +31,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="http://chanchan.io"><img src="https://avatars.githubusercontent.com/u/1954752?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mark Chandler</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=with-heart" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mattpocock"><img src="https://avatars.githubusercontent.com/u/28293365?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Pocock</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=mattpocock" title="Code">💻</a> <a href="#ideas-mattpocock" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-mattpocock" title="Examples">💡</a> <a href="#design-mattpocock" title="Design">🎨</a></td>
     <td align="center"><a href="https://twitter.com/belinburgh"><img src="https://avatars.githubusercontent.com/u/541045?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Henri Maurer</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=hmaurer" title="Code">💻</a> <a href="#ideas-hmaurer" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://twitter.com/bemayr"><img src="https://avatars.githubusercontent.com/u/6529243?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bernhard Mayr</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=bemayr" title="Code">💻</a> <a href="#ideas-bemayr" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="http://chanchan.io"><img src="https://avatars.githubusercontent.com/u/1954752?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mark Chandler</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=with-heart" title="Code">💻</a></td>
+    <td align="center"><a href="https://damiensedgwick.com"><img src="https://avatars.githubusercontent.com/u/42817702?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Damien Sedgwick</b></sub></a><br /><a href="https://github.com/mattpocock/xstate-catalogue/commits?author=damiensedgwick" title="Code">💻</a></td>
   </tr>
 </table>
 

@@ -89,6 +89,16 @@ export const Action = (props: { children: string }) => {
   );
 };
 
+export const Guard = (props: { children: string }) => {
+  return (
+    <span
+      className={`bg-gray-100 text-gray-600 font-mono font-bold text-sm px-2 py-1 transition-colors`}
+    >
+      {props.children}
+    </span>
+  );
+};
+
 export const Context = (props: { children: string; stringify?: boolean }) => {
   const context = useContext(MachineHelpersContext);
   const [state] = useService(context.service);

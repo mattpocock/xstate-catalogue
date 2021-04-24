@@ -7,6 +7,16 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "payment-checkout": {
+    title: "Payment Checkout",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
+  "shopping-cart": {
+    title: "Shopping Cart",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   authentication: {
     title: 'Authentication',
     icon: 'LockOpenOutlined',

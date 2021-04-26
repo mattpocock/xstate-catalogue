@@ -37,10 +37,6 @@ const tabFocusMachine = createMachine<
     },
   },
   {
-    delays: {
-      IDLE_CHECK_DELAY: 3000,
-      IDLE_TIME_OUT_DELAY: 3000,
-    },
     services: {
       checkForDocumentBlur: () => (send: Sender<TabFocusMachineEvent>) => {
         const listener = () => {

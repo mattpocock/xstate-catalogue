@@ -11,6 +11,7 @@ import {
   Action,
   Context,
   Event,
+  Guard,
   MachineHelpersContext,
   MDXMetadata,
   Service,
@@ -358,7 +359,7 @@ const SideBar = (props: {
           {props.machine.stateIds.map((id) => {
             if (id === props.machine.id) return null;
             return (
-              <li>
+              <li key={`MACHINE ID: ${id}`}>
                 <State>
                   {props.machine.getStateNodeById(id).path.join('.')}
                 </State>
@@ -376,7 +377,7 @@ const SideBar = (props: {
             .filter((event) => !event.startsWith('xstate.') && event)
             .map((event) => {
               return (
-                <li>
+                <li key={`EVENT TYPE: ${event}`}>
                   <Event>{event}</Event>
                 </li>
               );
@@ -391,7 +392,7 @@ const SideBar = (props: {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.actions).map((action) => {
               return (
-                <li>
+                <li key={`ACTION: ${action}`}>
                   <Action>{action}</Action>
                 </li>
               );
@@ -405,10 +406,10 @@ const SideBar = (props: {
             Guards
           </h2>
           <ul className="space-y-3">
-            {Object.keys(props.machine.options.guards).map((action) => {
+            {Object.keys(props.machine.options.guards).map((guard) => {
               return (
-                <li>
-                  <Action>{action}</Action>
+                <li key={`GUARD: ${guard}`}>
+                  <Guard>{guard}</Guard>
                 </li>
               );
             })}
@@ -423,7 +424,7 @@ const SideBar = (props: {
           <ul className="space-y-3">
             {Object.keys(props.machine.options.services).map((service) => {
               return (
-                <li>
+                <li key={`SERVICE: ${service}`}>
                   <Service>{service}</Service>
                 </li>
               );

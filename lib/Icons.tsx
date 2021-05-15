@@ -22,3 +22,4 @@ export { default as ImportContactsOutlined } from '@material-ui/icons/ImportCont
 export { default as TimerOutlined } from '@material-ui/icons/TimerOutlined';
 export { default as TabOutlined } from '@material-ui/icons/TabOutlined';
 export { default as CheckOutlined } from '@material-ui/icons/CheckOutlined';
+export { default as CloseOutlined } from '@material-ui/icons/CloseOutlined';

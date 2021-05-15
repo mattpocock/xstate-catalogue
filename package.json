@@ -59,7 +59,7 @@
     "tailwindcss": "^2.0.4",
     "typescript": "^4.2.3",
     "ws": "^7.4.4",
-    "xstate": "^4.16.2"
+    "xstate": "^4.19.1"
   },
   "devDependencies": {
     "husky": "^6.0.0",

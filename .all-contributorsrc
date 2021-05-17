@@ -54,6 +54,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rubenmoya",
+      "name": "Rubén Moya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/905225?v=4",
+      "profile": "https://rubenmoya.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mr-bjerre",
+      "name": "Nicolai Bjerre Pedersen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16841792?v=4",
+      "profile": "https://github.com/mr-bjerre",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

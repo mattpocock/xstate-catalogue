@@ -35,7 +35,7 @@ const cascadingSelectControlsMachine = createMachine<
         on: {
           FIRST_SELECTED: {
             target: "firstSelected",
-            actions: assign({firstSelection: (context, event) => event?.data.value})
+            actions: 'assignFirstSelection'
           }
         },
       },
@@ -50,7 +50,7 @@ const cascadingSelectControlsMachine = createMachine<
               src: 'fetchSecondOptions',
               onDone: {
                 target: 'awaitingSecondSelection',
-                actions: assign({secondOptions: (context, event) => event?.data.values})
+                actions: 'assignSecondOptions'
               }
             }
           },
@@ -58,7 +58,7 @@ const cascadingSelectControlsMachine = createMachine<
             on: {
               SECOND_SELECTED: {
                 target: "loadingThirdOptions",
-                actions: assign({secondSelection: (context, event) => event.data.value})
+                actions: 'assignSecondSelection'
               }
             }
           },
@@ -67,7 +67,7 @@ const cascadingSelectControlsMachine = createMachine<
               src: 'fetchThirdOptions',
               onDone: {
                 target: 'secondSelected',
-                actions: assign({thirdOptions: (context, event) => event?.data.values})
+                actions: 'assignThirdOptions'
               }
             }
           },
@@ -81,7 +81,7 @@ const cascadingSelectControlsMachine = createMachine<
                 on: {
                   THIRD_SELECTED: {
                     target: "thirdSelected",
-                    actions: assign({ thirdSelection: (context, event) => event.data.value })
+                    actions: 'assignThirdSelection'
                   }
                 }
               },
@@ -93,6 +93,13 @@ const cascadingSelectControlsMachine = createMachine<
     },
   },
   {
+    actions: {
+      assignFirstSelection: assign({firstSelection: (context, event) => event.data.value}),
+      assignSecondOptions: assign({secondOptions: (context, event) => event.data.values}),
+      assignSecondSelection: assign({secondSelection: (context, event) => event.data.value}),
+      assignThirdOptions: assign({thirdOptions: (context, event) => event.data.values}),
+      assignThirdSelection: assign({thirdSelection: (context, event) => event.data.value}),
+    },
     services: {
       fetchSecondOptions: () => () => {},
       fetchThirdOptions: () => () => {}
@@ -100,10 +107,4 @@ const cascadingSelectControlsMachine = createMachine<
   }
 );
 
-export const metadata = {
-  eventPayloads: {
-    FIRST_SELECTED: {data: 1},
-    SECOND_SELECTED: {data: 4},
-  }
-};
 export default cascadingSelectControlsMachine;

@@ -35,7 +35,7 @@ const cascadingSelectControlsMachine = createMachine<
         on: {
           FIRST_SELECTED: {
             target: "firstSelected",
-            actions: 'assignFirstSelection'
+            actions: "assignFirstSelection"
           }
         },
       },
@@ -47,10 +47,10 @@ const cascadingSelectControlsMachine = createMachine<
         states: {
           loadingSecondOptions: {
             invoke: {
-              src: 'fetchSecondOptions',
+              src: "fetchSecondOptions",
               onDone: {
-                target: 'awaitingSecondSelection',
-                actions: 'assignSecondOptions'
+                target: "awaitingSecondSelection",
+                actions: "assignSecondOptions"
               }
             }
           },
@@ -58,16 +58,16 @@ const cascadingSelectControlsMachine = createMachine<
             on: {
               SECOND_SELECTED: {
                 target: "loadingThirdOptions",
-                actions: 'assignSecondSelection'
+                actions: "assignSecondSelection"
               }
             }
           },
           loadingThirdOptions: {
             invoke: {
-              src: 'fetchThirdOptions',
+              src: "fetchThirdOptions",
               onDone: {
-                target: 'secondSelected',
-                actions: 'assignThirdOptions'
+                target: "secondSelected",
+                actions: "assignThirdOptions"
               }
             }
           },
@@ -81,7 +81,7 @@ const cascadingSelectControlsMachine = createMachine<
                 on: {
                   THIRD_SELECTED: {
                     target: "thirdSelected",
-                    actions: 'assignThirdSelection'
+                    actions: "assignThirdSelection"
                   }
                 }
               },

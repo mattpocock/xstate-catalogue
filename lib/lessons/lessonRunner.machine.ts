@@ -6,13 +6,15 @@ import {
   Interpreter,
   InterpreterStatus,
 } from 'xstate';
+import type { CompileHandlerResponse } from '../../pages/api/compile';
 import { DUMMY_MACHINE } from './dummyMachine';
 import { AcceptanceCriteriaStep, LessonType } from './LessonType';
+import { toMachine } from './toMachine';
 
 interface Context {
   lesson: LessonType<any, any>;
   service?: Interpreter<any, any, any>;
-  userText: string;
+  fileText: string;
   stepCursor: {
     case: number;
     step: number;
@@ -29,10 +31,10 @@ type Event = { type: 'TEXT_EDITED'; text: string };
 
 export const lessonMachine = createMachine<Context, Event>(
   {
-    initial: 'throttling',
+    initial: 'idle',
     context: {
       lesson: {} as any,
-      userText: '',
+      fileText: '',
       stepCursor: {
         case: 0,
         step: 0,
@@ -44,10 +46,10 @@ export const lessonMachine = createMachine<Context, Event>(
         target: '.throttling',
         actions: assign((context, event) => {
           return {
-            userText: event.text,
+            fileText: event.text,
           };
         }),
-        internal: true,
+        internal: false,
       },
     },
     states: {
@@ -69,14 +71,25 @@ export const lessonMachine = createMachine<Context, Event>(
       },
       throttling: {
         after: {
-          200: 'checkingIfMachineIsValid',
+          700: 'checkingIfMachineIsValid',
         },
       },
       checkingIfMachineIsValid: {
         invoke: {
           src: async (context, event) => {
-            // TODO - extract machine from context.userText
-            return interpret(DUMMY_MACHINE).start();
+            if (!context.fileText) throw new Error();
+            const result: CompileHandlerResponse = await fetch(`/api/compile`, {
+              method: 'POST',
+              body: JSON.stringify({ file: context.fileText }),
+            }).then((res) => res.json());
+
+            if (!result.didItWork || !result.result) {
+              throw new Error();
+            }
+
+            const machine = toMachine(result.result);
+
+            return interpret(machine).start();
           },
           onDone: {
             actions: assign((context, event) => {

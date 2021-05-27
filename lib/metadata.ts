@@ -92,11 +92,11 @@ export const metadata: Record<string, MetadataItem> = {
     icon: 'TabOutlined',
     version: '0.1.0',
   },
-  // "video-audio-controls": {
-  //   title: "Video / Audio Controls",
-  //   icon: "PlayCircleOutlineOutlined",
-  //   version: "0.0.0",
-  // },
+  'video-audio-controls': {
+    title: 'Video / Audio Controls',
+    icon: 'PlayCircleOutlineOutlined',
+    version: '0.1.0',
+  },
   // "circuit-breaker": {
   //   title: "With Circuit Breaker",
   //   icon: "BatteryAlertOutlined",

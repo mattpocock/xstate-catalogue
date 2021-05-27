@@ -1,0 +1,38 @@
+export const metadata = {
+  title: 'Video / Audio controls',
+};
+
+# Video/Audio controls
+
+This state machine handles the logic for a simple audio/video control service.
+
+## Start
+
+We start off in <State>idle</State>. When <Event>LOAD</Event> is triggered, we end up in <State>loading</State>.
+
+- When <Event>READY</Event> is triggered, it means that it loaded the content successfully, so we go to <State>ready</State>.
+- If <Event>ERROR</Event> is triggered, it means that we have some error while loading the content, so we go to <State>error</State>.
+
+## Ready
+
+Once the content is <State>ready</State>, the initial state is <State>playing</State>.
+
+- When <Event>PLAY</Event> is triggered we play the content.
+- When <Event>PAUSE</Event> is triggered we pause the content.
+- When <Event>RELOAD</Event> is triggered, we go back to the <State>loading</State>
+- When <Event>END</Event> is triggered, it means that we reached the end, so we go <State>ended</State>.
+- When <Event>VOLUME</Event> is triggered, we change the volume.
+- When <Event>MUTE</Event> is triggered, we mute the audio.
+- When <Event>LOOP</Event> is triggered, we will loop the content after the end.
+- When <Event>RATE</Event> is triggered, we change the rate.
+
+## End
+
+Once the content is <State>ended</State>, we can trigger two events.
+
+- When <Event>RELOAD</Event> is triggered we will reload the content.
+- When <Event>PLAY</Event> is triggered we will play the current content that has ended.
+
+## Error
+
+Once we have some <State>error</State>, we can trigger a <Event>RELOAD</Event> to reload the content.

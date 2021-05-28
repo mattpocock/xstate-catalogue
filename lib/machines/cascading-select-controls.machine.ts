@@ -42,8 +42,9 @@ const cascadingSelectControlsMachine = createMachine<
       firstSelected: {
         initial: "loadingSecondOptions",
         on: {
-          FIRST_SELECTED: ".loadingSecondOptions"
+          FIRST_SELECTED: {target: ".loadingSecondOptions", internal: false}
         },
+        exit: ['clearSecond'],
         states: {
           loadingSecondOptions: {
             invoke: {
@@ -74,8 +75,9 @@ const cascadingSelectControlsMachine = createMachine<
           secondSelected: {
             initial: "awaitingThirdSelection",
             on: {
-              SECOND_SELECTED: "loadingThirdOptions"
+              SECOND_SELECTED: {target: "loadingThirdOptions", internal: false}
             },
+            exit: ['clearThird'],
             states: {
               awaitingThirdSelection: {
                 on: {
@@ -99,6 +101,8 @@ const cascadingSelectControlsMachine = createMachine<
       assignSecondSelection: assign({secondSelection: (context, event) => event.data.value}),
       assignThirdOptions: assign({thirdOptions: (context, event) => event.data.values}),
       assignThirdSelection: assign({thirdSelection: (context, event) => event.data.value}),
+      clearSecond: assign({secondOptions: null, secondSelection: null}),
+      clearThird: assign({thirdOptions: null, thirdSelection: null})
     },
     services: {
       fetchSecondOptions: () => () => {},

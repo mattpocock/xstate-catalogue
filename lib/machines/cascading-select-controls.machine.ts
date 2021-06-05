@@ -1,12 +1,12 @@
 import { assign, createMachine, Sender } from "xstate";
 
 export interface CascadingSelectControlsMachineContext {
-  firstOptions: number[];
-  firstSelection: number;
-  secondOptions: number[];
-  secondSelection: number;
-  thirdOptions: number[];
-  thirdSelection: number;
+  firstOptions: number[] | null;
+  firstSelection: number | null;
+  secondOptions: number[] | null;
+  secondSelection: number | null;
+  thirdOptions: number[] | null;
+  thirdSelection: number | null;
 };
 
 export type CascadingSelectControlsMachineEvent =
@@ -97,12 +97,12 @@ const cascadingSelectControlsMachine = createMachine<
   {
     actions: {
       assignFirstSelection: assign({firstSelection: (context, event) => event.data.value}),
-      assignSecondOptions: assign({secondOptions: (context, event) => event.data.values}),
+      assignSecondOptions: assign({secondOptions: (context, event) => event.data.value}),
       assignSecondSelection: assign({secondSelection: (context, event) => event.data.value}),
-      assignThirdOptions: assign({thirdOptions: (context, event) => event.data.values}),
+      assignThirdOptions: assign({thirdOptions: (context, event) => event.data.value}),
       assignThirdSelection: assign({thirdSelection: (context, event) => event.data.value}),
-      clearSecond: assign({secondOptions: null, secondSelection: null}),
-      clearThird: assign({thirdOptions: null, thirdSelection: null})
+      clearSecond: assign(() => ({secondOptions: null, secondSelection: null})),
+      clearThird: assign(() => ({thirdOptions: null, thirdSelection: null}))
     },
     services: {
       fetchSecondOptions: () => () => {},

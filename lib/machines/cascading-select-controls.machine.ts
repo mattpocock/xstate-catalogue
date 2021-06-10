@@ -35,7 +35,11 @@ const cascadingSelectControlsMachine = createMachine<typeof model>(
       firstSelected: {
         initial: 'loadingSecondOptions',
         on: {
-          FIRST_SELECTED: { target: '.loadingSecondOptions', internal: false },
+          FIRST_SELECTED: {
+            actions: 'assignFirstSelection',
+            target: '.loadingSecondOptions',
+            internal: false
+          },
         },
         exit: ['clearSecond'],
         states: {
@@ -61,7 +65,10 @@ const cascadingSelectControlsMachine = createMachine<typeof model>(
           secondSelected: {
             initial: 'loadingThirdOptions',
             on: {
-              SECOND_SELECTED: { target: '.loadingThirdOptions', internal: false },
+              SECOND_SELECTED: {
+                actions: 'assignSecondSelection',
+                target: '.loadingThirdOptions',
+                internal: false },
             },
             exit: ['clearThird'],
             states: {

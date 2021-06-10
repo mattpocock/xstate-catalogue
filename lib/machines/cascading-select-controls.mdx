@@ -25,6 +25,6 @@ which will trigger another request to load the second set of options, or the use
 control triggering <Event value={4}>SECOND_SELECTED</Event>. As above this updates the context and also triggers
 the load of the third set of options. This completes with <Event values={[7, 8, 9]}>THIRD_OPTIONS_LOADED</Event> and moves the machine to <State>firstSelected.secondSelected.awaitingThirdSelection</State>.
 
-Again, the machine will respond to selections in previous controls (<Event data={{value: 1}}>FIRST_SELECTED</Event> or <Event data={4}>SECOND_SELECTED</Event>).
+Again, the machine will respond to selections in previous controls (<Event data={{value: 1}}>FIRST_SELECTED</Event> or <Event value={6}>SECOND_SELECTED</Event>).
 It will also respond to <Event value={9}>THIRD_SELECTED</Event> which is the final selection in this machine and
 moves the machine to <State>firstSelected.secondSelected.thirdSelected</State>.

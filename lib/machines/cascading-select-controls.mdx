@@ -1,10 +1,10 @@
 export const metadata = {
   eventPayloads: {
-    FIRST_SELECTED: {data: {value: 1}},
-    SECOND_SELECTED: {data: {value: 4}},
-    "done.invoke.fetchSecondOptions": {data: {value: [4,5,6]}},
-    "done.invoke.fetchThirdOptions": {data: {value: [8, 9, 10]}},
-    THIRD_SELECTED: {data: {value: 9}},
+    FIRST_SELECTED:  1,
+    SECOND_SELECTED: 4,
+    SECOND_OPTIONS_LOADED: [4,5,6],
+    THIRD_OPTIONS_LOADED: [7,8,9],
+    THIRD_SELECTED: {data: 9},
   }
 };
 
@@ -15,16 +15,16 @@ If the first selection is changed, the following select controls are reset/disab
 
 ## The pattern
 
-When the machine is started it is in the <State>awaitingFirstSelection</State> state. When the user selects a value the <Event data={{value: 1}}>FIRST_SELECTED</Event> event
+When the machine is started it is in the <State>awaitingFirstSelection</State> state. When the user selects a value the <Event value={1}>FIRST_SELECTED</Event> event
 is triggered with the selected value. This sets the selection in the context
-and the options for the second select are loaded based on the value of the first event. This completes with <Event data={{value: [4,5,6]}}>done.invoke.fetchSecondOptions</Event>
+and the options for the second select are loaded. This completes with <Event values={[4,5,6]}>SECOND_OPTIONS_LOADED</Event>
  and the machine enters <State>firstSelected.awaitingSecondSelection</State>. The pattern is repeated to an arbitrary depth.
 
-When the machine is in <State>firstSelected.awaitingSecondSelection</State> it will respond to either another <Event data={{value: 2}}>FIRST_SELECTED</Event>
-which will trigger another request to load the second set of options or the user may make a selection from the second
-control triggering <Event data={{value: 4}}>SECOND_SELECTED</Event>. As above this updates the context and also triggers
-the load of the third set of options. This completes with <Event data={{value: [8, 9, 10]}}>done.invoke.fetchThirdOptions</Event> and moves the machine to <State>firstSelected.secondSelected.awaitingThirdSelection</State>.
+When the machine is in <State>firstSelected.awaitingSecondSelection</State> it will respond to either another <Event value={2}>FIRST_SELECTED</Event>,
+which will trigger another request to load the second set of options, or the user may make a selection from the second
+control triggering <Event value={4}>SECOND_SELECTED</Event>. As above this updates the context and also triggers
+the load of the third set of options. This completes with <Event values={[7, 8, 9]}>THIRD_OPTIONS_LOADED</Event> and moves the machine to <State>firstSelected.secondSelected.awaitingThirdSelection</State>.
 
-Again, the machine will respond to selections in previous controls (<Event data={{value: 1}}>FIRST_SELECTED</Event> or <Event data={{value: 4}}>SECOND_SELECTED</Event>).
-It will also respond to <Event data={{value: 9}}>THIRD_SELECTED</Event> which is the final selection in this machine and
+Again, the machine will respond to selections in previous controls (<Event data={{value: 1}}>FIRST_SELECTED</Event> or <Event data={4}>SECOND_SELECTED</Event>).
+It will also respond to <Event value={9}>THIRD_SELECTED</Event> which is the final selection in this machine and
 moves the machine to <State>firstSelected.secondSelected.thirdSelected</State>.

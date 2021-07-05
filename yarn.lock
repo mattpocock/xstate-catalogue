@@ -752,6 +752,11 @@
     lodash.merge "^4.6.2"
     lodash.uniq "^4.5.0"
 
+"@types/dom-mediacapture-record@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.9.tgz#42eca652b9da7f8e1dfe5b264865c675f3fc344c"
+  integrity sha512-RKxDs2fTvWfvYGCwp2RgER3HkLCysOA/1FmLIIO++9wKT+y3XQHWi0pfx1pg4rMOy6E/NUy4uaS/xJiHj6NOuA==
+
 "@types/fined@*":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@types/fined/-/fined-1.1.2.tgz#05d2b9f93d144855c97c18c9675f424ed01400c4"

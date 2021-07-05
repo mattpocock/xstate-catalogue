@@ -1,0 +1,19 @@
+# Audio Recorder
+
+This machine handles audio recording, including pausing/resuming, and downloading. It's fully implemented in the browser, so feel free to try recording yourself!
+
+## Getting access to audio
+
+In the browser, you need to request access to the user's audio in order to record it. When the user presses <Event>RECORD</Event>, we enter <State>requestingAudioOptions</State>, where the <Service>requestAudioOptions</Service> service is invoked.
+
+If that check fails, via <Event>error.platform.requestAudioOptions</Event>, you'll be sent to the <State>couldNotRetrieveAudioOptions</State> state, where you can <Event>RETRY</Event> to try again.
+
+## Recording
+
+Once the device check completes, it saves a [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) to <Context stringify>stream</Context> and we enter <State>recording.running</State>. The <Service>recordFromStream</Service> service manages the [MediaRecorder](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder) and fires back the data to context via <Event>AUDIO_CHUNK_RECEIVED</Event>.
+
+Pressing <Event>PAUSE</Event> will pause the recording and head to <State>recording.paused</State>. Pressing <Event>RESUME</Event> starts the recording again.
+
+## Stopping and downloading
+
+Once you're done with the recording, you can <Event>STOP</Event> it. This heads to the <State>complete</State> state, where you can <Event>RETRY</Event> to go again or <Event>DOWNLOAD</Event> to grab the recording.

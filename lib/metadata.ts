@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "audio-recorder": {
+    title: "Audio Recorder",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   authentication: {
     title: 'Authentication',
     icon: 'LockOpenOutlined',

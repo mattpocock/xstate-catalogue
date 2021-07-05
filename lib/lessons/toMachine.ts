@@ -6,8 +6,7 @@ import {
   spawn,
   StateNode,
 } from 'xstate';
-import { raise } from 'xstate/lib/actions';
-import { assign, send } from 'xstate/lib/actionTypes';
+import { raise, assign, send } from 'xstate/lib/actions';
 
 export function toMachine(machineText: string): StateNode<any> {
   if (typeof machineText !== 'string') {

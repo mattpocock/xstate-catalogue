@@ -1,3 +1,4 @@
+import { inspect } from '@xstate/inspect';
 import {
   assign,
   createMachine,
@@ -5,16 +6,23 @@ import {
   interpret,
   Interpreter,
   InterpreterStatus,
+  StateNodeConfig,
 } from 'xstate';
 import type { CompileHandlerResponse } from '../../pages/api/compile';
-import { DUMMY_MACHINE } from './dummyMachine';
-import { AcceptanceCriteriaStep, LessonType } from './LessonType';
+import {
+  AcceptanceCriteriaStep,
+  CourseType,
+  LessonType,
+  AcceptanceCriteriaCase,
+} from './LessonType';
 import { toMachine } from './toMachine';
+import party from 'party-js';
 
 interface Context {
-  lesson: LessonType<any, any>;
+  course: CourseType;
   service?: Interpreter<any, any, any>;
   fileText: string;
+  lessonIndex: number;
   stepCursor: {
     case: number;
     step: number;
@@ -27,13 +35,63 @@ interface Context {
     | undefined;
 }
 
-type Event = { type: 'TEXT_EDITED'; text: string };
+type Event =
+  | { type: 'TEXT_EDITED'; text: string }
+  | {
+      type: 'STEP_DONE';
+    }
+  | {
+      type: 'GO_TO_NEXT_LESSON';
+    };
+
+const checkingIfMachineIsValid: StateNodeConfig<Context, any, Event> = {
+  entry: ['stopRunningService'],
+  invoke: {
+    src: async (context, event) => {
+      if (!context.fileText) throw new Error();
+      const result: CompileHandlerResponse = await fetch(`/api/compile`, {
+        method: 'POST',
+        body: JSON.stringify({ file: context.fileText }),
+      }).then((res) => res.json());
+
+      if (!result.didItWork || !result.result) {
+        throw new Error();
+      }
+
+      const machine = toMachine(result.result);
+
+      // Tests the machine to see if it fails compilation
+      interpret(machine).start().stop();
+
+      inspect();
+
+      await new Promise((res) => waitFor(600, res as any));
+
+      return interpret(machine, {
+        devTools: true,
+      });
+    },
+    onDone: {
+      actions: assign((context, event) => {
+        return {
+          service: event.data,
+        };
+      }),
+      target: 'runningTests',
+    },
+    onError: {
+      target: 'idle.machineCouldNotCompile',
+      actions: [console.log],
+    },
+  },
+};
 
 export const lessonMachine = createMachine<Context, Event>(
   {
-    initial: 'idle',
+    initial: 'throttling',
     context: {
-      lesson: {} as any,
+      course: {} as any,
+      lessonIndex: 0,
       fileText: '',
       stepCursor: {
         case: 0,
@@ -63,6 +121,24 @@ export const lessonMachine = createMachine<Context, Event>(
               testsNotPassed: {},
               testsPassed: {
                 tags: 'testsPassed',
+                on: {
+                  GO_TO_NEXT_LESSON: {
+                    target: '#movingToNextLesson',
+                  },
+                },
+                entry: [
+                  () => {
+                    party.confetti(
+                      new party.Circle(
+                        window.innerWidth / 2,
+                        window.innerHeight / 2,
+                      ),
+                      {
+                        size: window.innerWidth,
+                      },
+                    );
+                  },
+                ],
               },
             },
           },
@@ -74,61 +150,58 @@ export const lessonMachine = createMachine<Context, Event>(
           700: 'checkingIfMachineIsValid',
         },
       },
-      checkingIfMachineIsValid: {
-        invoke: {
-          src: async (context, event) => {
-            if (!context.fileText) throw new Error();
-            const result: CompileHandlerResponse = await fetch(`/api/compile`, {
-              method: 'POST',
-              body: JSON.stringify({ file: context.fileText }),
-            }).then((res) => res.json());
-
-            if (!result.didItWork || !result.result) {
-              throw new Error();
-            }
-
-            const machine = toMachine(result.result);
-
-            return interpret(machine).start();
-          },
-          onDone: {
-            actions: assign((context, event) => {
+      movingToNextLesson: {
+        id: 'movingToNextLesson',
+        always: {
+          actions: [
+            'stopRunningService',
+            assign((context, event) => {
               return {
-                service: event.data,
+                stepCursor: {
+                  case: 0,
+                  step: 0,
+                },
+                lessonIndex: context.lessonIndex + 1,
+                lastErroredStep: null,
               };
             }),
-            target: 'runningTests',
-          },
-          onError: {
-            target: 'idle.machineCouldNotCompile',
-          },
+            'autoFormatEditor',
+          ],
+          target: 'checkingIfMachineIsValid',
         },
       },
+      checkingIfMachineIsValid,
       runningTests: {
-        entry: ['resetLessonCursor'],
+        entry: ['resetLessonCursor', 'startService'],
         initial: 'runningStep',
         onDone: {
           target: 'idle.machineValid.testsPassed',
         },
-        exit: ['stopRunningService'],
         states: {
           runningStep: {
+            on: {
+              STEP_DONE: {
+                target: 'checkingIfThereIsAnIncompleteStep',
+              },
+            },
             invoke: {
               src: 'runTestStep',
               onError: {
                 target: '#idle.machineValid.testsNotPassed',
                 actions: ['markStepAsErrored'],
               },
-              onDone: {
-                target: 'checkingIfThereIsAnIncompleteStep',
-              },
             },
           },
           checkingIfThereIsAnIncompleteStep: {
             always: [
               {
-                cond: 'isThereAnIncompleteStep',
+                cond: 'isThereAnIncompleteStepInThisCase',
                 actions: 'incrementToNextStep',
+                target: 'runningStep',
+              },
+              {
+                cond: 'isThereAnIncompleteStep',
+                actions: ['restartService', 'incrementToNextStep'],
                 target: 'runningStep',
               },
               {
@@ -145,22 +218,47 @@ export const lessonMachine = createMachine<Context, Event>(
   },
   {
     services: {
-      runTestStep: async (context, event) => {
+      runTestStep: (context, event) => (send) => {
+        const cases = getCurrentLessonCases(context);
         const currentStep =
-          context.lesson.acceptanceCriteria.cases[context.stepCursor.case]
-            .steps[context.stepCursor.step];
+          cases[context.stepCursor.case].steps[context.stepCursor.step];
 
         if (!currentStep || !context.service) return;
 
-        runTestStep(currentStep, context.service);
+        runTestStep(currentStep, context.service, () => send('STEP_DONE'));
       },
     },
     guards: {
+      isThereAnIncompleteStepInThisCase: (context) => {
+        const cases = getCurrentLessonCases(context);
+        const nextStep = getNextSteps(cases, context.stepCursor);
+
+        return nextStep && nextStep.case === context.stepCursor.case;
+      },
       isThereAnIncompleteStep: (context) => {
-        return Boolean(getNextSteps(context.lesson, context.stepCursor));
+        const cases = getCurrentLessonCases(context);
+        const nextStep = getNextSteps(cases, context.stepCursor);
+        return Boolean(nextStep);
       },
     },
     actions: {
+      startService: (context) => {
+        if (
+          context.service &&
+          context.service.status !== InterpreterStatus.Running
+        ) {
+          context.service.start();
+        }
+      },
+      restartService: (context) => {
+        if (
+          context.service &&
+          context.service.status === InterpreterStatus.Running
+        ) {
+          context.service.stop();
+          context.service.start();
+        }
+      },
       stopRunningService: (context) => {
         if (
           context.service &&
@@ -170,7 +268,8 @@ export const lessonMachine = createMachine<Context, Event>(
         }
       },
       incrementToNextStep: assign((context) => {
-        const nextStep = getNextSteps(context.lesson, context.stepCursor);
+        const cases = getCurrentLessonCases(context);
+        const nextStep = getNextSteps(cases, context.stepCursor);
         if (!nextStep) return {};
 
         return {
@@ -194,11 +293,11 @@ export const lessonMachine = createMachine<Context, Event>(
 );
 
 const getNextSteps = (
-  lesson: LessonType<any, any>,
+  cases: AcceptanceCriteriaCase[],
   stepCursor: { case: number; step: number },
 ): { case: number; step: number } | null => {
   const currentCursor = stepCursor;
-  const currentCase = lesson.acceptanceCriteria.cases[currentCursor.case];
+  const currentCase = cases[currentCursor.case];
 
   if (currentCase && currentCase.steps[currentCursor.step + 1]) {
     return {
@@ -207,7 +306,7 @@ const getNextSteps = (
     };
   }
 
-  const nextCase = lesson.acceptanceCriteria.cases[currentCursor.case + 1];
+  const nextCase = cases[currentCursor.case + 1];
 
   if (nextCase) {
     return {
@@ -222,23 +321,97 @@ const getNextSteps = (
 const runTestStep = <TContext, TEvent extends EventObject>(
   step: AcceptanceCriteriaStep<TContext, TEvent>,
   service: Interpreter<TContext, any, TEvent>,
+  callback: () => void,
 ) => {
-  let unsubscribe = () => {};
+  let state = service.state;
+  const unsubscribeHandlers: (() => void)[] = [];
+
+  const unsub = service.subscribe((newState) => {
+    state = newState;
+  });
+
+  unsubscribeHandlers.push(unsub.unsubscribe);
 
   switch (step.type) {
     case 'ASSERTION':
       {
-        const succeeded = step.assertion(service.state);
+        const succeeded = step.assertion(state);
 
         if (!succeeded) {
           throw new Error('Assertion failed');
         }
+        callback();
       }
       break;
-    case 'SEND_EVENT': {
-      service.send(step.event);
-    }
+    case 'OPTIONS_ASSERTION':
+      {
+        const succeeded = step.assertion(service.machine.options);
+
+        if (!succeeded) {
+          throw new Error('Assertion failed');
+        }
+        callback();
+      }
+      break;
+    case 'SEND_EVENT':
+      {
+        service.send(step.event);
+        callback();
+      }
+      break;
+    case 'WAIT':
+      {
+        const unwait = waitFor(step.durationInMs, callback);
+        unsubscribeHandlers.push(unwait);
+      }
+      break;
   }
 
-  return unsubscribe;
+  return () => {
+    unsubscribeHandlers.forEach((func) => func());
+  };
+};
+
+const waitFor = (ms: number, callback: () => void): (() => void) => {
+  let timeout = setTimeout(callback, ms);
+
+  return () => {
+    clearTimeout(timeout);
+  };
+};
+
+const getCurrentLesson = (context: Context): LessonType => {
+  return context.course.lessons[context.lessonIndex];
+};
+
+export const getCurrentLessonCases = (
+  context: Context,
+): AcceptanceCriteriaCase<any, any>[] => {
+  if (context.lessonIndex === 0) {
+    return context.course.lessons[0].acceptanceCriteria.cases;
+  }
+
+  const currentLesson = getCurrentLesson(context);
+
+  if (!currentLesson.mergeWithPreviousCriteria) {
+    return currentLesson.acceptanceCriteria.cases;
+  }
+
+  const cases: AcceptanceCriteriaCase<any, any>[] = [];
+
+  let cursorIndex = context.lessonIndex;
+
+  while (cursorIndex >= 0) {
+    const targetLesson = context.course.lessons[cursorIndex];
+
+    cases.unshift(...targetLesson.acceptanceCriteria.cases);
+
+    if (!targetLesson.mergeWithPreviousCriteria) {
+      break;
+    }
+
+    cursorIndex--;
+  }
+
+  return cases;
 };

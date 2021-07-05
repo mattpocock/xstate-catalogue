@@ -10,6 +10,7 @@ export const paginationLesson: LessonType<
     }
 > = {
   title: 'Pagination',
+  initialMachineText: `createMachine({})`,
   acceptanceCriteria: {
     cases: [
       {

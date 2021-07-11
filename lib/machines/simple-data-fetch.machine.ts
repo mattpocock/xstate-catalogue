@@ -33,6 +33,7 @@ const simpleDataFetchMachine = createMachine<
   {
     id: 'simpleDataFetch',
     initial: 'idle',
+    context: {},
     states: {
       idle: {
         on: {

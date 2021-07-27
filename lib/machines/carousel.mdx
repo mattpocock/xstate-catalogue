@@ -2,13 +2,16 @@
 
 A carousel can be used for a variety of purposes. It can be used to display a set of images, content, or both.
 This machine handles the transitions between the slides in the carousel.
-# States
+
+## States
 
 This carousel machine has the following states:
 
 <State>idle</State><br/>
 <State>playing</State><br/>
 <State>paused</State><br/>
+
+## Transitions
 
 The <State>idle</State> state would be your standard user controlled carousel. Think of an image carousel with navigation buttons or pagination buttons.
 
@@ -19,12 +22,12 @@ From this point we can do three things:
 
  1. send the <Event>PAUSE</Event> event to pause the carousel.
  2. send the <Event>RESET</Event> event to reset back to active index 0, transitioning to the <State>idle</State> state.
- 3. send the <Event>UPDATE_INDEX</Event> event with an index to move to a custom slide index (useful for paginated carousels) but
+ 3. send the <Event index={4}>UPDATE_INDEX</Event> event with an index to move to a custom slide index (useful for paginated carousels) but
  remaining in the <State>playing</State> state.
 
 From the <State>paused</State> state we can resume <State>playing</State> from the index we paused at by sending the <Event>AUTO_PLAY</Event> event, send 
 the <Event>RESET</Event> event to reset to active index 0 and transition into the <State>idle</State> state 
-or send the <Event>UPDATE_INDEX</Event> event with a custom index to remain <State>paused</State> which could allow the carousel 
+or send the <Event index={3}>UPDATE_INDEX</Event> event with a custom index to remain <State>paused</State> which could allow the carousel 
 to resume <State>playing</State> from an alternative index like so:
 
 ```javascript

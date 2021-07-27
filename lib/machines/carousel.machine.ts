@@ -92,6 +92,4 @@ const createCarouselMachine = (initialContext: CarouselMachineContext = {
   }
 );
 
-const carouselMachine = createCarouselMachine()
-
-export default carouselMachine;
+export default createCarouselMachine();

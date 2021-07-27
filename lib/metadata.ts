@@ -8,8 +8,8 @@ export interface MetadataItem {
 
 export const metadata: Record<string, MetadataItem> = {
   "carousel": {
-    title: "carousel",
-    icon: "PlaylistAddCheckOutlined",
+    title: "Carousel",
+    icon: "AutoRenew",
     version: "0.1.0",
   },
   authentication: {

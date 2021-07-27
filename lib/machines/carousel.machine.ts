@@ -82,11 +82,7 @@ const createCarouselMachine = (initialContext: CarouselMachineContext = {
     },
     services: {
       autoUpdateActiveIndex: (context) => (cb) => {
-        const interval = setInterval(() => {
-          cb({
-            type: "UPDATE_INDEX",
-          });
-        }, context.interval);
+        const interval = setInterval(() => cb({ type: "UPDATE_INDEX" }), context.interval);
 
         return () => {
           clearInterval(interval);

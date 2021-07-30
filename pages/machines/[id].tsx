@@ -27,7 +27,7 @@ type ExportedMachine =
   | StateMachine<any, any, any>
   | (() => StateMachine<any, any, any>);
 
-const resultOf = (machine: ExportedMachine) => {
+const getMachineFromImport = (machine: ExportedMachine) => {
   if (typeof machine === 'function') {
     return machine();
   }
@@ -50,7 +50,7 @@ const useGetImports = (slug: string, deps: any[]) => {
     const mdxDoc = await import(`../../lib/machines/${slug}.mdx`);
 
     setImports({
-      machine: resultOf(machineImport.default),
+      machine: getMachineFromImport(machineImport.default),
       mdxDoc: mdxDoc.default,
       mdxMetadata: mdxDoc.metadata,
     });
@@ -233,7 +233,7 @@ const ShowMachinePage = (props: {
             </div>
           )}
           <div className="flex">
-            <SideBar machine={resultOf(props.machine)} />
+            <SideBar machine={getMachineFromImport(props.machine)} />
             <div className="p-6 space-y-6">
               <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
                 <a

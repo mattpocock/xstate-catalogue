@@ -22,9 +22,13 @@ import {
 import { metadata, MetadataItem } from '../../lib/metadata';
 import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
 
+type MachineFromImport =
+  | StateMachine<any, any, any>
+  | (() => StateMachine<any, any, any>);
+
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
-    machine: StateMachine<any, any, any>;
+    machine: MachineFromImport;
     mdxDoc: any;
     mdxMetadata?: MDXMetadata;
   }>();
@@ -32,13 +36,16 @@ const useGetImports = (slug: string, deps: any[]) => {
   const getMachine = async () => {
     setImports(undefined);
     const machineImport: {
-      default: StateMachine<any, any, any>;
+      default: MachineFromImport;
     } = await import(`../../lib/machines/${slug}.machine.ts`);
 
     const mdxDoc = await import(`../../lib/machines/${slug}.mdx`);
 
     setImports({
-      machine: machineImport.default,
+      machine:
+        typeof machineImport.default === 'function'
+          ? machineImport.default()
+          : machineImport.default,
       mdxDoc: mdxDoc.default,
       mdxMetadata: mdxDoc.metadata,
     });

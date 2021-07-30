@@ -10,7 +10,7 @@ export const metadata: Record<string, MetadataItem> = {
   "carousel": {
     title: "Carousel",
     icon: "AutoRenew",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   authentication: {
     title: 'Authentication',

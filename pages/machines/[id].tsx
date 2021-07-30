@@ -21,10 +21,18 @@ import {
 } from '../../lib/MachineHelpers';
 import { metadata, MetadataItem } from '../../lib/metadata';
 import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
+import { createMachine } from 'xstate';
 
 type ExportedMachine =
   | StateMachine<any, any, any>
   | (() => StateMachine<any, any, any>);
+
+const resultOf = (machine: ExportedMachine) => {
+  if (typeof machine === 'function') {
+    return machine();
+  }
+  return machine;
+};
 
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
@@ -42,10 +50,7 @@ const useGetImports = (slug: string, deps: any[]) => {
     const mdxDoc = await import(`../../lib/machines/${slug}.mdx`);
 
     setImports({
-      machine:
-        typeof machineImport.default === 'function'
-          ? machineImport.default()
-          : machineImport.default,
+      machine: resultOf(machineImport.default),
       mdxDoc: mdxDoc.default,
       mdxMetadata: mdxDoc.metadata,
     });
@@ -228,13 +233,7 @@ const ShowMachinePage = (props: {
             </div>
           )}
           <div className="flex">
-            <SideBar
-              machine={
-                typeof props.machine === 'function'
-                  ? props.machine()
-                  : props.machine
-              }
-            />
+            <SideBar machine={resultOf(props.machine)} />
             <div className="p-6 space-y-6">
               <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
                 <a

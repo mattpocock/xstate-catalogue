@@ -22,13 +22,13 @@ import {
 import { metadata, MetadataItem } from '../../lib/metadata';
 import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
 
-type MachineFromImport =
+type ExportedMachine =
   | StateMachine<any, any, any>
   | (() => StateMachine<any, any, any>);
 
 const useGetImports = (slug: string, deps: any[]) => {
   const [imports, setImports] = useState<{
-    machine: MachineFromImport;
+    machine: ExportedMachine;
     mdxDoc: any;
     mdxMetadata?: MDXMetadata;
   }>();
@@ -36,7 +36,7 @@ const useGetImports = (slug: string, deps: any[]) => {
   const getMachine = async () => {
     setImports(undefined);
     const machineImport: {
-      default: MachineFromImport;
+      default: ExportedMachine;
     } = await import(`../../lib/machines/${slug}.machine.ts`);
 
     const mdxDoc = await import(`../../lib/machines/${slug}.mdx`);
@@ -169,7 +169,7 @@ const Layout = (props: {
 };
 
 const ShowMachinePage = (props: {
-  machine: StateMachine<any, any, any>;
+  machine: ExportedMachine;
   mdxDoc: any;
   fileText: string;
   slug: string;
@@ -228,7 +228,13 @@ const ShowMachinePage = (props: {
             </div>
           )}
           <div className="flex">
-            <SideBar machine={props.machine} />
+            <SideBar
+              machine={
+                typeof props.machine === 'function'
+                  ? props.machine()
+                  : props.machine
+              }
+            />
             <div className="p-6 space-y-6">
               <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
                 <a

@@ -12,19 +12,6 @@ export type CarouselMachineEvent =
   | { type: 'RESET' }
   | { type: 'AUTO_PLAY' };
 
-const maybeDoThese = choose([
-  {
-    cond: (context, event) => {
-      // some condition
-      return false;
-    },
-    actions: [
-      // selected when "cond1" is true
-      log('cond1 chosen!'),
-    ],
-  },
-]);
-
 const createCarouselMachine = (
   initialContext: CarouselMachineContext = {
     activeIndex: 0,

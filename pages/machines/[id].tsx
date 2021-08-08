@@ -254,7 +254,6 @@ const ShowMachinePage = (props: {
                     h1: HTMLElements.H1,
                     h2: HTMLElements.H2,
                     a: HTMLElements.AnchorTag,
-                    code: HTMLElements.Code,
                   }}
                 >
                   <props.mdxDoc></props.mdxDoc>

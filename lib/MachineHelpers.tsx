@@ -184,15 +184,8 @@ const AnchorTag = (props: { children: string; href: string }) => {
   );
 };
 
-const Code = (props: { children: string }) => {
-  console.log(props);
-
-  return <code className="dark:text-gray-200">{props.children}</code>;
-};
-
 export const HTMLElements = {
   H1,
   H2,
   AnchorTag,
-  Code,
 };

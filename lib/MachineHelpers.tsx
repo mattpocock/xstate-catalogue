@@ -167,3 +167,32 @@ export const Service = (props: { children: string }) => {
     </span>
   );
 };
+
+const H1 = (props: { children: string }) => {
+  return <h1 className="dark:text-gray-200">{props.children}</h1>;
+};
+
+const H2 = (props: { children: string }) => {
+  return <h2 className="dark:text-gray-200">{props.children}</h2>;
+};
+
+const AnchorTag = (props: { children: string; href: string }) => {
+  return (
+    <a className="dark:text-gray-200" href={props.href}>
+      {props.children}
+    </a>
+  );
+};
+
+const Code = (props: { children: string }) => {
+  console.log(props);
+
+  return <code className="dark:text-gray-200">{props.children}</code>;
+};
+
+export const HTMLElements = {
+  H1,
+  H2,
+  AnchorTag,
+  Code,
+};

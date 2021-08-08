@@ -18,6 +18,7 @@ import {
   Service,
   State,
   WholeContext,
+  HTMLElements,
 } from '../../lib/MachineHelpers';
 import { metadata, MetadataItem } from '../../lib/metadata';
 import { useCopyToClipboard } from '../../lib/useCopyToClipboard';
@@ -250,6 +251,10 @@ const ShowMachinePage = (props: {
                     Service,
                     Context,
                     WholeContext,
+                    h1: HTMLElements.H1,
+                    h2: HTMLElements.H2,
+                    a: HTMLElements.AnchorTag,
+                    code: HTMLElements.Code,
                   }}
                 >
                   <props.mdxDoc></props.mdxDoc>

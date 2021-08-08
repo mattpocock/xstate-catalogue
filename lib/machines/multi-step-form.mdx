@@ -2,17 +2,16 @@ export const metadata = {
   eventPayloads: {
     CONFIRM_BENEFICIARY: {
       info: {
-        info: "Hey",
+        info: 'Hey',
       },
     },
     CONFIRM_DATE: {
       info: {
-        info: "Hey",
+        info: 'Hey',
       },
     },
   },
 };
-
 
 # Multi Step Form
 
@@ -20,7 +19,7 @@ Multi-step forms are a staple of many CRUD apps - especially where the entity be
 
 I've chosen to model this form as an internet banking payment. On the first page, you choose the beneficiary you'd like to pay, and the amount to pay them. On the second, you confirm the date.
 
-I've also chosen to model the form events as only `SUBMIT` events. For this machine, we assume that the data submitted in these events has been validated in the frontend. For a multi-step form with Async Validation, see [this machine](/machines/multi-step-form-with-validation).
+I've also chosen to model the form events as only \`SUBMIT\` events. For this machine, we assume that the data submitted in these events has been validated in the frontend. For a multi-step form with Async Validation, see [this machine](/machines/multi-step-form-with-validation).
 
 ## First Page
 

@@ -9,8 +9,34 @@ export interface CarouselMachineContext {
 export type CarouselMachineEvent =
   | { type: 'UPDATE_INDEX'; index?: number }
   | { type: 'PAUSE' }
+  | { type: 'NEXT_INDEX' }
+  | { type: 'PREV_INDEX' }
   | { type: 'RESET' }
   | { type: 'AUTO_PLAY' };
+
+const calculateNextIndex = (
+  context: CarouselMachineContext,
+  event: CarouselMachineEvent,
+) => {
+  if (event.type === 'UPDATE_INDEX' && event.index && event.index < 0) {
+    return context.totalSlideCount;
+  }
+  // Only update activeIndex if index provided is between 0 - totalSlideCount
+  if (
+    event.type === 'UPDATE_INDEX' &&
+    event.index &&
+    event.index <= context.totalSlideCount &&
+    event.index >= 0
+  ) {
+    return event.index;
+  }
+
+  if (context.activeIndex === context.totalSlideCount) {
+    return 0;
+  } else {
+    return context.activeIndex + 1;
+  }
+};
 
 const createCarouselMachine = (
   initialContext: CarouselMachineContext = {
@@ -64,28 +90,13 @@ const createCarouselMachine = (
     },
     {
       actions: {
-        resetActiveIndex: assign({
-          activeIndex: 0,
+        resetActiveIndex: assign((context) => {
+          return {
+            activeIndex: 0,
+          };
         }),
-
         updateActiveIndex: assign({
-          activeIndex: (context, event) => {
-            // Only update activeIndex if index provided is between 0 - totalSlideCount
-            if (
-              event.type === 'UPDATE_INDEX' &&
-              event.index &&
-              event.index <= context.totalSlideCount &&
-              event.index >= 0
-            ) {
-              return event.index;
-            }
-
-            if (context.activeIndex === context.totalSlideCount) {
-              return 0;
-            } else {
-              return context.activeIndex + 1;
-            }
-          },
+          activeIndex: (context, event) => calculateNextIndex(context, event),
         }),
       },
       services: {

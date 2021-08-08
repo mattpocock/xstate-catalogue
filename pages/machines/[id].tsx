@@ -223,10 +223,10 @@ const ShowMachinePage = (props: {
           <div className="flex">
             <SideBar machine={props.machine} />
             <div className="p-6 space-y-6">
-              <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
+              <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500 dark:text-gray-200">
                 <a
                   href={`https://github.com/mattpocock/xstate-catalogue/edit/master/lib/machines/${props.slug}.machine.ts`}
-                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded dark:text-gray-200"
                   target="_blank"
                 >
                   <span>Edit</span>
@@ -234,14 +234,14 @@ const ShowMachinePage = (props: {
                 </a>
                 <a
                   href={`https://github.com/mattpocock/xstate-catalogue/discussions?discussions_q=${props.meta.title}`}
-                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-500 border border-gray-200 rounded"
+                  className="inline-flex items-center px-2 py-1 pr-1 space-x-2 text-gray-200 border border-gray-200 rounded"
                   target="_blank"
                 >
                   <span>Discuss</span>
                   <GitHub style={{ height: '1rem', width: '1.2rem' }} />
                 </a>
               </div>
-              <div className="prose lg:prose-lg">
+              <div className="prose lg:prose-lg dark:text-gray-200">
                 <MDXProvider
                   components={{
                     Event,
@@ -260,7 +260,7 @@ const ShowMachinePage = (props: {
         </div>
       </div>
       <div className="mt-16">
-        <div className="p-6 xl:p-12 -mb-20 text-gray-100 bg-gray-900">
+        <div className="p-6 -mb-20 text-gray-100 bg-gray-900 xl:p-12">
           <div className="container relative max-w-6xl mx-auto">
             <pre>
               <code ref={fileTextRef} className="lang-ts">
@@ -268,7 +268,7 @@ const ShowMachinePage = (props: {
               </code>
             </pre>
             <button
-              className="invisible md:visible absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
+              className="absolute top-0 right-0 invisible px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg md:visible"
               onClick={() => {
                 copyToClipboard(props.fileText);
               }}
@@ -316,13 +316,13 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
     >
       <div className="w-48" />
       <Link href="/#Catalogue">
-        <a className="space-x-3 text-base text-gray-600">
-          <span className="text-gray-500">{'❮'}</span>
+        <a className="space-x-3 text-base text-gray-600 dark:text-gray-200">
+          <span className="text-gray-500 dark:text-gray-200">{'❮'}</span>
           <span>Back to List</span>
         </a>
       </Link>
       <div className="space-y-3">
-        <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+        <h2 className="text-base font-semibold tracking-tighter text-gray-500 dark:text-gray-200">
           States
         </h2>
         <ul className="space-y-3">
@@ -339,7 +339,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
         </ul>
       </div>
       <div className="space-y-3">
-        <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+        <h2 className="text-base font-semibold tracking-tighter text-gray-500 dark:text-gray-200">
           Events
         </h2>
         <ul className="space-y-3">
@@ -356,7 +356,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
       </div>
       {Object.keys(props.machine.options.actions).length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500 dark:text-gray-200">
             Actions
           </h2>
           <ul className="space-y-3">
@@ -372,7 +372,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
       )}
       {Object.keys(props.machine.options.guards).length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500 dark:text-gray-200">
             Guards
           </h2>
           <ul className="space-y-3">
@@ -388,7 +388,7 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
       )}
       {Object.keys(props.machine.options.services).length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+          <h2 className="text-base font-semibold tracking-tighter text-gray-500 dark:text-gray-200">
             Services
           </h2>
           <ul className="space-y-3">

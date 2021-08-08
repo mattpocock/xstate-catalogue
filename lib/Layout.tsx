@@ -2,7 +2,7 @@ import { OverlayContainer } from '@react-aria/overlays';
 import { useInterpret, useSelector } from '@xstate/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import packageJson from '../package.json';
 import { CatalogueSearcher } from './CatalogueSearcher';
 import { globalStateService, useLayout } from './GlobalState';
@@ -11,6 +11,8 @@ import { ModalDialog } from './ModalDialog';
 import { modalsMachine } from './modalsMachine';
 
 export const Layout: React.FC = ({ children }) => {
+  const [showDarkTheme, setShowDarkTheme] = useState(false);
+
   const router = useRouter();
 
   const shouldPreventScroll = router.pathname.includes('/machines/[id]');
@@ -25,15 +27,17 @@ export const Layout: React.FC = ({ children }) => {
 
   return (
     <div
-      className="grid h-screen grid-rows-2"
+      className={`grid h-screen grid-rows-2 dark:bg-gray-800 ${
+        showDarkTheme ? 'dark' : ''
+      }`}
       style={{
         gridTemplateRows: `50px 1fr`,
       }}
     >
-      <nav className="flex items-center justify-between flex-grow-0 flex-shrink-0 px-6 border-b">
+      <nav className="flex items-center justify-between flex-grow-0 flex-shrink-0 px-6 border-b dark:bg-gray-800">
         <Link href="/">
           <a>
-            <p className="font-bold tracking-tight text-gray-700">
+            <p className="font-bold tracking-tight text-gray-700 dark:text-gray-200">
               XState{' '}
               <span className="font-light tracking-tighter">Catalogue</span>
             </p>
@@ -41,14 +45,14 @@ export const Layout: React.FC = ({ children }) => {
         </Link>
         <div className="self-stretch hidden md:block">
           <button
-            className="flex items-center h-full p-3 space-x-16 text-lg text-gray-500 border-l border-r outline-none focus:outline-none focus:ring"
+            className="flex items-center h-full p-3 space-x-16 text-lg text-gray-500 border-l border-r outline-none dark:text-gray-200 focus:outline-none focus:ring"
             onClick={() => modalsService.send('CLICK_SEARCH')}
           >
             <div className="flex items-center space-x-3 text-sm">
-              <SearchOutlined className="w-4 h-4 text-gray-400" />
+              <SearchOutlined className="w-4 h-4 text-gray-400 dark:text-gray-200" />
               <span>Search for machines...</span>
             </div>
-            <span className="px-2 py-1 ml-4 text-sm tracking-widest text-gray-400 border border-gray-300 rounded">
+            <span className="px-2 py-1 ml-4 text-sm tracking-widest text-gray-400 border border-gray-300 rounded dark:text-gray-200 dark:border-gray-200">
               ⌘K
             </span>
           </button>
@@ -57,7 +61,7 @@ export const Layout: React.FC = ({ children }) => {
           {router.pathname.includes('machines') && (
             <button
               onClick={() => globalStateService.send('TOGGLE_LAYOUT')}
-              className="px-2 py-1 text-gray-400"
+              className="px-2 py-1 text-gray-400 dark:text-gray-200"
             >
               {layout === 'horizontal' && (
                 <svg
@@ -112,17 +116,31 @@ export const Layout: React.FC = ({ children }) => {
               )}
             </button>
           )}
-          <a
-            className="text-sm font-semibold text-gray-400"
-            href="https://github.com/mattpocock/xstate-catalogue"
-            target="_blank"
-            title="XState Catalogue GitHub"
-          >
-            v{packageJson.version}
-          </a>
+          <div className="flex flex-row items-center">
+            <button
+              className="mr-3"
+              onClick={() => setShowDarkTheme(!showDarkTheme)}
+            >
+              <span>{showDarkTheme ? '☀️' : '🕶'}</span>
+            </button>
+            <a
+              className="text-sm font-semibold text-gray-400 dark:text-gray-200"
+              href="https://github.com/mattpocock/xstate-catalogue"
+              target="_blank"
+              title="XState Catalogue GitHub"
+            >
+              v{packageJson.version}
+            </a>
+          </div>
         </div>
       </nav>
-      <div className={shouldPreventScroll ? 'overflow-hidden' : ''}>
+      <div
+        className={
+          shouldPreventScroll
+            ? 'overflow-hidden dark:bg-gray-800'
+            : ' dark:bg-gray-800'
+        }
+      >
         {children}
       </div>
       {/* <main className="pb-20">{children}</main> */}

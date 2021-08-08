@@ -1,10 +1,10 @@
 export const metadata = {
   eventPayloads: {
     SUCCESSFULLY_FETCHED_ITEM: {
-      item: { name: "Matt Pocock" },
+      item: { name: 'Matt Pocock' },
     },
     SUBMIT: {
-      item: { name: "Matt Pocock" },
+      item: { name: 'Matt Pocock' },
     },
     'error.platform.fetchItem': {
       data: new Error('Something went wrong...'),
@@ -34,7 +34,7 @@ If the fetch fails, the service sends back <Event>error.platform.fetchItem</Even
 
 ## Submitting the form
 
-In the <State>awaitingSubmit</State> state, the user can <Event>SUBMIT</Event> the form. We head to either <State>submitting.editing</State> or <State>submitting.creating</State> depending on whether <Context stringify>isInEditMode</Context> is `true`.
+In the <State>awaitingSubmit</State> state, the user can <Event>SUBMIT</Event> the form. We head to either <State>submitting.editing</State> or <State>submitting.creating</State> depending on whether <Context stringify>isInEditMode</Context> is \`true\`.
 
 - If the operation goes wrong, via <Event>error.platform.editItem</Event> or <Event>error.platform.createItem</Event>, we head back to <State>awaitingSubmit</State> with the <Context>errorMessage</Context> saved.
 

@@ -57,6 +57,12 @@ const createCarouselMachine = (
               actions: ['updateActiveIndex'],
             },
             AUTO_PLAY: 'playing',
+            NEXT_INDEX: {
+              actions: ['nextIndex'],
+            },
+            PREV_INDEX: {
+              actions: ['prevIndex'],
+            },
           },
         },
         paused: {
@@ -68,6 +74,12 @@ const createCarouselMachine = (
             },
             UPDATE_INDEX: {
               actions: ['updateActiveIndex'],
+            },
+            NEXT_INDEX: {
+              actions: ['nextIndex'],
+            },
+            PREV_INDEX: {
+              actions: ['prevIndex'],
             },
           },
         },
@@ -84,6 +96,12 @@ const createCarouselMachine = (
             UPDATE_INDEX: {
               actions: ['updateActiveIndex'],
             },
+            NEXT_INDEX: {
+              actions: ['nextIndex'],
+            },
+            PREV_INDEX: {
+              actions: ['prevIndex'],
+            },
           },
         },
       },
@@ -95,6 +113,18 @@ const createCarouselMachine = (
             activeIndex: 0,
           };
         }),
+        nextIndex: assign((context) => ({
+          activeIndex:
+            context.activeIndex === context.totalSlideCount
+              ? 0
+              : context.activeIndex + 1,
+        })),
+        prevIndex: assign((context) => ({
+          activeIndex:
+            context.activeIndex === 0
+              ? context.totalSlideCount
+              : context.activeIndex - 1,
+        })),
         updateActiveIndex: assign({
           activeIndex: (context, event) => calculateNextIndex(context, event),
         }),

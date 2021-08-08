@@ -1,17 +1,22 @@
 import { OverlayContainer } from '@react-aria/overlays';
-import { useInterpret, useSelector } from '@xstate/react';
+import { useInterpret, useMachine, useSelector } from '@xstate/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 import packageJson from '../package.json';
 import { CatalogueSearcher } from './CatalogueSearcher';
-import { globalStateService, useLayout } from './GlobalState';
+import {
+  globalStateMachine,
+  globalStateService,
+  useLayout,
+} from './GlobalState';
 import { SearchOutlined } from './Icons';
 import { ModalDialog } from './ModalDialog';
 import { modalsMachine } from './modalsMachine';
 
 export const Layout: React.FC = ({ children }) => {
-  const [showDarkTheme, setShowDarkTheme] = useState(false);
+  const [state, send] = useMachine(globalStateMachine);
 
   const router = useRouter();
 
@@ -25,11 +30,17 @@ export const Layout: React.FC = ({ children }) => {
     return state.matches('showingSearchModal');
   });
 
+  let theme;
+
+  if (typeof window !== 'undefined') {
+    theme = localStorage.getItem('XSTATE_THEME_PREFERENCE');
+  }
+
+  if (!theme) return null;
+
   return (
     <div
-      className={`grid h-screen grid-rows-2 dark:bg-gray-800 ${
-        showDarkTheme ? 'dark' : ''
-      }`}
+      className={`grid h-screen grid-rows-2 dark:bg-gray-800 ${theme}`}
       style={{
         gridTemplateRows: `50px 1fr`,
       }}
@@ -117,11 +128,8 @@ export const Layout: React.FC = ({ children }) => {
             </button>
           )}
           <div className="flex flex-row items-center">
-            <button
-              className="mr-3"
-              onClick={() => setShowDarkTheme(!showDarkTheme)}
-            >
-              <span>{showDarkTheme ? '☀️' : '🕶'}</span>
+            <button className="mr-3" onClick={() => send('TOGGLE_THEME')}>
+              {theme === 'dark' ? '☀️' : '😎'}
             </button>
             <a
               className="text-sm font-semibold text-gray-400 dark:text-gray-200"

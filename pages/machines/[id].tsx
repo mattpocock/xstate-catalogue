@@ -86,12 +86,13 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
 
   const iframeRef = useRef(null);
   useEffect(() => {
-    const { disconnect } = inspect({
+    const sub = inspect({
       iframe: () => iframeRef.current,
+      url: 'http://localhost:3000/viz',
     });
 
     return () => {
-      disconnect();
+      sub?.disconnect();
     };
   }, [layout, props.slug]);
 
@@ -139,6 +140,19 @@ const Layout = (props: {
         <div className="overflow-y-scroll md:pt-12">
           <div>{props.content}</div>
         </div>
+      </div>
+    );
+  }
+  if (layout === 'inspector') {
+    return (
+      <div className="h-full overflow-hidden">
+        <div
+          style={{ height: 'calc(100vh - 50px)' }}
+          className="hidden mb-16 bg-black md:block"
+        >
+          {props.iframe}
+        </div>
+        <div className="hidden">{props.content}</div>
       </div>
     );
   }
@@ -260,7 +274,7 @@ const ShowMachinePage = (props: {
         </div>
       </div>
       <div className="mt-16">
-        <div className="p-6 xl:p-12 -mb-20 text-gray-100 bg-gray-900">
+        <div className="p-6 -mb-20 text-gray-100 bg-gray-900 xl:p-12">
           <div className="container relative max-w-6xl mx-auto">
             <pre>
               <code ref={fileTextRef} className="lang-ts">
@@ -268,7 +282,7 @@ const ShowMachinePage = (props: {
               </code>
             </pre>
             <button
-              className="invisible md:visible absolute top-0 right-0 px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg"
+              className="absolute top-0 right-0 invisible px-6 py-3 mr-8 font-bold tracking-tight text-gray-100 bg-blue-700 rounded-lg md:visible"
               onClick={() => {
                 copyToClipboard(props.fileText);
               }}

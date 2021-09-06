@@ -31,6 +31,10 @@ export const globalStateMachine = createMachine<
                 target: 'horizontal',
               },
               {
+                cond: 'isInspectorLayout',
+                target: 'inspector',
+              },
+              {
                 target: 'blog',
               },
             ],
@@ -50,6 +54,12 @@ export const globalStateMachine = createMachine<
           vertical: {
             entry: ['saveVerticalLayoutToLocalStorage'],
             on: {
+              TOGGLE_LAYOUT: 'inspector',
+            },
+          },
+          inspector: {
+            entry: ['saveInspectorLayoutToLocalStorage'],
+            on: {
               TOGGLE_LAYOUT: 'blog',
             },
           },
@@ -62,6 +72,9 @@ export const globalStateMachine = createMachine<
       isVerticalLayout: () => {
         return localStorage?.getItem('XSTATE_CATALOGUE_LAYOUT') === 'vertical';
       },
+      isInspectorLayout: () => {
+        return localStorage?.getItem('XSTATE_CATALOGUE_LAYOUT') === 'inspector';
+      },
       isHorizontalLayout: () => {
         return (
           localStorage?.getItem('XSTATE_CATALOGUE_LAYOUT') === 'horizontal'
@@ -71,6 +84,9 @@ export const globalStateMachine = createMachine<
     actions: {
       saveBlogLayoutToLocalStorage: () => {
         localStorage?.setItem('XSTATE_CATALOGUE_LAYOUT', 'blog');
+      },
+      saveInspectorLayoutToLocalStorage: () => {
+        localStorage?.setItem('XSTATE_CATALOGUE_LAYOUT', 'inspector');
       },
       saveHorizontalLayoutToLocalStorage: () => {
         localStorage?.setItem('XSTATE_CATALOGUE_LAYOUT', 'horizontal');
@@ -100,6 +116,9 @@ export const useLayout = () => {
     }
     if (state.matches('layout.vertical')) {
       return 'vertical';
+    }
+    if (state.matches('layout.inspector')) {
+      return 'inspector';
     }
     if (state.matches('layout.horizontal')) {
       return 'horizontal';

@@ -37,7 +37,7 @@ const multiStepFormMachine = createMachine<
   MultiStepFormMachineEvent
 >(
   {
-    id: 'multiStepFormWithValidation',
+    id: 'multiStepForm',
     initial: 'enteringBeneficiary',
     states: {
       enteringBeneficiary: {

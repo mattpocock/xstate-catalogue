@@ -1,11 +1,15 @@
 import { useSelector } from '@xstate/react';
-import { createMachine, interpret, Interpreter } from 'xstate';
+import { createMachine, interpret, Interpreter, assign } from 'xstate';
 
-interface GlobalStateContext {}
+interface GlobalStateContext {
+  themePreference: 'light' | 'dark';
+}
 
-export type GlobalStateEvent = {
-  type: 'TOGGLE_LAYOUT';
-};
+export type GlobalStateEvent =
+  | {
+      type: 'TOGGLE_LAYOUT';
+    }
+  | { type: 'TOGGLE_THEME' };
 
 const localStorage =
   typeof window !== 'undefined' ? window.localStorage : undefined;
@@ -16,6 +20,9 @@ export const globalStateMachine = createMachine<
 >(
   {
     type: 'parallel',
+    context: {
+      themePreference: 'light',
+    },
     states: {
       layout: {
         initial: 'checking',
@@ -55,6 +62,54 @@ export const globalStateMachine = createMachine<
           },
         },
       },
+      theme: {
+        initial: 'checking',
+        states: {
+          checking: {
+            always: [
+              {
+                cond: 'isLightTheme',
+                target: 'light',
+              },
+              {
+                cond: 'isDarkTheme',
+                target: 'dark',
+              },
+              {
+                target: 'light',
+              },
+            ],
+          },
+          light: {
+            on: {
+              TOGGLE_THEME: {
+                target: 'dark',
+                actions: [
+                  'saveDarkThemePreferenceToLocalStorage',
+                  assign({
+                    themePreference: (context, event) =>
+                      (context.themePreference = 'dark'),
+                  }),
+                ],
+              },
+            },
+          },
+          dark: {
+            on: {
+              TOGGLE_THEME: {
+                target: 'light',
+                actions: [
+                  'saveLightThemePreferenceToLocalStorage',
+                  assign({
+                    themePreference: (context, event) =>
+                      (context.themePreference = 'light'),
+                  }),
+                ],
+              },
+            },
+          },
+        },
+      },
     },
   },
   {
@@ -67,6 +122,12 @@ export const globalStateMachine = createMachine<
           localStorage?.getItem('XSTATE_CATALOGUE_LAYOUT') === 'horizontal'
         );
       },
+      isLightTheme: () => {
+        return localStorage?.getItem('XSTATE_THEME_PREFERENCE') === 'light';
+      },
+      isDarkTheme: () => {
+        return localStorage?.getItem('XSTATE_THEME_PREFERENCE') === 'dark';
+      },
     },
     actions: {
       saveBlogLayoutToLocalStorage: () => {
@@ -77,6 +138,12 @@ export const globalStateMachine = createMachine<
       },
       saveVerticalLayoutToLocalStorage: () => {
         localStorage?.setItem('XSTATE_CATALOGUE_LAYOUT', 'vertical');
+      },
+      saveDarkThemePreferenceToLocalStorage: () => {
+        localStorage?.setItem('XSTATE_THEME_PREFERENCE', 'dark');
+      },
+      saveLightThemePreferenceToLocalStorage: () => {
+        localStorage?.setItem('XSTATE_THEME_PREFERENCE', 'light');
       },
     },
   },

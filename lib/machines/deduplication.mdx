@@ -14,6 +14,6 @@ Deduplication is similar to [debouncing](/machines/debounce), but instead of res
 
 ## Kicking off the dedup
 
-We start in the <State>canPerformAction</State> state, and pressing <Event>Go</Event> will immediately fire an `alert('Action fired!')`.
+We start in the <State>canPerformAction</State> state, and pressing <Event>Go</Event> will immediately fire an `\alert('Action fired!')\`.
 
 We then head to the <State>deduplicating</State> state, where <Event>Go</Event> no longer works for a couple of seconds. This means that no matter how many times the <Event>Go</Event> event is fired, it will only execute at most every 2 seconds.

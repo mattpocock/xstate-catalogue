@@ -18,6 +18,6 @@ Debouncing can be troublesome to implement in vanilla Javascript, but state mach
 
 We start off in the <State>idle</State> state. Pressing <Event>GO</Event> will send us into <State>debouncing</State>.
 
-From there, we have a countdown of two seconds before the action we passed into the event is fired. Which in this case, is `alert('Action fired!')`.
+From there, we have a countdown of two seconds before the action we passed into the event is fired. Which in this case, is \`alert('Action fired!')\`.
 
 But if we press <Event>GO</Event> multiple times, we stay in <State>debouncing</State> longer than two seconds, and only the _last_ action we passed in gets fired.

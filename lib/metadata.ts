@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "carousel": {
+    title: "Carousel",
+    icon: "AutoRenew",
+    version: "0.2.0",
+  },
   authentication: {
     title: 'Authentication',
     icon: 'LockOpenOutlined',

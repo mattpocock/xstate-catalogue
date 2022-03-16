@@ -39,6 +39,7 @@ const multiStepFormMachine = createMachine<
   {
     id: 'multiStepForm',
     initial: 'enteringBeneficiary',
+    context: {},
     states: {
       enteringBeneficiary: {
         on: {

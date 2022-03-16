@@ -1,12 +1,11 @@
 import GitHub from '@material-ui/icons/GitHub';
 import { MDXProvider } from '@mdx-js/react';
 import { inspect } from '@xstate/inspect';
-import { useInterpret } from '@xstate/react';
 import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
-import { StateMachine } from 'xstate';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { interpret, StateMachine } from 'xstate';
 import { useLayout } from '../../lib/GlobalState';
 import {
   Action,
@@ -85,15 +84,19 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
   const imports = useGetImports(props.slug, [layout]);
 
   const iframeRef = useRef(null);
-  useEffect(() => {
-    const { disconnect } = inspect({
-      iframe: () => iframeRef.current,
-    });
 
-    return () => {
-      disconnect();
-    };
-  }, [layout, props.slug]);
+  let disconnectInspector = () => {};
+  const connectInspector = () => {
+    disconnectInspector();
+    disconnectInspector = inspect({
+      iframe: () => iframeRef.current,
+    }).disconnect;
+  };
+
+  useEffect(connectInspector, [layout, props.slug]);
+  useEffect(() => {
+    return disconnectInspector ?? (() => {});
+  }, []);
 
   return (
     <>
@@ -110,6 +113,7 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
                 mdxDoc={imports.mdxDoc}
                 fileText={props.fileText}
                 meta={props.meta}
+                connectInspector={connectInspector}
                 mdxMetadata={imports.mdxMetadata}
               ></ShowMachinePage>
             )}
@@ -167,11 +171,13 @@ const ShowMachinePage = (props: {
   fileText: string;
   slug: string;
   meta: MetadataItem;
+  connectInspector: () => void;
   mdxMetadata?: MDXMetadata;
 }) => {
-  const service = useInterpret(props.machine, {
-    devTools: true,
-  });
+  function startMachine() {
+    return interpret(props.machine, { devTools: true }).start();
+  }
+  const [service, setService] = useState(startMachine());
   const [hasDismissed, setHasDismissed] = useState<boolean>(
     Boolean(localStorage.getItem('REJECTED_1')),
   );
@@ -179,6 +185,19 @@ const ShowMachinePage = (props: {
   const copyToClipboard = useCopyToClipboard({});
 
   const fileTextRef = useRef(null);
+
+  function reset() {
+    service.stop();
+    props.connectInspector();
+    setService(startMachine());
+  }
+
+  // do proper service cleanup because `useInterpret` is no longer used
+  useLayoutEffect(() => {
+    return () => {
+      service?.stop();
+    };
+  }, []);
 
   useEffect(() => {
     // @ts-ignore
@@ -221,7 +240,7 @@ const ShowMachinePage = (props: {
             </div>
           )}
           <div className="flex">
-            <SideBar machine={props.machine} />
+            <SideBar machine={props.machine} reset={reset} />
             <div className="p-6 space-y-6">
               <div className="space-x-4 text-xs font-medium tracking-tight text-gray-500">
                 <a
@@ -308,7 +327,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export default MachinePage;
 
-const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
+const SideBar = (props: {
+  machine: StateMachine<any, any, any>;
+  reset: () => void;
+}) => {
   return (
     <div
       className="hidden p-6 space-y-16 border-r md:block"
@@ -321,6 +343,14 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
           <span>Back to List</span>
         </a>
       </Link>
+      <div className="space-y-3">
+        <button
+          className="border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-gray-200 rounded px-4 py-2"
+          onClick={props.reset}
+        >
+          Reset the Machine
+        </button>
+      </div>
       <div className="space-y-3">
         <h2 className="text-base font-semibold tracking-tighter text-gray-500">
           States

@@ -24,6 +24,7 @@ const confirmationDialogMachine = createMachine<
   {
     id: 'confirmationDialog',
     initial: 'closed',
+    context: {},
     states: {
       closed: {
         id: 'closed',

@@ -36,6 +36,9 @@ const formInputMachine = createMachine<
   {
     id: 'formInput',
     initial: 'active',
+    context: {
+      value: ''
+    },
     states: {
       active: {
         on: {

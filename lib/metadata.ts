@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "cascading-select-controls": {
+    title: "Cascading Select Controls",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   authentication: {
     title: 'Authentication',
     icon: 'LockOpenOutlined',

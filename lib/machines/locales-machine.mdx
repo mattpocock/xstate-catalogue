@@ -1,0 +1,49 @@
+export const metadata = {
+  eventPayloads: {
+    START: {
+      locales: {
+        en: {
+          hello: 'world',
+        },
+      },
+      locale: 'en',
+    },
+  },
+};
+
+# Locales
+
+This machine handles the entire state of localization in an app. It stores all locales, current locale and the current set of strings.
+
+## States -> idle
+
+The initial state. Nothing insteresting happens here. 👻
+
+### Events -> START
+
+The event <Event>START</Event> starts the machine. In this event, you can send defaults locales and default language (locale whitout {s}).
+
+### Actions-assignLocales
+
+The action <Action>assignLocales</Action> is responsible to assign the locales coming from event to the machine's context.
+
+## State -> started
+
+Where good things happen. 😽
+
+### State -> changing
+
+Transient state <State>changing</State>, which handles the switch of languages/locales.
+Actions: Change the current set of strings.
+
+### State -> normal
+
+State <State>normal</State> is the main state of the machine. Here you can send event to change the current locale, which triggers the switch of the set of strings.
+
+Event: <Event>CHANGE_LANGUAGE</Event>, where you can send the language code that ou want (It must be existed inside the whole locales).
+Action: <Action>changeLocale</Action>, changes the current locale.
+
+## NB
+
+This code can be used as spawned machine (inside another machine), simple machine or as a service inside an async state node. 🤛🏾
+The action <Action>updateParent</Action> was commented because it creates a bug when you execute inside the inspector.

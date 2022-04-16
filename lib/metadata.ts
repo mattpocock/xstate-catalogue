@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "locales-machine": {
+    title: "localesMachine",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   authentication: {
     title: 'Authentication',
     icon: 'LockOpenOutlined',

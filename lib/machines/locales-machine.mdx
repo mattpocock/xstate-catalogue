@@ -1,7 +1,12 @@
 export const metadata = {
   eventPayloads: {
-    CHANGE: {
-      value: 'newValue',
+    START: {
+      locales: {
+        en: {
+          hello: 'world',
+        },
+      },
+      locale: 'en',
     },
   },
 };
@@ -34,9 +39,10 @@ Actions: Change the current set of strings.
 ### State -> normal
 
 The <State>normal</State> is the main state of the machine. Here you can send event to change the current locale, which triggers the switch of the set of strings.
+
 Event: CHANGE_LANGUAGE where you can send the language code that ou want (It must be existed inside the whole locales).
 Action: changeLocale, changes the current locale.
 
 ## NB
 
-This code can be used as spawned machine (inside another machine), simple machine or as a service inside an async state node. 
+This code can be used as spawned machine (inside another machine), simple machine or as a service inside an async state node.

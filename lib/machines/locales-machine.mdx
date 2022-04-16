@@ -1,1 +1,42 @@
-# localesMachine
+export const metadata = {
+  eventPayloads: {
+    CHANGE: {
+      value: 'newValue',
+    },
+  },
+};
+
+# Locales
+
+This machine handles the entire state of localization in an app. It stores all locales, current locale and the current set of strings.
+
+## States -> idle
+
+The initial state. Nothing insteresting happens here. 👻
+
+## Events -> START
+
+The event <State>START</State> starts the machine. In this event, you can send defaults locales and default language (locale whitout {s}).
+
+### Actions-assignLocales
+
+The <Action>assignLocales</Action> is responsible to assign the locales coming from event to the machine's context.
+
+## State -> started
+
+Where good things happen. 😽
+
+### State -> changing
+
+Transient state which handles the switch of languages/locales.
+Actions: Change the current set of strings.
+
+### State -> normal
+
+The <State>normal</State> is the main state of the machine. Here you can send event to change the current locale, which triggers the switch of the set of strings.
+Event: CHANGE_LANGUAGE where you can send the language code that ou want (It must be existed inside the whole locales).
+Action: changeLocale, changes the current locale.
+
+## NB
+
+This code can be used as spawned machine (inside another machine), simple machine or as a service inside an async state node. 

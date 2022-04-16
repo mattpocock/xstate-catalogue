@@ -7,13 +7,13 @@ type LocalesContext = {
   current: unknown;
 };
 
-type LocalesEvents<L extends Record<string, unknown>> =
+type LocalesEvents =
   | {
       type: 'START';
       locales: Record<string, unknown>;
       defaultLocale: string;
     }
-  | { type: 'CHANGE_LANGUAGE'; locale: keyof L };
+  | { type: 'CHANGE_LANGUAGE'; locale: string };
 
 const localesMachineMachine = createMachine(
   {
@@ -28,7 +28,7 @@ const localesMachineMachine = createMachine(
 
     schema: {
       context: {} as LocalesContext,
-      events: {} as LocalesEvents<LocalesContext['locales']>,
+      events: {} as LocalesEvents,
     },
 
     states: {

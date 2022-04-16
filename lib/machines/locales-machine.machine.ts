@@ -45,7 +45,7 @@ const localesMachineMachine = createMachine(
         initial: 'changing',
         states: {
           normal: {
-            entry: 'updateParent',
+            // entry: 'updateParent',
             exit: 'inc',
             on: {
               CHANGE_LANGUAGE: {
@@ -77,11 +77,11 @@ const localesMachineMachine = createMachine(
 
       inc: assign({ iterator: (context) => context.iterator + 1 }),
 
-      updateParent: sendParent(({ current, locale }) => ({
-        type: 'LOCALES.UPDATE' as const,
-        locale,
-        current,
-      })),
+      // updateParent: sendParent(({ current, locale }) => ({
+      //   type: 'LOCALES.UPDATE' as const,
+      //   locale,
+      //   current,
+      // })),
     },
   },
 );

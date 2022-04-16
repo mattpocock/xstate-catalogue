@@ -1,4 +1,4 @@
-import { assign, createMachine, Sender, sendParent } from 'xstate';
+import { assign, createMachine, sendParent } from 'xstate';
 
 type LocalesContext = {
   iterator: number;
@@ -10,8 +10,8 @@ type LocalesContext = {
 type LocalesEvents =
   | {
       type: 'START';
-      locales: Record<string, unknown>;
-      defaultLocale: string;
+      locales?: Record<string, unknown>;
+      defaultLocale?: string;
     }
   | { type: 'CHANGE_LANGUAGE'; locale: string };
 
@@ -67,8 +67,8 @@ const localesMachineMachine = createMachine(
     actions: {
       changeLocale: assign({ locale: (_, { locale }: any) => locale }),
       assignLocales: assign({
-        locales: (_, { locales }: any) => locales,
-        locale: (_, { locale }: any) => locale,
+        locales: (ctx, { locales }: any) => locales ?? ctx.locales,
+        locale: (ctx, { locale }: any) => locale ?? ctx.locale,
       }),
 
       changeCurrent: assign({
